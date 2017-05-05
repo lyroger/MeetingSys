@@ -1,0 +1,21 @@
+//
+//  MeetingSysPrefixHeader.pch
+//  MeetingSys
+//
+//  Created by luoyan on 2017/5/5.
+//  Copyright © 2017年 roger. All rights reserved.
+//
+
+#ifndef MeetingSysPrefixHeader_pch
+#define MeetingSysPrefixHeader_pch
+
+// Include any system framework and library headers here that should be included in all compilation units.
+// You will also need to set the Prefix Header build setting of one or more of your targets to reference this file.
+#ifdef __OBJC__
+#import <Availability.h>
+#import <UIKit/UIKit.h>
+#import <Foundation/Foundation.h>
+
+#import "Common_define.h"
+#endif
+#endif /* MeetingSysPrefixHeader_pch */
