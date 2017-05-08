@@ -9,24 +9,24 @@
 #ifndef MNNetConfigure_h
 #define MNNetConfigure_h
 
-#define isTrueEnvironment 1 //正式发布
+#define isTrueEnvironment 0 //正式发布
 #define isTestEnvironment 1 //测试环境
 
 
 #if isTrueEnvironment
 //正式环境的环境类型
-#define kServerHost                 @"http://121.43.178.45:8080"
-#define kServerCurrentPath          @"/tfin/"
-#define kServerPushNotificationHost @"http://121.196.199.36:8080/push"
-#define kJPushAPPKey                @"3612ee3156da4290d136665c"
+#define kServerHost                 @"http://119.23.243.229:8080"
+#define kServerCurrentPath          @"/agate-web/"
+#define kServerPushNotificationHost @"http://119.23.243.229:8080/agate-web"
+#define kJPushAPPKey                @"1f775a82abf23e099c5f658c"
 #else
 
 #if isTestEnvironment
 // 测试环境
-#define kServerHost                 @"http://172.18.84.243:8080"
-#define kServerCurrentPath          @"/tfin/"
-#define kServerPushNotificationHost @"http://172.18.84.243:8080/push"
-#define kJPushAPPKey                @"3612ee3156da4290d136665c"
+#define kServerHost                 @"http://119.23.243.229:8080"
+#define kServerCurrentPath          @"/agate-web/"
+#define kServerPushNotificationHost @"http://119.23.243.229:8080/agate-web"
+#define kJPushAPPKey                @"1f775a82abf23e099c5f658c"
 #endif
 
 #endif

@@ -35,7 +35,7 @@
 
 /***Model***/
 #import "StatusModel.h"
-#import "MNUserInfo.h"
+#import "MSUserInfo.h"
 
 /***Configure***/
 #import "AutoSizeCGRect.h"

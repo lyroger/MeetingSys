@@ -129,6 +129,14 @@ THE SOFTWARE.
  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+## JCore
+
+Copyright jpush.cn
+
+## JPush
+
+Copyright jpush.cn
+
 ## LKDBHelper
 
 Copyright (c) 2012 Jianghuai Li (https://github.com/li6185377)

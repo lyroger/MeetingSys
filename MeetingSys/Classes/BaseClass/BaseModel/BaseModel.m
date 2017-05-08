@@ -39,7 +39,7 @@ static LKDBHelper* userHelper;
 static dispatch_once_t userOnceToken;
 
 + (LKDBHelper *)getUserLKDBHelper {
-	NSString *dbName = [NSString stringWithFormat:@"MN%@",[MNUserInfo shareUserInfo].userId];
+	NSString *dbName = [NSString stringWithFormat:@"MN%@",[MSUserInfo shareUserInfo].userId];
 	dispatch_once(&userOnceToken, ^{
         userHelper = [[LKDBHelper alloc] initWithDBName:dbName];
         [userHelper setKey:[[dbName stringByAppendingString:@"qkjskl"] md5String]];
@@ -57,7 +57,7 @@ static dispatch_once_t userOnceToken;
 
 + (LKDBHelper *)getUsingLKDBHelper {
 	LKDBHelper *helper;
-	if ([MNUserInfo shareUserInfo].userId) {
+	if ([MSUserInfo shareUserInfo].userId) {
 		helper = [self getUserLKDBHelper];
 	} else {
 		helper = [self getDefaultLKDBHelper];

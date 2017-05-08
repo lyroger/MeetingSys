@@ -78,7 +78,7 @@
     pwdImage.image = [UIImage imageNamed:@"login_icon_password"];
     [accountInputContent addSubview:pwdImage];
     
-    NSString *username = [MNUserInfo shareUserInfo].userAcount;
+    NSString *username = [MSUserInfo shareUserInfo].userAcount;
     userTextField = [UITextField new];
     userTextField.placeholder = @"输入手机号";
     userTextField.clearButtonMode = UITextFieldViewModeWhileEditing;
@@ -91,7 +91,7 @@
     [accountInputContent addSubview:userTextField];
     
     
-    NSString *password = [[MNUserInfo shareUserInfo] getPassword];
+    NSString *password = [[MSUserInfo shareUserInfo] getPassword];
     pwdTextField = [UITextField new];
     pwdTextField.placeholder = @"输入密码";
     pwdTextField.clearButtonMode = UITextFieldViewModeWhileEditing;
@@ -299,15 +299,15 @@
     
     if (username.length > 0 && password.length > 0) {
         DLog(@"账号密码格式正确");
-        [MNUserInfo loginWithLoginId:username password:password networkHUD:NetworkHUDLockScreenAndError target:self success:^(StatusModel *data) {
+        [MSUserInfo loginWithLoginId:username password:password networkHUD:NetworkHUDLockScreenAndError target:self success:^(StatusModel *data) {
             if (data.code == 0) {
                 //登录成功
-                MNUserInfo *userInfo = data.data;
+                MSUserInfo *userInfo = data.data;
                 //登录后的lastCityId应该取cityId的值
                 userInfo.lastCityId = userInfo.cityId;
                 userInfo.lastCityName = userInfo.cityName;
                 userInfo.userAcount = username;//账号信息
-                [[MNUserInfo shareUserInfo] setUserInfo:userInfo];
+                [[MSUserInfo shareUserInfo] setUserInfo:userInfo];
                 
                 // 放在注册推送信息接口会调用保存。
                 //                [[SHMUserInfo getUsingLKDBHelper] insertToDB:userInfo callback:^(BOOL result) {

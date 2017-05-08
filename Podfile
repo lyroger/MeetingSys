@@ -43,6 +43,7 @@ target ‘MeetingSys’ do
   pod 'BlocksKit'
   pod 'RegexKitLite'
   pod 'HZActivityIndicatorView'
-
+  #极光推送
+  pod 'JPush'
 
 end
