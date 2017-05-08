@@ -36,19 +36,19 @@
         
         [meetingIcon mas_makeConstraints:^(MASConstraintMaker *make) {
             make.left.equalTo(@30);
-            make.size.mas_equalTo(CGSizeMake(22, 22));
+            make.size.mas_equalTo(CGSizeMake(24, 24));
             make.centerY.equalTo(self);
         }];
         
         [tipsLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.left.mas_equalTo(meetingIcon.mas_right).mas_offset(10);
+            make.left.mas_equalTo(meetingIcon.mas_right).mas_offset(15);
             make.centerY.equalTo(self);
         }];
         
         [upIcon mas_makeConstraints:^(MASConstraintMaker *make) {
             make.right.equalTo(@(-30));
             make.centerY.equalTo(self);
-            make.size.mas_equalTo(CGSizeMake(15, 12));
+            make.size.mas_equalTo(CGSizeMake(15, 10));
         }];
         
         UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(clickAction:)];

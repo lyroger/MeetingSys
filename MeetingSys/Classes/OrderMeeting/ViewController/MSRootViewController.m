@@ -58,6 +58,12 @@
     tableAllMeetingView.dataSource = self;
     [mainScrollView addSubview:tableAllMeetingView];
     
+    //加載導航欄
+    navTabbarView = [[MSNavTabbarView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, 40)];
+    navTabbarView.delegete = self;
+    [self.view addSubview:navTabbarView];
+    
+    //加载底部预约按钮
     MSOrderMeetingButtonView *bottomView = [MSOrderMeetingButtonView new];
     bottomView.backgroundColor = UIColorHex(0xFF845F);
     bottomView.delegate = self;
@@ -65,11 +71,6 @@
     bottomView.layer.shadowOpacity = 0.8;
     bottomView.layer.shadowOffset = CGSizeMake(0, -5);
     [self.view addSubview:bottomView];
-    
-    //加載導航欄
-    navTabbarView = [[MSNavTabbarView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, 40)];
-    navTabbarView.delegete = self;
-    [self.view addSubview:navTabbarView];
     
     [bottomView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.right.bottom.equalTo(@0);
