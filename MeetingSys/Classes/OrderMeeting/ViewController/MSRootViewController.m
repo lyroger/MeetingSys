@@ -12,6 +12,7 @@
 #import "MSMeetingListCell.h"
 #import "MSNoticeCellView.h"
 #import "MSMeetingDetailCell.h"
+#import "MSMeetingUserCenterView.h"
 
 @interface MSRootViewController ()<MSNavTabbarViewDelegete,UITableViewDelegate,UITableViewDataSource,UIScrollViewDelegate,MSOrderMeetingButtonViewDelegate>
 {
@@ -19,6 +20,7 @@
     UITableView *tableAllMeetingView;
     UIScrollView *mainScrollView;
     MSNavTabbarView *navTabbarView;
+    MSMeetingUserCenterView *userCenterView;
 }
 
 @property (nonatomic, strong) NSMutableArray *noticeArray;
@@ -123,6 +125,10 @@
 - (void)userInfoClick:(UIButton*)button
 {
     NSLog(@"個人中心");
+    if (!userCenterView) {
+        userCenterView = [MSMeetingUserCenterView new];
+    }
+    [userCenterView showUserCenterView];
 }
 
 //新增預約

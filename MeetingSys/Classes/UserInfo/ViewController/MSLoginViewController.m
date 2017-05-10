@@ -20,6 +20,9 @@
     UIButton *loginButton;
     
     UIView *loginOtherContentView;
+    
+    UIButton *agreeButton;
+    
 }
 
 @property (nonatomic, strong) UIButton *btnLogin;
@@ -54,7 +57,7 @@
     //加载logo
     UIImageView *logoImage = [[UIImageView alloc] init];
     logoImage.contentMode = UIViewContentModeScaleAspectFit;
-    logoImage.image = [UIImage imageNamed:@"login_icon_logo"];
+    logoImage.image = [UIImage imageNamed:@"login_logo"];
     [loginContentView addSubview:logoImage];
     
     //加载账号密码输入框
@@ -71,21 +74,21 @@
     [accountInputContent addSubview:pwdLine];
     
     UIImageView *accountImage = [UIImageView new];
-    accountImage.image = [UIImage imageNamed:@"login_icon_user"];
+    accountImage.image = [UIImage imageNamed:@"login_account"];
     [accountInputContent addSubview:accountImage];
     
     UIImageView *pwdImage = [UIImageView new];
-    pwdImage.image = [UIImage imageNamed:@"login_icon_password"];
+    pwdImage.image = [UIImage imageNamed:@"login_password"];
     [accountInputContent addSubview:pwdImage];
     
     NSString *username = [MSUserInfo shareUserInfo].userAcount;
     userTextField = [UITextField new];
-    userTextField.placeholder = @"输入手机号";
+    userTextField.placeholder = @"請輸入賬號";
     userTextField.clearButtonMode = UITextFieldViewModeWhileEditing;
     userTextField.returnKeyType = UIReturnKeyNext;
     userTextField.delegate = self;
     userTextField.text = username;
-    userTextField.tintColor = UIColorHex(0x6dffd0);
+    userTextField.tintColor = UIColorHex(0xFF7B54);
     userTextField.font = kFontPingFangRegularSize(16);
     userTextField.textColor = UIColorHex(0x666666);
     [accountInputContent addSubview:userTextField];
@@ -93,13 +96,13 @@
     
     NSString *password = [[MSUserInfo shareUserInfo] getPassword];
     pwdTextField = [UITextField new];
-    pwdTextField.placeholder = @"输入密码";
+    pwdTextField.placeholder = @"請輸入密碼（8﹣12位）";
     pwdTextField.clearButtonMode = UITextFieldViewModeWhileEditing;
     pwdTextField.secureTextEntry = YES;
     pwdTextField.returnKeyType = UIReturnKeyDone;
     pwdTextField.delegate = self;
     pwdTextField.text = password;
-    pwdTextField.tintColor = UIColorHex(0x6dffd0);
+    pwdTextField.tintColor = UIColorHex(0xFF7B54);
     pwdTextField.font = kFontPingFangRegularSize(16);
     pwdTextField.textColor = UIColorHex(0x666666);
     [accountInputContent addSubview:pwdTextField];
@@ -112,16 +115,16 @@
     
     loginButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [loginButton setTitleEdgeInsets:UIEdgeInsetsMake(-5, 0, 0, 0)];
-    [loginButton setBackgroundImage:[UIImage imageNamed:@"login_icon_off"] forState:UIControlStateDisabled];
-    [loginButton setBackgroundImage:[UIImage imageNamed:@"login_icon_on"] forState:UIControlStateNormal];
+    [loginButton setBackgroundImage:[UIImage imageWithColor:UIColorHex(0xE3E3E3)] forState:UIControlStateDisabled];
+    [loginButton setBackgroundImage:[UIImage imageWithColor:UIColorHex(0xFF7B54)] forState:UIControlStateNormal];
     
-    loginButton.layer.cornerRadius = 24;
+    loginButton.layer.cornerRadius = 4;
     loginButton.layer.borderColor = [UIColor clearColor].CGColor;
     loginButton.layer.borderWidth = 1;
     loginButton.layer.masksToBounds = YES;
     
     [loginButton addTarget:self action:@selector(loginAction:) forControlEvents:UIControlEventTouchUpInside];
-    [loginButton setTitle:@"登录" forState:UIControlStateNormal];
+    [loginButton setTitle:@"登錄" forState:UIControlStateNormal];
     loginButton.enabled = NO;
     loginButton.titleLabel.font = kFontPingFangMediumSize(18);
     [loginActionContentView addSubview:loginButton];
@@ -132,46 +135,27 @@
         loginButton.enabled = NO;
     }
     
-    UIButton *registerButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    registerButton.backgroundColor = [UIColor clearColor];
-    registerButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
-    [registerButton setTitleColor:UIColorHex(0x38DDC2) forState:UIControlStateNormal];
-    [registerButton setTitleColor:[UIColor grayColor] forState:UIControlStateHighlighted];
-    registerButton.titleLabel.font = kFontPingFangMediumSize(16);
-    [registerButton setTitle:@"立即注册" forState:UIControlStateNormal];
-    [loginActionContentView addSubview:registerButton];
     
+    //协议
+    agreeButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    agreeButton.tag = 100;
+    [agreeButton setImage:[UIImage imageNamed:@"login_agreement_off"] forState:UIControlStateNormal];
+    [agreeButton addTarget:self action:@selector(agreeAction:) forControlEvents:UIControlEventTouchUpInside];
+    [loginActionContentView addSubview:agreeButton];
     
-    UIButton *forgotPasswordButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    forgotPasswordButton.backgroundColor = [UIColor clearColor];
-    forgotPasswordButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
-    [forgotPasswordButton setTitleColor:UIColorHex(0x888888) forState:UIControlStateNormal];
-    [forgotPasswordButton setTitleColor:[UIColor grayColor] forState:UIControlStateHighlighted];
-    forgotPasswordButton.titleLabel.font = kFontPingFangMediumSize(16);
-    [forgotPasswordButton setTitle:@"忘记密码?" forState:UIControlStateNormal];
-    [loginActionContentView addSubview:forgotPasswordButton];
+    UILabel *labelAgree = [UILabel new];
+    labelAgree.text = @"同意";
+    labelAgree.font = kFontSize(12);
+    labelAgree.textColor = UIColorHex(0xCACACA);
+    [loginActionContentView addSubview:labelAgree];
     
-    
-    loginOtherContentView = [UIView new];
-    [loginContentView addSubview:loginOtherContentView];
-    
-    MNBottomTitleButton *weiButton = [MNBottomTitleButton new];
-    [weiButton.button setBackgroundImage:[UIImage imageNamed:@"login_icon_weixin"] forState:UIControlStateNormal];
-    weiButton.label.text = @"微信登录";
-    [weiButton.button addTarget:self action:@selector(loginByOther:) forControlEvents:UIControlEventTouchUpInside];
-    [loginOtherContentView addSubview:weiButton];
-    
-    MNBottomTitleButton *qqButton = [MNBottomTitleButton new];
-    [qqButton.button setBackgroundImage:[UIImage imageNamed:@"login_icon_qq"] forState:UIControlStateNormal];
-    qqButton.label.text = @"QQ登录";
-    [qqButton.button addTarget:self action:@selector(loginByOther:) forControlEvents:UIControlEventTouchUpInside];
-    [loginOtherContentView addSubview:qqButton];
-    
-    MNBottomTitleButton *weiboButton = [MNBottomTitleButton new];
-    [weiboButton.button setBackgroundImage:[UIImage imageNamed:@"login_icon_weibo"] forState:UIControlStateNormal];
-    weiboButton.label.text = @"微博登录";
-    [weiboButton.button addTarget:self action:@selector(loginByOther:) forControlEvents:UIControlEventTouchUpInside];
-    [loginOtherContentView addSubview:weiboButton];
+    UIButton *agreeDetailButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    agreeDetailButton.tag = 101;
+    agreeDetailButton.titleLabel.font = kFontSize(12);
+    [agreeDetailButton setTitleColor:UIColorHex(0xFFA200) forState:UIControlStateNormal];
+    [agreeDetailButton setTitle:@"《協議》" forState:UIControlStateNormal];
+    [agreeDetailButton addTarget:self action:@selector(agreeAction:) forControlEvents:UIControlEventTouchUpInside];
+    [loginActionContentView addSubview:agreeDetailButton];
     /**
      *  布局
      */
@@ -241,41 +225,32 @@
         make.height.mas_equalTo(48);
     }];
     
-    [registerButton mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.mas_equalTo(0);
-        make.bottom.mas_equalTo(-11);
-        make.height.mas_equalTo(20);
+    //同意協議
+    [agreeButton mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(loginButton);
+        make.top.mas_equalTo(loginButton.mas_bottom).mas_offset(10);
+        make.size.mas_equalTo(CGSizeMake(18, 18));
     }];
     
-    [forgotPasswordButton mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.right.mas_equalTo(0);
-        make.bottom.mas_equalTo(-11);
-        make.height.mas_equalTo(20);
+    [labelAgree mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.mas_equalTo(agreeButton.mas_right).mas_offset(5);
+        make.centerY.mas_equalTo(agreeButton.mas_centerY);
+        make.size.mas_equalTo(CGSizeMake(25, 22));
     }];
     
-    [loginOtherContentView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.bottom.equalTo(self.view).offset(-30);
-        make.left.equalTo(accountInputContent);
-        make.right.equalTo(accountInputContent);
-        make.height.equalTo(@84);
+    [agreeDetailButton mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.mas_equalTo(labelAgree.mas_right).mas_offset(0);
+        make.centerY.mas_equalTo(agreeButton.mas_centerY);
     }];
-    
-    //第三方登录
-    [weiButton mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.top.bottom.equalTo(@0);
-        make.width.equalTo(@58);
-    }];
-    
-    [qqButton mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.bottom.equalTo(@0);
-        make.centerX.equalTo(loginOtherContentView.mas_centerX);
-        make.width.equalTo(weiButton);
-    }];
-    
-    [weiboButton mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.right.top.bottom.equalTo(@0);
-        make.width.equalTo(weiButton);
-    }];
+}
+
+- (void)agreeAction:(UIButton*)button
+{
+    if (button.tag == 100) {
+        //複選框
+    } else if (button.tag == 101) {
+        //進入協議詳情
+    }
 }
 
 /**

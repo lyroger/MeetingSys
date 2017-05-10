@@ -13,6 +13,7 @@
 #import <BlocksKit/BlocksKit.h>
 #import <BlocksKit/BlocksKit+UIKit.h>
 #import "NSString+MyString.h"
+#import "UIImageView+WebCache.h"
 
 /***View***/
 #import "MJRefresh.h"

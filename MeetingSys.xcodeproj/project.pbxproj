@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A71510991EC1F3C800B2361F /* MSMeetingUserCenterView.m in Sources */ = {isa = PBXBuildFile; fileRef = A71510981EC1F3C800B2361F /* MSMeetingUserCenterView.m */; };
+		A715109C1EC1F61800B2361F /* MSUserInfoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A715109B1EC1F61800B2361F /* MSUserInfoCell.m */; };
 		A7186F4A1EBC219F00DE4B67 /* BaseModel+HUD.m in Sources */ = {isa = PBXBuildFile; fileRef = A7186E0F1EBC219E00DE4B67 /* BaseModel+HUD.m */; };
 		A7186F4B1EBC219F00DE4B67 /* BaseModel.m in Sources */ = {isa = PBXBuildFile; fileRef = A7186E111EBC219E00DE4B67 /* BaseModel.m */; };
 		A7186F4C1EBC219F00DE4B67 /* GPSServerManager.m in Sources */ = {isa = PBXBuildFile; fileRef = A7186E131EBC219E00DE4B67 /* GPSServerManager.m */; };
@@ -151,6 +153,10 @@
 /* Begin PBXFileReference section */
 		3C81739A1963D5DB2DE66276 /* Pods-MeetingSys.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MeetingSys.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MeetingSys/Pods-MeetingSys.debug.xcconfig"; sourceTree = "<group>"; };
 		51821ADB74B0C3A16AE2BCE8 /* libPods-MeetingSys.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-MeetingSys.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		A71510971EC1F3C800B2361F /* MSMeetingUserCenterView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSMeetingUserCenterView.h; sourceTree = "<group>"; };
+		A71510981EC1F3C800B2361F /* MSMeetingUserCenterView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSMeetingUserCenterView.m; sourceTree = "<group>"; };
+		A715109A1EC1F61800B2361F /* MSUserInfoCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSUserInfoCell.h; sourceTree = "<group>"; };
+		A715109B1EC1F61800B2361F /* MSUserInfoCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSUserInfoCell.m; sourceTree = "<group>"; };
 		A7186E0D1EBC219E00DE4B67 /* AFHTTPSessionManager_BaseModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFHTTPSessionManager_BaseModel.h; sourceTree = "<group>"; };
 		A7186E0E1EBC219E00DE4B67 /* BaseModel+HUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "BaseModel+HUD.h"; sourceTree = "<group>"; };
 		A7186E0F1EBC219E00DE4B67 /* BaseModel+HUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "BaseModel+HUD.m"; sourceTree = "<group>"; };
@@ -552,6 +558,10 @@
 			children = (
 				A7186E331EBC219E00DE4B67 /* MNBottomTitleButton.h */,
 				A7186E341EBC219E00DE4B67 /* MNBottomTitleButton.m */,
+				A71510971EC1F3C800B2361F /* MSMeetingUserCenterView.h */,
+				A71510981EC1F3C800B2361F /* MSMeetingUserCenterView.m */,
+				A715109A1EC1F61800B2361F /* MSUserInfoCell.h */,
+				A715109B1EC1F61800B2361F /* MSUserInfoCell.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -1382,6 +1392,7 @@
 				A7186FA81EBC219F00DE4B67 /* UIImage+Orientation.m in Sources */,
 				A7186F5A1EBC219F00DE4B67 /* MNBottomTitleButton.m in Sources */,
 				A7186FA11EBC219F00DE4B67 /* UIControl+Block.m in Sources */,
+				A715109C1EC1F61800B2361F /* MSUserInfoCell.m in Sources */,
 				A7186FB61EBC219F00DE4B67 /* UITextField+Select.m in Sources */,
 				A7186F941EBC219F00DE4B67 /* UIButton+Block.m in Sources */,
 				A7186F851EBC219F00DE4B67 /* NSString+Score.m in Sources */,
@@ -1435,6 +1446,7 @@
 				A7186F5D1EBC219F00DE4B67 /* NSArray+Block.m in Sources */,
 				A7186FAF1EBC219F00DE4B67 /* UINavigationController+StackManager.m in Sources */,
 				A7186F6A1EBC219F00DE4B67 /* NSDictionary+SafeAccess.m in Sources */,
+				A71510991EC1F3C800B2361F /* MSMeetingUserCenterView.m in Sources */,
 				A7186F841EBC219F00DE4B67 /* NSString+RemoveEmoji.m in Sources */,
 				A7186FBE1EBC219F00DE4B67 /* UIView+GestureCallback.m in Sources */,
 				A7186FA41EBC219F00DE4B67 /* UIImage+BlurImage.m in Sources */,
