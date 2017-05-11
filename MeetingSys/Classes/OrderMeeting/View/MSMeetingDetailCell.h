@@ -7,7 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "MSNoticeModel.h"
 
 @interface MSMeetingDetailCell : UITableViewCell
+
+- (void)data:(MSNoticeModel*)model;
+
++ (CGFloat)meetingDetailHeight:(MSNoticeModel*)model;
 
 @end

@@ -130,10 +130,12 @@
         if (!cell) {
             cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"cell"];
             cell.backgroundColor = UIColorHex(0xffffff);
+            cell.textLabel.font = kFontPingFangRegularSize(16);
+            cell.textLabel.textColor = UIColorHex(0x333333);
         }
         
         NSArray *datas = @[@"修改密碼",@"檢查更新",@"退出"];
-        NSArray *images = @[@"me_upgrade",@"me_upgrade",@"me_upgrade"];
+        NSArray *images = @[@"me_password",@"me_update",@"me_out"];
         
         NSString *image = images[indexPath.row-6];
         cell.imageView.image = [UIImage imageNamed:image];

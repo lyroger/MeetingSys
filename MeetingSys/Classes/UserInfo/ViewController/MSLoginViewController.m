@@ -8,6 +8,7 @@
 
 #import "MSLoginViewController.h"
 #import "MNBottomTitleButton.h"
+#import "MSAgreementViewController.h"
 
 @interface MSLoginViewController ()<UITextFieldDelegate>
 {
@@ -22,6 +23,7 @@
     UIView *loginOtherContentView;
     
     UIButton *agreeButton;
+    BOOL isAgreement;
     
 }
 
@@ -248,8 +250,17 @@
 {
     if (button.tag == 100) {
         //複選框
+        isAgreement = !isAgreement;
+        if (isAgreement) {
+            [agreeButton setImage:[UIImage imageNamed:@"login_agreement_on"] forState:UIControlStateNormal];
+        } else {
+            [agreeButton setImage:[UIImage imageNamed:@"login_agreement_off"] forState:UIControlStateNormal];
+        }
+        [self textFieldTextDidChange:nil];
     } else if (button.tag == 101) {
         //進入協議詳情
+        MSAgreementViewController *agreeVC = [[MSAgreementViewController alloc] init];
+        [self.navigationController pushViewController:agreeVC animated:YES];
     }
 }
 
@@ -304,20 +315,6 @@
     }
 }
 
-//第三方登录
-- (void)loginByOther:(UIButton*)button
-{
-    if (button.tag == 100) {
-        //微信
-    } else if (button.tag == 101) {
-        //qq
-    } else if (button.tag == 102) {
-        //微博
-        
-    }
-        
-}
-
 #pragma mark - UITextFieldDelegate
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
 {
@@ -333,7 +330,7 @@
 {
     NSString *username = [userTextField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
     NSString *password = [pwdTextField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
-    if (username.length > 0 && password.length > 0) {
+    if (username.length > 0 && password.length > 0 && isAgreement) {
         loginButton.enabled = YES;
     } else {
         loginButton.enabled = NO;

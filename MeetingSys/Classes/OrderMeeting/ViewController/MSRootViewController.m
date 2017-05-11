@@ -41,6 +41,8 @@
 
 - (void)loadSubView
 {
+    [self loadDemoData];
+    
     mainScrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 40, kScreenWidth, kScreenHeight-64-50-40)];
     [mainScrollView setContentSize:CGSizeMake(kScreenWidth*2, mainScrollView.height)];
     mainScrollView.pagingEnabled = YES;
@@ -52,12 +54,17 @@
     tableNoticeView.backgroundColor = UIColorHex(0xf6f6f6);
     tableNoticeView.delegate = self;
     tableNoticeView.dataSource = self;
+    tableNoticeView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    [tableNoticeView registerClass:[MSMeetingDetailCell class] forCellReuseIdentifier:@"MSMeetingDetailCell"];
+    [tableNoticeView registerClass:[MSNoticeCellView class] forCellReuseIdentifier:@"MSNoticeCellView"];
     [mainScrollView addSubview:tableNoticeView];
     
     tableAllMeetingView = [[UITableView alloc] initWithFrame:CGRectMake(kScreenWidth, 0, kScreenWidth, mainScrollView.height) style:UITableViewStyleGrouped];
     tableAllMeetingView.backgroundColor = UIColorHex(0xf6f6f6);
     tableAllMeetingView.delegate = self;
     tableAllMeetingView.dataSource = self;
+    tableAllMeetingView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    [tableAllMeetingView registerClass:[MSMeetingListCell class] forCellReuseIdentifier:@"MSMeetingListCell"];
     [mainScrollView addSubview:tableAllMeetingView];
     
     //加載導航欄
@@ -80,45 +87,126 @@
     }];
 }
 
+- (void)loadDemoData
+{
+    for (int i = 0; i < 10; i++) {
+        MSNoticeModel *model = [[MSNoticeModel alloc] init];
+        model.noticeDate = @"五分鐘前";
+        model.noticeContent = @"保險專業知識培訓01";
+        model.noticeTitle = @"會議通知";
+        model.meetingDate = @"2017-04-04 10:00";
+        model.isUnfold = NO;
+        //第一个展开
+//        model.isUnfold = i==0?YES:NO;
+        
+        MSMeetingDetailModel *detailModel = [[MSMeetingDetailModel alloc] init];
+        detailModel.beginTime = @"2017-04-04 10:00";
+        detailModel.endTime = @"2017-04-04 10:30";
+        detailModel.address = @"s1";
+        detailModel.agenda = @"保險專業知識培訓保險專業知識培訓保險專業知識培訓保險專業知識培訓";
+        detailModel.demand = @"保險專業知識培訓保險專業知識培訓保險專業知識培訓";
+        
+        model.meetingDetailModel = detailModel;
+        [self.noticeArray addObject:model];
+    }
+}
+
 #pragma mark UITableViewDelegate & UITableViewDataSource
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    if (tableView == tableNoticeView) {
+        MSNoticeModel *model = [self.noticeArray objectAtIndex:indexPath.section];
+        if (indexPath.row == 0) {
+            model.isUnfold = !model.isUnfold;
+            [tableNoticeView reloadSections:[NSIndexSet indexSetWithIndex:indexPath.section] withRowAnimation:UITableViewRowAnimationFade];
+        }
+    } else {
+        
+    }
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 44;
+    if (tableView == tableNoticeView) {
+        MSNoticeModel *model = [self.noticeArray objectAtIndex:indexPath.section];
+        if (model.isUnfold) {
+            if (indexPath.row == 0) {
+                return [MSNoticeCellView noticeCellHeight];
+            } else {
+                return [MSMeetingDetailCell meetingDetailHeight:model];
+            }
+        } else {
+            return [MSNoticeCellView noticeCellHeight];
+        }
+    } else {
+        return 44;
+    }
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    return 0.01;
+    if (section == 0) {
+        return 12;
+    } else {
+        return 8;
+    }
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
 {
-    return 0.01;
+    return 0.001;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return 10;
+    if (tableView == tableNoticeView) {
+        MSNoticeModel *model = [self.noticeArray objectAtIndex:section];
+        return model.isUnfold?2:1;
+    } else {
+        return 10;
+    }
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return 1;
+    if (tableView == tableNoticeView) {
+        return self.noticeArray.count;
+    } else {
+        return 1;
+    }
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cel"];
-    if (!cell) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"cel"];
+    if (tableView == tableNoticeView) {
+        MSNoticeCellView *cell = [tableView dequeueReusableCellWithIdentifier:@"MSNoticeCellView"];
+        cell.backgroundColor = tableNoticeView.backgroundColor;
+        MSNoticeModel *model = [self.noticeArray objectAtIndex:indexPath.section];
+        if (model.isUnfold) {
+            //考慮一個列表和一個詳情
+            if (indexPath.row == 0) {
+                [cell data:model];
+            } else {
+                MSMeetingDetailCell *detailCell = [tableView dequeueReusableCellWithIdentifier:@"MSMeetingDetailCell"];
+                detailCell.selectionStyle = UITableViewCellSeparatorStyleNone;
+                detailCell.backgroundColor = tableNoticeView.backgroundColor;
+                [detailCell data:model];
+                return detailCell;
+            }
+        } else {
+            //考慮列表即可
+            [cell data:model];
+        }
+        return cell;
+    } else {
+        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cel"];
+        if (!cell) {
+            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"cel"];
+        }
+        cell.textLabel.text = @"sfef";
+        return cell;
     }
-    cell.textLabel.text = @"sfef";
-    return cell;
 }
 
 //個人中心
