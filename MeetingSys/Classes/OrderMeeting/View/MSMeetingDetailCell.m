@@ -8,6 +8,7 @@
 
 #import "MSMeetingDetailCell.h"
 #import "MSTitleAndDetailView.h"
+#import "MSMemberView.h"
 
 @interface MSMeetingDetailCell()
 {
@@ -15,6 +16,8 @@
     
     MSTitleAndDetailView *beginTimeView;
     MSTitleAndDetailView *endTimeView;
+    
+    MSMemberView *memberView;//参会成员
     
     MSTitleAndDetailView *meetindAddressView;//會議地址
     MSTitleAndDetailView *meetingAgendaView;//會議議程
@@ -43,6 +46,9 @@
         
         meetindAddressView = [MSTitleAndDetailView new];
         [bgContentView addSubview:meetindAddressView];
+        
+        memberView = [MSMemberView new];
+        [bgContentView addSubview:memberView];
         
         meetingAgendaView = [MSTitleAndDetailView new];
         [bgContentView addSubview:meetingAgendaView];
@@ -84,9 +90,15 @@
             make.height.equalTo(@70);
         }];
         
+        [memberView mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.top.equalTo(meetindAddressView.mas_bottom);
+            make.left.right.equalTo(@0);
+            make.height.equalTo(@127);
+        }];
+        
         [meetingAgendaView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.left.right.equalTo(@0);
-            make.top.equalTo(meetindAddressView.mas_bottom);
+            make.top.equalTo(memberView.mas_bottom);
             make.bottom.equalTo(meetingDemandView.mas_top);
         }];
         
@@ -111,6 +123,8 @@
     meetindAddressView.titleLabel.text = @"會議地址";
     meetindAddressView.detailLabel.text = model.meetingDetailModel.address;
     
+    [memberView membersData:model.meetingDetailModel.members];
+    
     meetingAgendaView.titleLabel.text = @"會議議程";
     meetingAgendaView.detailLabel.text = model.meetingDetailModel.agenda;
     
@@ -120,7 +134,7 @@
 
 + (CGFloat)meetingDetailHeight:(MSNoticeModel*)model
 {
-    CGFloat tottalHeight = 70+70+[MSTitleAndDetailView titleAndDetailViewHeight:model.meetingDetailModel.agenda width:kScreenWidth-10*2-10*2]+[MSTitleAndDetailView titleAndDetailViewHeight:model.meetingDetailModel.demand width:kScreenWidth-10*2-10*2];
+    CGFloat tottalHeight = 70+70+127+[MSTitleAndDetailView titleAndDetailViewHeight:model.meetingDetailModel.agenda width:kScreenWidth-10*2-10*2]+[MSTitleAndDetailView titleAndDetailViewHeight:model.meetingDetailModel.demand width:kScreenWidth-10*2-10*2];
     return tottalHeight;
 }
 

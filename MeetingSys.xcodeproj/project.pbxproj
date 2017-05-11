@@ -144,6 +144,7 @@
 		A7416AEB1EC0867300E42EB0 /* MSNoticeCellView.m in Sources */ = {isa = PBXBuildFile; fileRef = A7416AEA1EC0867300E42EB0 /* MSNoticeCellView.m */; };
 		A7416AEE1EC086B200E42EB0 /* MSMeetingListCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A7416AED1EC086B200E42EB0 /* MSMeetingListCell.m */; };
 		A7416AF11EC086E700E42EB0 /* MSMeetingDetailCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A7416AF01EC086E700E42EB0 /* MSMeetingDetailCell.m */; };
+		A773273A1EC498B1005A89AE /* MSMemberView.m in Sources */ = {isa = PBXBuildFile; fileRef = A77327391EC498B1005A89AE /* MSMemberView.m */; };
 		A789FCBD1EBC101B004CA763 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = A789FCBC1EBC101B004CA763 /* main.m */; };
 		A789FCC01EBC101B004CA763 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = A789FCBF1EBC101B004CA763 /* AppDelegate.m */; };
 		A789FCC81EBC101B004CA763 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A789FCC71EBC101B004CA763 /* Assets.xcassets */; };
@@ -445,6 +446,8 @@
 		A7416AED1EC086B200E42EB0 /* MSMeetingListCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSMeetingListCell.m; sourceTree = "<group>"; };
 		A7416AEF1EC086E700E42EB0 /* MSMeetingDetailCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSMeetingDetailCell.h; sourceTree = "<group>"; };
 		A7416AF01EC086E700E42EB0 /* MSMeetingDetailCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSMeetingDetailCell.m; sourceTree = "<group>"; };
+		A77327381EC498B1005A89AE /* MSMemberView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSMemberView.h; sourceTree = "<group>"; };
+		A77327391EC498B1005A89AE /* MSMemberView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSMemberView.m; sourceTree = "<group>"; };
 		A789FCB81EBC101B004CA763 /* MeetingSys.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MeetingSys.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A789FCBC1EBC101B004CA763 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		A789FCBE1EBC101B004CA763 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -1173,14 +1176,12 @@
 		A7186FCE1EBC233D00DE4B67 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				A77327371EC4971F005A89AE /* Meeting */,
+				A77327361EC496B1005A89AE /* Notice */,
 				A7416AE31EC064F300E42EB0 /* MSNavTabbarView.h */,
 				A7416AE41EC064F300E42EB0 /* MSNavTabbarView.m */,
 				A7416AE61EC0797C00E42EB0 /* MSOrderMeetingButtonView.h */,
 				A7416AE71EC0797C00E42EB0 /* MSOrderMeetingButtonView.m */,
-				A7416AE91EC0867200E42EB0 /* MSNoticeCellView.h */,
-				A7416AEA1EC0867300E42EB0 /* MSNoticeCellView.m */,
-				A7416AEF1EC086E700E42EB0 /* MSMeetingDetailCell.h */,
-				A7416AF01EC086E700E42EB0 /* MSMeetingDetailCell.m */,
 				A7416AEC1EC086B200E42EB0 /* MSMeetingListCell.h */,
 				A7416AED1EC086B200E42EB0 /* MSMeetingListCell.m */,
 				A7D9C8A81EC4584F000FB05C /* MSTitleAndDetailView.h */,
@@ -1196,6 +1197,26 @@
 				A7186FD11EBC2CC300DE4B67 /* MSRootViewController.m */,
 			);
 			path = ViewController;
+			sourceTree = "<group>";
+		};
+		A77327361EC496B1005A89AE /* Notice */ = {
+			isa = PBXGroup;
+			children = (
+				A7416AE91EC0867200E42EB0 /* MSNoticeCellView.h */,
+				A7416AEA1EC0867300E42EB0 /* MSNoticeCellView.m */,
+				A7416AEF1EC086E700E42EB0 /* MSMeetingDetailCell.h */,
+				A7416AF01EC086E700E42EB0 /* MSMeetingDetailCell.m */,
+				A77327381EC498B1005A89AE /* MSMemberView.h */,
+				A77327391EC498B1005A89AE /* MSMemberView.m */,
+			);
+			name = Notice;
+			sourceTree = "<group>";
+		};
+		A77327371EC4971F005A89AE /* Meeting */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Meeting;
 			sourceTree = "<group>";
 		};
 		A789FCAF1EBC101B004CA763 = {
@@ -1491,6 +1512,7 @@
 				A7186FC71EBC219F00DE4B67 /* DataManager.m in Sources */,
 				A7186F4B1EBC219F00DE4B67 /* BaseModel.m in Sources */,
 				A7186F701EBC219F00DE4B67 /* NSNumber+CGFloat.m in Sources */,
+				A773273A1EC498B1005A89AE /* MSMemberView.m in Sources */,
 				A7186F631EBC219F00DE4B67 /* NSDate+Formatter.m in Sources */,
 				A7416AF11EC086E700E42EB0 /* MSMeetingDetailCell.m in Sources */,
 				A7186FBB1EBC219F00DE4B67 /* UIView+CustomBorder.m in Sources */,

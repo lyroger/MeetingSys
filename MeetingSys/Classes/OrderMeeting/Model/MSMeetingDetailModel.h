@@ -8,6 +8,13 @@
 
 #import "BaseModel.h"
 
+@interface MSMemberModel : BaseModel
+
+@property (nonatomic,copy) NSString *name;
+@property (nonatomic,copy) NSString *headURL;
+
+@end
+
 @interface MSMeetingDetailModel : BaseModel
 
 @property (nonatomic, copy) NSString *beginTime;
@@ -15,5 +22,7 @@
 @property (nonatomic, copy) NSString *address;
 @property (nonatomic, copy) NSString *agenda;
 @property (nonatomic, copy) NSString *demand;
+@property (nonatomic, strong) NSMutableArray *members;
+
 
 @end

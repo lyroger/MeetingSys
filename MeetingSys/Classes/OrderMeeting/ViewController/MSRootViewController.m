@@ -106,6 +106,13 @@
         detailModel.agenda = @"保險專業知識培訓保險專業知識培訓保險專業知識培訓保險專業知識培訓";
         detailModel.demand = @"保險專業知識培訓保險專業知識培訓保險專業知識培訓";
         
+        for (int j = 0; j < 8; j++) {
+            MSMemberModel *member = [[MSMemberModel alloc] init];
+            member.headURL = @"";
+            member.name = @"roger";
+            [detailModel.members addObject:member];
+        }
+        
         model.meetingDetailModel = detailModel;
         [self.noticeArray addObject:model];
     }
