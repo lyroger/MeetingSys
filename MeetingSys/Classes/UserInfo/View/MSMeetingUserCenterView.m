@@ -95,6 +95,10 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    
+    if (self.delegate && [self.delegate respondsToSelector:@selector(didClickMeetingUserCenterViewItem:)]) {
+        [self.delegate didClickMeetingUserCenterViewItem:indexPath.row-6];
+    }
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath

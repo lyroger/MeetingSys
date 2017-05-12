@@ -14,5 +14,7 @@
 @property (strong, nonatomic) UIWindow *window;
 @property (strong, nonatomic) MSRootViewController *rootViewController;
 
+- (void)authorizeOperation;
+
 @end
 

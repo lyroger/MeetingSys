@@ -17,7 +17,7 @@
 #import "MSAllMeetingDetailCell.h"
 #import "MSTodayMeetingView.h"
 
-@interface MSRootViewController ()<MSNavTabbarViewDelegete,UITableViewDelegate,UITableViewDataSource,UIScrollViewDelegate,MSOrderMeetingButtonViewDelegate,MSAllMeetingDetailCellDelegate>
+@interface MSRootViewController ()<MSNavTabbarViewDelegete,UITableViewDelegate,UITableViewDataSource,UIScrollViewDelegate,MSOrderMeetingButtonViewDelegate,MSAllMeetingDetailCellDelegate,MSMeetingUserCenterViewDelegate>
 {
     UITableView *tableNoticeView;
     UITableView *tableAllMeetingView;
@@ -37,6 +37,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.title = @"會議室管理";
+    AddNotification(self, @selector(userLoginOut), kLoginOutNotification, nil);
     [self leftBarButtonWithName:nil image:[UIImage imageNamed:@"user_center_icon"] target:self action:@selector(userInfoClick:)];
     
     [self loadSubView];
@@ -374,6 +375,7 @@
     NSLog(@"個人中心");
     if (!userCenterView) {
         userCenterView = [MSMeetingUserCenterView new];
+        userCenterView.delegate = self;
     }
     [userCenterView showUserCenterView];
 }
@@ -382,6 +384,35 @@
 - (void)didClickOrder:(MSOrderMeetingButtonView*)view
 {
     NSLog(@"新增會與預約");
+}
+
+- (void)didClickMeetingUserCenterViewItem:(NSInteger)itemIndex
+{
+    if (itemIndex == 0) {
+        //修改密碼
+    } else if (itemIndex == 1) {
+        //檢查更新
+    } else if (itemIndex == 2) {
+        //註銷
+        [UIAlertView alertWithCallBackBlock:^(NSInteger buttonIndex) {
+            if (buttonIndex == 1) {
+                [self userLoginOut];
+            }
+        } title:@"提示" message:@"確定要註銷？" cancelButtonName:@"取消" otherButtonTitles:@"確定", nil];
+    }
+}
+
+- (void)userLoginOut
+{
+    //注销token 发送退出登录通知
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [MSUserInfo shareUserInfo].token = nil;
+        [[MSUserInfo shareUserInfo] deletePassword];
+        MSUserInfo *userInfo = [MSUserInfo shareUserInfo];
+        if ([userInfo saveToDB]) {
+            [kAppDelegate authorizeOperation];
+        }
+    });
 }
 
 //切換tabbar

@@ -8,8 +8,18 @@
 
 #import <UIKit/UIKit.h>
 
+@protocol MSMeetingUserCenterViewDelegate;
+
 @interface MSMeetingUserCenterView : UIControl
 
+@property (nonatomic, weak) id<MSMeetingUserCenterViewDelegate> delegate;
+
 - (void)showUserCenterView;
+
+@end
+
+@protocol MSMeetingUserCenterViewDelegate <NSObject>
+
+- (void)didClickMeetingUserCenterViewItem:(NSInteger)itemIndex;
 
 @end
