@@ -9,11 +9,21 @@
 #import "MSMeetingDetailCell.h"
 #import "MSMeetingDetailModel.h"
 
+@protocol MSAllMeetingDetailCellDelegate;
+
 @interface MSAllMeetingDetailCell : MSMeetingDetailCell
 {
     UIButton *sureButton;
 }
 
+@property (nonatomic,weak) id<MSAllMeetingDetailCellDelegate> delegate;
+
 - (void)data:(MSMeetingDetailModel*)model;
 + (CGFloat)meetingDetailHeight:(MSMeetingDetailModel*)model;
+@end
+
+@protocol MSAllMeetingDetailCellDelegate <NSObject>
+
+- (void)didClickSureActionCell:(MSAllMeetingDetailCell*)cell;
+
 @end

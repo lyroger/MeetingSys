@@ -15,8 +15,9 @@
 #import "MSMeetingUserCenterView.h"
 #import "MSAllMeetingModel.h"
 #import "MSAllMeetingDetailCell.h"
+#import "MSTodayMeetingView.h"
 
-@interface MSRootViewController ()<MSNavTabbarViewDelegete,UITableViewDelegate,UITableViewDataSource,UIScrollViewDelegate,MSOrderMeetingButtonViewDelegate>
+@interface MSRootViewController ()<MSNavTabbarViewDelegete,UITableViewDelegate,UITableViewDataSource,UIScrollViewDelegate,MSOrderMeetingButtonViewDelegate,MSAllMeetingDetailCellDelegate>
 {
     UITableView *tableNoticeView;
     UITableView *tableAllMeetingView;
@@ -27,6 +28,7 @@
 
 @property (nonatomic, strong) NSMutableArray *noticeArray;
 @property (nonatomic, strong) MSAllMeetingModel *allMeetingModel;
+@property (nonatomic, strong) MSTodayMeetingView *todayMeetingView;
 
 @end
 
@@ -68,7 +70,10 @@
     tableAllMeetingView.separatorStyle = UITableViewCellSeparatorStyleNone;
     [tableAllMeetingView registerClass:[MSMeetingListCell class] forCellReuseIdentifier:@"MSMeetingListCell"];
     [tableAllMeetingView registerClass:[MSAllMeetingDetailCell class] forCellReuseIdentifier:@"MSAllMeetingDetailCell"];
+    tableAllMeetingView.tableHeaderView = self.todayMeetingView;
     [mainScrollView addSubview:tableAllMeetingView];
+    
+    [self.todayMeetingView reloadWithDatas:self.allMeetingModel.todayList];
     
     //加載導航欄
     navTabbarView = [[MSNavTabbarView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, 40)];
@@ -150,6 +155,27 @@
         }
         [self.allMeetingModel.dayGroupList addObject:dayGroupList];
     }
+    
+    //加載當天數據
+    for (int i = 0; i<8; i++) {
+        MSMeetingDetailModel *detailModel = [[MSMeetingDetailModel alloc] init];
+        detailModel.title = @"月度總結報告";
+        detailModel.organizeName = @"roger";
+        detailModel.beginTime = @"10:00";
+        detailModel.endTime = @"10:30";
+        detailModel.address = @"s1";
+        detailModel.agenda = @"保險專業知識培訓保險專業知識培訓保險專業知識培訓保險專業知識培訓";
+        detailModel.demand = @"保險專業知識培訓保險專業知識培訓保險專業知識培訓";
+        
+        
+        for (int j = 0; j < 8; j++) {
+            MSMemberModel *member = [[MSMemberModel alloc] init];
+            member.headURL = @"";
+            member.name = @"roger";
+            [detailModel.members addObject:member];
+        }
+        [self.allMeetingModel.todayList addObject:detailModel];
+    }
 }
 
 - (NSInteger)fetchOtherUnfoldCell:(NSInteger)section
@@ -163,6 +189,18 @@
         }
     }];
     return otherUnfoldSection;
+}
+
+- (void)didClickSureActionCell:(MSAllMeetingDetailCell*)cell
+{
+    NSIndexPath *indexPath = [tableAllMeetingView indexPathForCell:cell];
+    
+    MSDayGroupList *dayGroupList = [self.allMeetingModel.dayGroupList objectAtIndex:indexPath.section];
+    MSMeetingDetailModel *dayDetailModel = [dayGroupList.list objectAtIndex:indexPath.row-1];
+    dayDetailModel.isUnfold = NO;
+    
+    [dayGroupList.list removeObjectAtIndex:indexPath.row];
+    [tableAllMeetingView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
 }
 
 #pragma mark UITableViewDelegate & UITableViewDataSource
@@ -186,12 +224,13 @@
         if (!dayDetailModel.isDetail) {
             if (dayDetailModel.isUnfold) {
                 //折叠详情
-                [dayGroupList.list removeObject:dayDetailModel];
-                [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+                [dayGroupList.list removeObjectAtIndex:indexPath.row+1];
+                NSIndexPath *indexP = [NSIndexPath indexPathForRow:indexPath.row+1 inSection:indexPath.section];
+                [tableView deleteRowsAtIndexPaths:@[indexP] withRowAnimation:UITableViewRowAnimationFade];
             } else {
                 //展开详情
                 MSMeetingDetailModel *copyDetail = [dayDetailModel copy];
-                dayDetailModel.isDetail = YES;
+                copyDetail.isDetail = YES;
                 [dayGroupList.list insertObject:copyDetail atIndex:indexPath.row+1];
                 NSIndexPath *indexP = [NSIndexPath indexPathForRow:indexPath.row+1 inSection:indexPath.section];
                 [tableView insertRowsAtIndexPaths:@[indexP] withRowAnimation:UITableViewRowAnimationFade];
@@ -316,6 +355,8 @@
         if (dayDetailModel.isDetail) {
             //展开的详情
             MSAllMeetingDetailCell *cell = [tableView dequeueReusableCellWithIdentifier:@"MSAllMeetingDetailCell"];
+            cell.delegate = self;
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
             [cell data:dayDetailModel];
             return cell;
         } else {
@@ -368,6 +409,14 @@
         _noticeArray = [[NSMutableArray alloc] init];
     }
     return _noticeArray;
+}
+
+- (MSTodayMeetingView*)todayMeetingView
+{
+    if (!_todayMeetingView) {
+        _todayMeetingView = [[MSTodayMeetingView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, 212)];
+    }
+    return _todayMeetingView;
 }
 
 - (void)didReceiveMemoryWarning {

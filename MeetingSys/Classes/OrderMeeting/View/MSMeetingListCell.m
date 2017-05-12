@@ -78,6 +78,7 @@
             make.width.lessThanOrEqualTo(@100);
             make.height.mas_equalTo(25);
         }];
+        
     }
     
     return self;

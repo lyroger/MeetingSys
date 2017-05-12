@@ -154,6 +154,10 @@
 		A7D9C8A71EC44A98000FB05C /* MSNoticeModel.m in Sources */ = {isa = PBXBuildFile; fileRef = A7D9C8A61EC44A98000FB05C /* MSNoticeModel.m */; };
 		A7D9C8AA1EC4584F000FB05C /* MSTitleAndDetailView.m in Sources */ = {isa = PBXBuildFile; fileRef = A7D9C8A91EC4584F000FB05C /* MSTitleAndDetailView.m */; };
 		A7D9C8AD1EC46B9B000FB05C /* MSMeetingDetailModel.m in Sources */ = {isa = PBXBuildFile; fileRef = A7D9C8AC1EC46B9B000FB05C /* MSMeetingDetailModel.m */; };
+		A7FA35F91EC5E58B0053B682 /* MSTodayMeetingView.m in Sources */ = {isa = PBXBuildFile; fileRef = A7FA35F81EC5E58B0053B682 /* MSTodayMeetingView.m */; };
+		A7FA36001EC5E5C80053B682 /* CyclicCardCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A7FA35FB1EC5E5C80053B682 /* CyclicCardCell.m */; };
+		A7FA36011EC5E5C80053B682 /* CyclicCardFlowLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = A7FA35FD1EC5E5C80053B682 /* CyclicCardFlowLayout.m */; };
+		A7FA36021EC5E5C80053B682 /* HJCarouselViewLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = A7FA35FF1EC5E5C80053B682 /* HJCarouselViewLayout.m */; };
 		B98867DDE7763AC096282742 /* libPods-MeetingSys.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 51821ADB74B0C3A16AE2BCE8 /* libPods-MeetingSys.a */; };
 /* End PBXBuildFile section */
 
@@ -468,6 +472,14 @@
 		A7D9C8A91EC4584F000FB05C /* MSTitleAndDetailView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSTitleAndDetailView.m; sourceTree = "<group>"; };
 		A7D9C8AB1EC46B9B000FB05C /* MSMeetingDetailModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSMeetingDetailModel.h; sourceTree = "<group>"; };
 		A7D9C8AC1EC46B9B000FB05C /* MSMeetingDetailModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSMeetingDetailModel.m; sourceTree = "<group>"; };
+		A7FA35F71EC5E58B0053B682 /* MSTodayMeetingView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSTodayMeetingView.h; sourceTree = "<group>"; };
+		A7FA35F81EC5E58B0053B682 /* MSTodayMeetingView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSTodayMeetingView.m; sourceTree = "<group>"; };
+		A7FA35FA1EC5E5C80053B682 /* CyclicCardCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CyclicCardCell.h; sourceTree = "<group>"; };
+		A7FA35FB1EC5E5C80053B682 /* CyclicCardCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CyclicCardCell.m; sourceTree = "<group>"; };
+		A7FA35FC1EC5E5C80053B682 /* CyclicCardFlowLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CyclicCardFlowLayout.h; sourceTree = "<group>"; };
+		A7FA35FD1EC5E5C80053B682 /* CyclicCardFlowLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CyclicCardFlowLayout.m; sourceTree = "<group>"; };
+		A7FA35FE1EC5E5C80053B682 /* HJCarouselViewLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HJCarouselViewLayout.h; sourceTree = "<group>"; };
+		A7FA35FF1EC5E5C80053B682 /* HJCarouselViewLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HJCarouselViewLayout.m; sourceTree = "<group>"; };
 		DB46E8896A084F3BF7552B82 /* Pods-MeetingSys.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MeetingSys.release.xcconfig"; path = "Pods/Target Support Files/Pods-MeetingSys/Pods-MeetingSys.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -1184,6 +1196,7 @@
 		A7186FCE1EBC233D00DE4B67 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				A7FA35F61EC5E4700053B682 /* ToDayMeeting */,
 				A77327371EC4971F005A89AE /* Meeting */,
 				A77327361EC496B1005A89AE /* Notice */,
 				A7416AE31EC064F300E42EB0 /* MSNavTabbarView.h */,
@@ -1269,6 +1282,21 @@
 				A7186FCB1EBC221900DE4B67 /* MeetingSysPrefixHeader.pch */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		A7FA35F61EC5E4700053B682 /* ToDayMeeting */ = {
+			isa = PBXGroup;
+			children = (
+				A7FA35FA1EC5E5C80053B682 /* CyclicCardCell.h */,
+				A7FA35FB1EC5E5C80053B682 /* CyclicCardCell.m */,
+				A7FA35FC1EC5E5C80053B682 /* CyclicCardFlowLayout.h */,
+				A7FA35FD1EC5E5C80053B682 /* CyclicCardFlowLayout.m */,
+				A7FA35FE1EC5E5C80053B682 /* HJCarouselViewLayout.h */,
+				A7FA35FF1EC5E5C80053B682 /* HJCarouselViewLayout.m */,
+				A7FA35F71EC5E58B0053B682 /* MSTodayMeetingView.h */,
+				A7FA35F81EC5E58B0053B682 /* MSTodayMeetingView.m */,
+			);
+			name = ToDayMeeting;
 			sourceTree = "<group>";
 		};
 		D04E6D2F44C7FCE0E3EAE559 /* Frameworks */ = {
@@ -1414,6 +1442,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A7FA36021EC5E5C80053B682 /* HJCarouselViewLayout.m in Sources */,
 				A7186FAB1EBC219F00DE4B67 /* UIImageView+Addition.m in Sources */,
 				A7186F971EBC219F00DE4B67 /* UIButton+ImageTitleStyle.m in Sources */,
 				A7186F881EBC219F00DE4B67 /* NSString+UrlEncode.m in Sources */,
@@ -1453,10 +1482,12 @@
 				A7186F521EBC219F00DE4B67 /* CSErrorTips.m in Sources */,
 				A7416AEE1EC086B200E42EB0 /* MSMeetingListCell.m in Sources */,
 				A7186F991EBC219F00DE4B67 /* UIButton+LXMImagePosition.m in Sources */,
+				A7FA36011EC5E5C80053B682 /* CyclicCardFlowLayout.m in Sources */,
 				A7186F771EBC219F00DE4B67 /* NSObject+Reflection.m in Sources */,
 				A7186F951EBC219F00DE4B67 /* UIButton+Bootstrap.m in Sources */,
 				A7186F611EBC219F00DE4B67 /* NSDate+CupertinoYankee.m in Sources */,
 				A7186F641EBC219F00DE4B67 /* NSDate+Reporting.m in Sources */,
+				A7FA35F91EC5E58B0053B682 /* MSTodayMeetingView.m in Sources */,
 				A7186F571EBC219F00DE4B67 /* MSBaseViewController.m in Sources */,
 				A7186F581EBC219F00DE4B67 /* MSNavigationController.m in Sources */,
 				A7186F691EBC219F00DE4B67 /* NSDictionary+Merge.m in Sources */,
@@ -1557,6 +1588,7 @@
 				A7186F871EBC219F00DE4B67 /* NSString+Trims.m in Sources */,
 				A7186FB01EBC219F00DE4B67 /* UINavigationItem+Lock.m in Sources */,
 				A7186F591EBC219F00DE4B67 /* MSUserInfo.m in Sources */,
+				A7FA36001EC5E5C80053B682 /* CyclicCardCell.m in Sources */,
 				A7186F831EBC219F00DE4B67 /* NSString+RegexCategory.m in Sources */,
 				A7186FB71EBC219F00DE4B67 /* UITextView+PlaceHolder.m in Sources */,
 				A7186FC41EBC219F00DE4B67 /* UIViewController+BackButtonItemTitle.m in Sources */,
