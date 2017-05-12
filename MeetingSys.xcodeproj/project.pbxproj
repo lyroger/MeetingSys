@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A70CE67D1EC5A5F70046F536 /* MSAllMeetingModel.m in Sources */ = {isa = PBXBuildFile; fileRef = A70CE67C1EC5A5F70046F536 /* MSAllMeetingModel.m */; };
+		A70CE6801EC5B75A0046F536 /* MSAllMeetingDetailCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A70CE67F1EC5B75A0046F536 /* MSAllMeetingDetailCell.m */; };
 		A71510991EC1F3C800B2361F /* MSMeetingUserCenterView.m in Sources */ = {isa = PBXBuildFile; fileRef = A71510981EC1F3C800B2361F /* MSMeetingUserCenterView.m */; };
 		A715109C1EC1F61800B2361F /* MSUserInfoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A715109B1EC1F61800B2361F /* MSUserInfoCell.m */; };
 		A7186F4A1EBC219F00DE4B67 /* BaseModel+HUD.m in Sources */ = {isa = PBXBuildFile; fileRef = A7186E0F1EBC219E00DE4B67 /* BaseModel+HUD.m */; };
@@ -158,6 +160,10 @@
 /* Begin PBXFileReference section */
 		3C81739A1963D5DB2DE66276 /* Pods-MeetingSys.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MeetingSys.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MeetingSys/Pods-MeetingSys.debug.xcconfig"; sourceTree = "<group>"; };
 		51821ADB74B0C3A16AE2BCE8 /* libPods-MeetingSys.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-MeetingSys.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		A70CE67B1EC5A5F70046F536 /* MSAllMeetingModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSAllMeetingModel.h; sourceTree = "<group>"; };
+		A70CE67C1EC5A5F70046F536 /* MSAllMeetingModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSAllMeetingModel.m; sourceTree = "<group>"; };
+		A70CE67E1EC5B75A0046F536 /* MSAllMeetingDetailCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSAllMeetingDetailCell.h; sourceTree = "<group>"; };
+		A70CE67F1EC5B75A0046F536 /* MSAllMeetingDetailCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSAllMeetingDetailCell.m; sourceTree = "<group>"; };
 		A71510971EC1F3C800B2361F /* MSMeetingUserCenterView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSMeetingUserCenterView.h; sourceTree = "<group>"; };
 		A71510981EC1F3C800B2361F /* MSMeetingUserCenterView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSMeetingUserCenterView.m; sourceTree = "<group>"; };
 		A715109A1EC1F61800B2361F /* MSUserInfoCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSUserInfoCell.h; sourceTree = "<group>"; };
@@ -1169,6 +1175,8 @@
 				A7D9C8A61EC44A98000FB05C /* MSNoticeModel.m */,
 				A7D9C8AB1EC46B9B000FB05C /* MSMeetingDetailModel.h */,
 				A7D9C8AC1EC46B9B000FB05C /* MSMeetingDetailModel.m */,
+				A70CE67B1EC5A5F70046F536 /* MSAllMeetingModel.h */,
+				A70CE67C1EC5A5F70046F536 /* MSAllMeetingModel.m */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -1182,8 +1190,6 @@
 				A7416AE41EC064F300E42EB0 /* MSNavTabbarView.m */,
 				A7416AE61EC0797C00E42EB0 /* MSOrderMeetingButtonView.h */,
 				A7416AE71EC0797C00E42EB0 /* MSOrderMeetingButtonView.m */,
-				A7416AEC1EC086B200E42EB0 /* MSMeetingListCell.h */,
-				A7416AED1EC086B200E42EB0 /* MSMeetingListCell.m */,
 				A7D9C8A81EC4584F000FB05C /* MSTitleAndDetailView.h */,
 				A7D9C8A91EC4584F000FB05C /* MSTitleAndDetailView.m */,
 			);
@@ -1215,6 +1221,10 @@
 		A77327371EC4971F005A89AE /* Meeting */ = {
 			isa = PBXGroup;
 			children = (
+				A7416AEC1EC086B200E42EB0 /* MSMeetingListCell.h */,
+				A7416AED1EC086B200E42EB0 /* MSMeetingListCell.m */,
+				A70CE67E1EC5B75A0046F536 /* MSAllMeetingDetailCell.h */,
+				A70CE67F1EC5B75A0046F536 /* MSAllMeetingDetailCell.m */,
 			);
 			name = Meeting;
 			sourceTree = "<group>";
@@ -1464,6 +1474,7 @@
 				A7186F9B1EBC219F00DE4B67 /* UIButton+Submitting.m in Sources */,
 				A7186FA71EBC219F00DE4B67 /* UIImage+GIF.m in Sources */,
 				A7186F751EBC219F00DE4B67 /* NSObject+GCD.m in Sources */,
+				A70CE6801EC5B75A0046F536 /* MSAllMeetingDetailCell.m in Sources */,
 				A7186F6E1EBC219F00DE4B67 /* NSNotificationCenter+MainThread.m in Sources */,
 				A7186F721EBC219F00DE4B67 /* NSObject+AssociatedObject.m in Sources */,
 				A7186F9F1EBC219F00DE4B67 /* UIColor+Modify.m in Sources */,
@@ -1494,6 +1505,7 @@
 				A7186F841EBC219F00DE4B67 /* NSString+RemoveEmoji.m in Sources */,
 				A7186FBE1EBC219F00DE4B67 /* UIView+GestureCallback.m in Sources */,
 				A7186FA41EBC219F00DE4B67 /* UIImage+BlurImage.m in Sources */,
+				A70CE67D1EC5A5F70046F536 /* MSAllMeetingModel.m in Sources */,
 				A7186F931EBC219F00DE4B67 /* UIButton+BadegeImage.m in Sources */,
 				A7186F561EBC219F00DE4B67 /* MyRefreshHUD.m in Sources */,
 				A7186FB11EBC219F00DE4B67 /* UINavigationItem+Margin.m in Sources */,

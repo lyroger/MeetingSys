@@ -13,6 +13,8 @@
 #import "MSNoticeCellView.h"
 #import "MSMeetingDetailCell.h"
 #import "MSMeetingUserCenterView.h"
+#import "MSAllMeetingModel.h"
+#import "MSAllMeetingDetailCell.h"
 
 @interface MSRootViewController ()<MSNavTabbarViewDelegete,UITableViewDelegate,UITableViewDataSource,UIScrollViewDelegate,MSOrderMeetingButtonViewDelegate>
 {
@@ -24,7 +26,7 @@
 }
 
 @property (nonatomic, strong) NSMutableArray *noticeArray;
-@property (nonatomic, strong) NSMutableArray *allMeetingsArray;
+@property (nonatomic, strong) MSAllMeetingModel *allMeetingModel;
 
 @end
 
@@ -59,12 +61,13 @@
     [tableNoticeView registerClass:[MSNoticeCellView class] forCellReuseIdentifier:@"MSNoticeCellView"];
     [mainScrollView addSubview:tableNoticeView];
     
-    tableAllMeetingView = [[UITableView alloc] initWithFrame:CGRectMake(kScreenWidth, 0, kScreenWidth, mainScrollView.height) style:UITableViewStyleGrouped];
+    tableAllMeetingView = [[UITableView alloc] initWithFrame:CGRectMake(kScreenWidth, 0, kScreenWidth, mainScrollView.height) style:UITableViewStylePlain];
     tableAllMeetingView.backgroundColor = UIColorHex(0xf6f6f6);
     tableAllMeetingView.delegate = self;
     tableAllMeetingView.dataSource = self;
     tableAllMeetingView.separatorStyle = UITableViewCellSeparatorStyleNone;
     [tableAllMeetingView registerClass:[MSMeetingListCell class] forCellReuseIdentifier:@"MSMeetingListCell"];
+    [tableAllMeetingView registerClass:[MSAllMeetingDetailCell class] forCellReuseIdentifier:@"MSAllMeetingDetailCell"];
     [mainScrollView addSubview:tableAllMeetingView];
     
     //加載導航欄
@@ -89,6 +92,7 @@
 
 - (void)loadDemoData
 {
+    //加载提醒demo数据
     for (int i = 0; i < 10; i++) {
         MSNoticeModel *model = [[MSNoticeModel alloc] init];
         model.noticeDate = @"五分鐘前";
@@ -116,6 +120,49 @@
         model.meetingDetailModel = detailModel;
         [self.noticeArray addObject:model];
     }
+    
+    //加载所有会议数据
+    self.allMeetingModel = [[MSAllMeetingModel alloc] init];
+    NSArray *meetingDate = @[@"2017-05-05",@"2017-05-06",@"2017-05-07",@"2017-05-08",@"2017-05-09"];
+    
+    for (int section = 0; section < meetingDate.count; section++) {
+        MSDayGroupList *dayGroupList = [[MSDayGroupList alloc] init];
+        dayGroupList.meetingDate = meetingDate[section];
+        
+        for (int row = 0; row < 3; row++) {
+            MSMeetingDetailModel *detailModel = [[MSMeetingDetailModel alloc] init];
+            detailModel.title = @"月度總結報告";
+            detailModel.organizeName = @"roger";
+            detailModel.beginTime = @"10:00";
+            detailModel.endTime = @"10:30";
+            detailModel.address = @"s1";
+            detailModel.agenda = @"保險專業知識培訓保險專業知識培訓保險專業知識培訓保險專業知識培訓";
+            detailModel.demand = @"保險專業知識培訓保險專業知識培訓保險專業知識培訓";
+            
+            
+            for (int j = 0; j < 8; j++) {
+                MSMemberModel *member = [[MSMemberModel alloc] init];
+                member.headURL = @"";
+                member.name = @"roger";
+                [detailModel.members addObject:member];
+            }
+            [dayGroupList.list addObject:detailModel];
+        }
+        [self.allMeetingModel.dayGroupList addObject:dayGroupList];
+    }
+}
+
+- (NSInteger)fetchOtherUnfoldCell:(NSInteger)section
+{
+    __block NSInteger otherUnfoldSection = 0;
+    [self.noticeArray enumerateObjectsUsingBlock:^(MSNoticeModel *model, NSUInteger idx, BOOL * _Nonnull stop) {
+        if (idx != section && model.isUnfold) {
+            otherUnfoldSection = idx;
+            model.isUnfold = NO;
+            *stop = YES;
+        }
+    }];
+    return otherUnfoldSection;
 }
 
 #pragma mark UITableViewDelegate & UITableViewDataSource
@@ -128,8 +175,30 @@
             model.isUnfold = !model.isUnfold;
             [tableNoticeView reloadSections:[NSIndexSet indexSetWithIndex:indexPath.section] withRowAnimation:UITableViewRowAnimationFade];
         }
+        //收起其他展开项目
+        NSInteger otherUnfoldSecion = [self fetchOtherUnfoldCell:indexPath.section];
+        if (otherUnfoldSecion != -1) {
+            [tableNoticeView reloadSections:[NSIndexSet indexSetWithIndex:otherUnfoldSecion] withRowAnimation:UITableViewRowAnimationFade];
+        }
     } else {
-        
+        MSDayGroupList *dayGroupList = [self.allMeetingModel.dayGroupList objectAtIndex:indexPath.section];
+        MSMeetingDetailModel *dayDetailModel = [dayGroupList.list objectAtIndex:indexPath.row];
+        if (!dayDetailModel.isDetail) {
+            if (dayDetailModel.isUnfold) {
+                //折叠详情
+                [dayGroupList.list removeObject:dayDetailModel];
+                [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+            } else {
+                //展开详情
+                MSMeetingDetailModel *copyDetail = [dayDetailModel copy];
+                dayDetailModel.isDetail = YES;
+                [dayGroupList.list insertObject:copyDetail atIndex:indexPath.row+1];
+                NSIndexPath *indexP = [NSIndexPath indexPathForRow:indexPath.row+1 inSection:indexPath.section];
+                [tableView insertRowsAtIndexPaths:@[indexP] withRowAnimation:UITableViewRowAnimationFade];
+            }
+            
+            dayDetailModel.isUnfold = !dayDetailModel.isUnfold;
+        }
     }
 }
 
@@ -147,17 +216,29 @@
             return [MSNoticeCellView noticeCellHeight];
         }
     } else {
-        return 44;
+        
+        MSDayGroupList *dayGroupList = [self.allMeetingModel.dayGroupList objectAtIndex:indexPath.section];
+        MSMeetingDetailModel *dayDetailModel = [dayGroupList.list objectAtIndex:indexPath.row];
+        if (!dayDetailModel.isDetail) {
+            return [MSMeetingListCell meetingListCellHeight];
+        } else {
+            return [MSAllMeetingDetailCell meetingDetailHeight:dayDetailModel];
+        }
     }
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    if (section == 0) {
-        return 12;
+    if (tableView == tableNoticeView) {
+        if (section == 0) {
+            return 12;
+        } else {
+            return 8;
+        }
     } else {
-        return 8;
+        return 46;
     }
+    
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
@@ -171,7 +252,8 @@
         MSNoticeModel *model = [self.noticeArray objectAtIndex:section];
         return model.isUnfold?2:1;
     } else {
-        return 10;
+        MSDayGroupList *dayGroupList = [self.allMeetingModel.dayGroupList objectAtIndex:section];
+        return dayGroupList.list.count;
     }
 }
 
@@ -180,8 +262,29 @@
     if (tableView == tableNoticeView) {
         return self.noticeArray.count;
     } else {
-        return 1;
+        return self.allMeetingModel.dayGroupList.count;
     }
+}
+
+- (UIView*)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+{
+    if (tableView == tableAllMeetingView) {
+        MSDayGroupList *dayGroupList = [self.allMeetingModel.dayGroupList objectAtIndex:section];
+        UIView *sectionContentView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, 46)];
+        sectionContentView.backgroundColor = UIColorHex(0xf6f6f6);
+        UILabel *titleLabel = [UILabel new];
+        titleLabel.frame = sectionContentView.bounds;
+        titleLabel.font = kFontPingFangRegularSize(14);
+        titleLabel.textColor = UIColorHex(0xFF7B54);
+        titleLabel.textAlignment = NSTextAlignmentCenter;
+        titleLabel.backgroundColor = sectionContentView.backgroundColor;
+        titleLabel.text = dayGroupList.meetingDate;
+        [sectionContentView addSubview:titleLabel];
+        return sectionContentView;
+    } else {
+        return nil;
+    }
+    
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -207,12 +310,20 @@
         }
         return cell;
     } else {
-        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cel"];
-        if (!cell) {
-            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"cel"];
+        MSDayGroupList *dayGroupModel = [self.allMeetingModel.dayGroupList objectAtIndex:indexPath.section];
+        MSMeetingDetailModel *dayDetailModel = [dayGroupModel.list objectAtIndex:indexPath.row];
+        
+        if (dayDetailModel.isDetail) {
+            //展开的详情
+            MSAllMeetingDetailCell *cell = [tableView dequeueReusableCellWithIdentifier:@"MSAllMeetingDetailCell"];
+            [cell data:dayDetailModel];
+            return cell;
+        } else {
+            //列表
+            MSMeetingListCell *cell = [tableView dequeueReusableCellWithIdentifier:@"MSMeetingListCell"];
+            [cell data:dayDetailModel];
+            return cell;
         }
-        cell.textLabel.text = @"sfef";
-        return cell;
     }
 }
 
@@ -245,8 +356,10 @@
 //滾動視圖時觸發
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
 {
-    NSInteger index = floor((scrollView.contentOffset.x - scrollView.frame.size.width / 2) / scrollView.frame.size.width) + 1;
-    [navTabbarView selectedItemIndex:index];
+    if (scrollView == mainScrollView) {
+        NSInteger index = floor((scrollView.contentOffset.x - scrollView.frame.size.width / 2) / scrollView.frame.size.width) + 1;
+        [navTabbarView selectedItemIndex:index];
+    }
 }
 
 - (NSMutableArray *)noticeArray;
@@ -255,13 +368,6 @@
         _noticeArray = [[NSMutableArray alloc] init];
     }
     return _noticeArray;
-}
-- (NSMutableArray *)allMeetingsArray
-{
-    if (!_allMeetingsArray) {
-        _allMeetingsArray = [[NSMutableArray alloc] init];
-    }
-    return _allMeetingsArray;
 }
 
 - (void)didReceiveMemoryWarning {

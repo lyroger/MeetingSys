@@ -7,7 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "MSMeetingDetailModel.h"
 
 @interface MSMeetingListCell : UITableViewCell
 
+- (void)data:(MSMeetingDetailModel*)model;
++ (CGFloat)meetingListCellHeight;
 @end

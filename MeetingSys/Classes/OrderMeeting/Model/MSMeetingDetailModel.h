@@ -24,5 +24,12 @@
 @property (nonatomic, copy) NSString *demand;
 @property (nonatomic, strong) NSMutableArray *members;
 
+@property (nonatomic, copy) NSString *organizerHeadURL;
+@property (nonatomic, copy) NSString *title;
+@property (nonatomic, copy) NSString *organizeName;
+
+@property (nonatomic, assign) BOOL   isDetail;
+@property (nonatomic, assign) BOOL   isUnfold;
+
 
 @end
