@@ -16,6 +16,8 @@
 #import "MSAllMeetingModel.h"
 #import "MSAllMeetingDetailCell.h"
 #import "MSTodayMeetingView.h"
+#import "MSNewMeetingViewController.h"
+#import "MSNavigationController.h"
 
 @interface MSRootViewController ()<MSNavTabbarViewDelegete,UITableViewDelegate,UITableViewDataSource,UIScrollViewDelegate,MSOrderMeetingButtonViewDelegate,MSAllMeetingDetailCellDelegate,MSMeetingUserCenterViewDelegate>
 {
@@ -384,6 +386,11 @@
 - (void)didClickOrder:(MSOrderMeetingButtonView*)view
 {
     NSLog(@"新增會與預約");
+    MSNewMeetingViewController *newMeetingVC = [[MSNewMeetingViewController alloc] init];
+    MSNavigationController *newMeetingNav = [[MSNavigationController alloc] initWithRootViewController:newMeetingVC];
+    [self presentViewController:newMeetingNav animated:YES completion:^{
+        
+    }];
 }
 
 - (void)didClickMeetingUserCenterViewItem:(NSInteger)itemIndex

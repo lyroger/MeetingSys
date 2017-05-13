@@ -116,7 +116,6 @@
     [loginContentView addSubview:loginActionContentView];
     
     loginButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [loginButton setTitleEdgeInsets:UIEdgeInsetsMake(-5, 0, 0, 0)];
     [loginButton setBackgroundImage:[UIImage imageWithColor:UIColorHex(0xE3E3E3)] forState:UIControlStateDisabled];
     [loginButton setBackgroundImage:[UIImage imageWithColor:UIColorHex(0xFF7B54)] forState:UIControlStateNormal];
     
