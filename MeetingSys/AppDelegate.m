@@ -13,7 +13,6 @@
 #ifdef NSFoundationVersionNumber_iOS_9_x_Max
 #import <UserNotifications/UserNotifications.h>
 #endif
-
 @interface AppDelegate ()<JPUSHRegisterDelegate>
 
 @property (nonatomic, strong) MSLoginViewController *loginVC;
@@ -77,6 +76,16 @@
 //            NSLog(@"登录页面释放-动画结束");
 //        }];
 //    }
+}
+
+- (void)setupConfig {
+    
+    //    [[FLEXManager sharedManager] showExplorer];
+    [[IQKeyboardManager sharedManager] setEnable:YES];
+    [[IQKeyboardManager sharedManager]
+     setKeyboardDistanceFromTextField:IQKeyboardDistanceFromTextField];
+    [[IQKeyboardManager sharedManager] setEnableAutoToolbar:NO];
+    [[IQKeyboardManager sharedManager] setCanAdjustTextView:YES];
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application {

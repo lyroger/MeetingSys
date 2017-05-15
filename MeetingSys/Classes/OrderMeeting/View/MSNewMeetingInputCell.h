@@ -10,4 +10,6 @@
 
 @interface MSNewMeetingInputCell : UITableViewCell
 
+- (void)multipleLineInput:(BOOL)multiple title:(NSString *)title placeholder:(NSString *)placeholder must:(BOOL)must;
+
 @end

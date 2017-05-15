@@ -62,7 +62,7 @@
     newMeetingTableView.tableHeaderView = self.headView;
     newMeetingTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     [newMeetingTableView registerClass:[MSNewMeetingTimeCell class] forCellReuseIdentifier:@"MSNewMeetingTimeCell"];
-    [newMeetingTableView registerClass:[MSNewMeetingInputCell class] forCellReuseIdentifier:@"MSNewMeetingInputCell.h"];
+    [newMeetingTableView registerClass:[MSNewMeetingInputCell class] forCellReuseIdentifier:@"MSNewMeetingInputCell"];
     [newMeetingTableView registerClass:[MSNewMeetingSelectCell class] forCellReuseIdentifier:@"MSNewMeetingSelectCell"];
     [self.view addSubview:newMeetingTableView];
 }
@@ -81,7 +81,13 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 70;
+    if (indexPath.row == 7 || indexPath.row == 8) {
+        return 100;
+    } else if (indexPath.row == 0){
+        return 50;
+    } else {
+        return 70;
+    }
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
@@ -96,7 +102,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return 8;
+    return 9;
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -122,9 +128,17 @@
         }
         
         return cell;
-    } else if (indexPath.row == 1) {
+    } else if (indexPath.row == 1 || indexPath.row == 7 || indexPath.row == 8) {
+        NSArray *titles = @[@"會議主題",@"會議議程",@"會議要求"];
+        NSArray *placeholders = @[@"請輸入會議主題",@"請輸入會議議程",@"請輸入會議要求"];
+        MSNewMeetingInputCell *cell = [tableView dequeueReusableCellWithIdentifier:@"MSNewMeetingInputCell"];
+        NSInteger index = indexPath.row==1?0:indexPath.row-6;
+        [cell multipleLineInput:indexPath.row == 1?NO:YES title:titles[index] placeholder:placeholders[index] must:indexPath.row==1?YES:NO];
+        return cell;
+    } else if (indexPath.row >= 3 && indexPath.row <= 6) {
+        NSArray *titles = @[@"會議類型",@"會議地點",@"會議組織者",@"參與人員"];
         MSNewMeetingSelectCell *cell = [tableView dequeueReusableCellWithIdentifier:@"MSNewMeetingSelectCell"];
-        [cell title:@"會議類型" placeholder:@"請選擇" mustItem:YES rightView:NO];
+        [cell title:titles[indexPath.row-3] placeholder:@"請選擇" mustItem:indexPath.row==6?NO:YES rightView:NO];
         return cell;
     } else {
         MSNewMeetingTimeCell *cell = [tableView dequeueReusableCellWithIdentifier:@"MSNewMeetingTimeCell"];

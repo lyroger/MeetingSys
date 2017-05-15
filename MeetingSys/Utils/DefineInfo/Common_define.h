@@ -23,7 +23,7 @@
 
 /***Manager***/
 #import "HUDManager.h"
-//#import <IQKeyboardManager.h>
+#import <IQKeyboardManager.h>
 
 /***Util***/
 #import "RegexKitLite.h"

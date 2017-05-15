@@ -39,7 +39,7 @@
         
         [mustView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.left.equalTo(@12);
-            make.top.equalTo(@16);
+            make.top.equalTo(@14);
             make.right.equalTo(@(-12));
             make.height.equalTo(@16);
         }];
@@ -52,8 +52,8 @@
         
         [accessView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.centerY.equalTo(textLabel);
-            make.right.equalTo(@(-10));
-            make.size.mas_equalTo(CGSizeMake(6, 18));
+            make.right.equalTo(@(-12));
+            make.size.mas_equalTo(CGSizeMake(8, 20));
         }];
         
         self.bottomLine = [UILabel new];
