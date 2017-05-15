@@ -108,10 +108,24 @@
             make.left.bottom.equalTo(@0);
             make.right.equalTo(menuImage.mas_left);
         }];
-        
     }
     
     return self;
+}
+
+- (void)theme:(NSString*)theme hideImage:(BOOL)hide
+{
+    if ([theme isEqualToString:@""]) {
+        //金典主题
+        themeClassics.hidden = NO;
+        themeNoPictures.hidden = YES;
+        themeLegend.hidden = YES;
+    } else if ([theme isEqualToString:@""]) {
+        //legend主题
+        themeClassics.hidden = YES;
+        themeNoPictures.hidden = !hide;
+        themeLegend.hidden = hide;
+    }
 }
 
 @end

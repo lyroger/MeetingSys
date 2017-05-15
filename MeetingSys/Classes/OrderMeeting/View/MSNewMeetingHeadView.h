@@ -10,4 +10,6 @@
 
 @interface MSNewMeetingHeadView : UIView
 
+- (void)theme:(NSString*)theme hideImage:(BOOL)hide;
+
 @end

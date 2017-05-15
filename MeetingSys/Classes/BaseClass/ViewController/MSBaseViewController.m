@@ -319,9 +319,9 @@
     {
         [btn setTitle:name forState:UIControlStateNormal];
         btn.titleLabel.font = kFontSize16;
-        [btn setTitleColor:kMainColor forState:UIControlStateNormal];
-        [btn setTitleColor:UIColorHex_Alpha(0x02b0f0,0.3) forState:UIControlStateHighlighted];
-        [btn setTitleColor:UIColorHex_Alpha(0x02b0f0,0.3) forState:UIControlStateDisabled];
+        [btn setTitleColor:UIColorHex_Alpha(0xffffff, 1) forState:UIControlStateNormal];
+        [btn setTitleColor:UIColorHex_Alpha(0xffffff, 1) forState:UIControlStateHighlighted];
+        [btn setTitleColor:UIColorHex_Alpha(0xffffff,0.6) forState:UIControlStateDisabled];
         CGFloat nameWidth = [name widthWithFont:btn.titleLabel.font constrainedToHeight:CGFLOAT_MAX];
         btn.frame=CGRectMake(0, 0, nameWidth+13, 30);
     }

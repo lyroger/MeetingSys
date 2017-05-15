@@ -34,7 +34,7 @@
 - (MSNewMeetingHeadView*)headView
 {
     if (!_headView) {
-        _headView = [[MSNewMeetingHeadView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, 260)];
+        _headView = [[MSNewMeetingHeadView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, 240)];
     }
     return _headView;
 }
@@ -51,7 +51,11 @@
 
     [self leftBarButtonWithName:@"" image:[UIImage imageNamed:@"guanbi"] target:self action:@selector(closeView:)];
     
-    newMeetingTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, kScreenHeight-64-64) style:UITableViewStyleGrouped];
+    [self rightBarButtonWithName:@"確認" normalImgName:@"" highlightImgName:@"" target:self action:@selector(submitMeetingAction:)];
+    
+    self.navigationItem.rightBarButtonItem.enabled = NO;
+    
+    newMeetingTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, kScreenHeight-64) style:UITableViewStyleGrouped];
     newMeetingTableView.backgroundColor = UIColorHex(0xf6f6f6);
     newMeetingTableView.delegate = self;
     newMeetingTableView.dataSource = self;
@@ -61,29 +65,6 @@
     [newMeetingTableView registerClass:[MSNewMeetingInputCell class] forCellReuseIdentifier:@"MSNewMeetingInputCell.h"];
     [newMeetingTableView registerClass:[MSNewMeetingSelectCell class] forCellReuseIdentifier:@"MSNewMeetingSelectCell"];
     [self.view addSubview:newMeetingTableView];
-    
-    //加载底部预约按钮
-    newMeetingButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [newMeetingButton setBackgroundImage:[UIImage imageWithColor:UIColorHex(0xE3E3E3)] forState:UIControlStateDisabled];
-    [newMeetingButton setBackgroundImage:[UIImage imageWithColor:UIColorHex(0xFF7B54)] forState:UIControlStateNormal];
-    
-    newMeetingButton.layer.cornerRadius = 4;
-    newMeetingButton.layer.borderColor = [UIColor clearColor].CGColor;
-    newMeetingButton.layer.borderWidth = 1;
-    newMeetingButton.layer.masksToBounds = YES;
-    
-    [newMeetingButton addTarget:self action:@selector(submitMeetingAction:) forControlEvents:UIControlEventTouchUpInside];
-    [newMeetingButton setTitle:@"確認" forState:UIControlStateNormal];
-    newMeetingButton.enabled = NO;
-    newMeetingButton.titleLabel.font = kFontPingFangMediumSize(18);
-    [self.view addSubview:newMeetingButton];
-    
-    [newMeetingButton mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(@10);
-        make.right.equalTo(@(-10));
-        make.bottom.equalTo(@(-10));
-        make.height.equalTo(@44);
-    }];
 }
 
 - (void)submitMeetingAction:(UIButton*)button
@@ -125,11 +106,31 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    MSNewMeetingTimeCell *cell = [tableView dequeueReusableCellWithIdentifier:@"MSNewMeetingTimeCell"];
-    
-    cell.textLabel.text = @"預約信息";
-    
-    return cell;
+    if (indexPath.row == 0) {
+        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"UITableViewCell"];
+        if (!cell) {
+            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"UITableViewCell"];
+            UILabel *bottomLine = [UILabel new];
+            bottomLine.backgroundColor = UIColorHex(0xE3E3E3);
+            [cell.contentView addSubview:bottomLine];
+            [bottomLine mas_makeConstraints:^(MASConstraintMaker *make) {
+                make.bottom.equalTo(@0);
+                make.left.equalTo(@12);
+                make.right.equalTo(@(-12));
+                make.height.equalTo(@(0.6));
+            }];
+        }
+        
+        return cell;
+    } else if (indexPath.row == 1) {
+        MSNewMeetingSelectCell *cell = [tableView dequeueReusableCellWithIdentifier:@"MSNewMeetingSelectCell"];
+        [cell title:@"會議類型" placeholder:@"請選擇" mustItem:YES rightView:NO];
+        return cell;
+    } else {
+        MSNewMeetingTimeCell *cell = [tableView dequeueReusableCellWithIdentifier:@"MSNewMeetingTimeCell"];
+        cell.textLabel.text = @"預約信息";
+        return cell;
+    }
 }
 
 - (void)closeView:(UIButton*)button

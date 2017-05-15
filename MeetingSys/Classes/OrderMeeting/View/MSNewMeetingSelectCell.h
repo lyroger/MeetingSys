@@ -10,4 +10,6 @@
 
 @interface MSNewMeetingSelectCell : UITableViewCell
 
+- (void)title:(NSString*)title placeholder:(NSString*)placeholder mustItem:(BOOL)must rightView:(BOOL)hide;
+
 @end
