@@ -36,6 +36,7 @@
         textView = [UITextView new];
         textView.font = kFontPingFangRegularSize(14);
         textView.textColor = UIColorHex(0x888888);
+        textView.delegate = self;
         [self.contentView addSubview:textView];
         
         placeholderLabel = [UILabel new];
@@ -59,13 +60,13 @@
         
         [textView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.top.mas_equalTo(mustView.mas_bottom).mas_offset(10);
-            make.left.mas_equalTo(12);
+            make.left.mas_equalTo(9);
             make.right.mas_equalTo(-12);
             make.bottom.mas_equalTo(-12);
         }];
         
         [placeholderLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.left.mas_equalTo(0);
+            make.left.mas_equalTo(4);
             make.top.mas_equalTo(5);
             make.right.mas_equalTo(0);
             make.height.mas_equalTo(20);
@@ -91,11 +92,17 @@
         textView.hidden = NO;
         textField.hidden = YES;
         placeholderLabel.text = placeholder;
+        placeholderLabel.hidden = textView.text.length;
     } else {
         textField.hidden = NO;
         textView.hidden = YES;
         textField.placeholder = placeholder;
     }
+}
+
+- (void)textViewDidChange:(UITextView *)textV
+{
+    placeholderLabel.hidden = textV.text.length;
 }
 
 - (void)awakeFromNib {

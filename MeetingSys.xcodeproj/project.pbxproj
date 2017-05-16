@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		A70CE67D1EC5A5F70046F536 /* MSAllMeetingModel.m in Sources */ = {isa = PBXBuildFile; fileRef = A70CE67C1EC5A5F70046F536 /* MSAllMeetingModel.m */; };
 		A70CE6801EC5B75A0046F536 /* MSAllMeetingDetailCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A70CE67F1EC5B75A0046F536 /* MSAllMeetingDetailCell.m */; };
+		A70F16C71ECA93D90093B56B /* MSNewMeetingONOffCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A70F16C61ECA93D90093B56B /* MSNewMeetingONOffCell.m */; };
 		A71024AF1EC9A1C40036CFF0 /* MSMustInputItemView.m in Sources */ = {isa = PBXBuildFile; fileRef = A71024AE1EC9A1C40036CFF0 /* MSMustInputItemView.m */; };
 		A71510991EC1F3C800B2361F /* MSMeetingUserCenterView.m in Sources */ = {isa = PBXBuildFile; fileRef = A71510981EC1F3C800B2361F /* MSMeetingUserCenterView.m */; };
 		A715109C1EC1F61800B2361F /* MSUserInfoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A715109B1EC1F61800B2361F /* MSUserInfoCell.m */; };
@@ -174,6 +175,8 @@
 		A70CE67C1EC5A5F70046F536 /* MSAllMeetingModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSAllMeetingModel.m; sourceTree = "<group>"; };
 		A70CE67E1EC5B75A0046F536 /* MSAllMeetingDetailCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSAllMeetingDetailCell.h; sourceTree = "<group>"; };
 		A70CE67F1EC5B75A0046F536 /* MSAllMeetingDetailCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSAllMeetingDetailCell.m; sourceTree = "<group>"; };
+		A70F16C51ECA93D90093B56B /* MSNewMeetingONOffCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSNewMeetingONOffCell.h; sourceTree = "<group>"; };
+		A70F16C61ECA93D90093B56B /* MSNewMeetingONOffCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSNewMeetingONOffCell.m; sourceTree = "<group>"; };
 		A71024AD1EC9A1C40036CFF0 /* MSMustInputItemView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSMustInputItemView.h; sourceTree = "<group>"; };
 		A71024AE1EC9A1C40036CFF0 /* MSMustInputItemView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSMustInputItemView.m; sourceTree = "<group>"; };
 		A71510971EC1F3C800B2361F /* MSMeetingUserCenterView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSMeetingUserCenterView.h; sourceTree = "<group>"; };
@@ -1252,6 +1255,8 @@
 				A71EC7461EC6F44700E22577 /* MSNewMeetingInputCell.m */,
 				A71EC7481EC6F47D00E22577 /* MSNewMeetingTimeCell.h */,
 				A71EC7491EC6F47D00E22577 /* MSNewMeetingTimeCell.m */,
+				A70F16C51ECA93D90093B56B /* MSNewMeetingONOffCell.h */,
+				A70F16C61ECA93D90093B56B /* MSNewMeetingONOffCell.m */,
 			);
 			name = NewMeeting;
 			sourceTree = "<group>";
@@ -1521,6 +1526,7 @@
 				A7416AEE1EC086B200E42EB0 /* MSMeetingListCell.m in Sources */,
 				A7186F991EBC219F00DE4B67 /* UIButton+LXMImagePosition.m in Sources */,
 				A7FA36011EC5E5C80053B682 /* CyclicCardFlowLayout.m in Sources */,
+				A70F16C71ECA93D90093B56B /* MSNewMeetingONOffCell.m in Sources */,
 				A7186F771EBC219F00DE4B67 /* NSObject+Reflection.m in Sources */,
 				A7186F951EBC219F00DE4B67 /* UIButton+Bootstrap.m in Sources */,
 				A7186F611EBC219F00DE4B67 /* NSDate+CupertinoYankee.m in Sources */,

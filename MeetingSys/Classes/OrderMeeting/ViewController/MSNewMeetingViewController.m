@@ -11,6 +11,7 @@
 #import "MSNewMeetingInputCell.h"
 #import "MSNewMeetingSelectCell.h"
 #import "MSNewMeetingHeadView.h"
+#import "MSNewMeetingONOffCell.h"
 
 @interface MSNewMeetingViewController ()<UITableViewDelegate,UITableViewDataSource>
 {
@@ -64,6 +65,7 @@
     [newMeetingTableView registerClass:[MSNewMeetingTimeCell class] forCellReuseIdentifier:@"MSNewMeetingTimeCell"];
     [newMeetingTableView registerClass:[MSNewMeetingInputCell class] forCellReuseIdentifier:@"MSNewMeetingInputCell"];
     [newMeetingTableView registerClass:[MSNewMeetingSelectCell class] forCellReuseIdentifier:@"MSNewMeetingSelectCell"];
+    [newMeetingTableView registerClass:[MSNewMeetingONOffCell class] forCellReuseIdentifier:@"MSNewMeetingONOffCell"];
     [self.view addSubview:newMeetingTableView];
 }
 
@@ -82,7 +84,7 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (indexPath.row == 7 || indexPath.row == 8) {
-        return 100;
+        return 110;
     } else if (indexPath.row == 0){
         return 50;
     } else {
@@ -112,26 +114,11 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.row == 0) {
-        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"UITableViewCell"];
-        if (!cell) {
-            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"UITableViewCell"];
-            UILabel *bottomLine = [UILabel new];
-            bottomLine.backgroundColor = UIColorHex(0xE3E3E3);
-            [cell.contentView addSubview:bottomLine];
-            [bottomLine mas_makeConstraints:^(MASConstraintMaker *make) {
-                make.bottom.equalTo(@0);
-                make.left.equalTo(@12);
-                make.right.equalTo(@(-12));
-                make.height.equalTo(@(0.6));
-            }];
-        }
-        
-        return cell;
-    } else if (indexPath.row == 1 || indexPath.row == 7 || indexPath.row == 8) {
+    if (indexPath.row == 1 || indexPath.row == 7 || indexPath.row == 8) {
         NSArray *titles = @[@"會議主題",@"會議議程",@"會議要求"];
         NSArray *placeholders = @[@"請輸入會議主題",@"請輸入會議議程",@"請輸入會議要求"];
         MSNewMeetingInputCell *cell = [tableView dequeueReusableCellWithIdentifier:@"MSNewMeetingInputCell"];
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
         NSInteger index = indexPath.row==1?0:indexPath.row-6;
         [cell multipleLineInput:indexPath.row == 1?NO:YES title:titles[index] placeholder:placeholders[index] must:indexPath.row==1?YES:NO];
         return cell;
@@ -140,9 +127,14 @@
         MSNewMeetingSelectCell *cell = [tableView dequeueReusableCellWithIdentifier:@"MSNewMeetingSelectCell"];
         [cell title:titles[indexPath.row-3] placeholder:@"請選擇" mustItem:indexPath.row==6?NO:YES rightView:NO];
         return cell;
-    } else {
+    } else if (indexPath.row == 2){
         MSNewMeetingTimeCell *cell = [tableView dequeueReusableCellWithIdentifier:@"MSNewMeetingTimeCell"];
-        cell.textLabel.text = @"預約信息";
+        [cell title:@"會議時間" mustItem:YES begin:@"2017-05-16 10:30" end:@"2017-05-16 11:10"];
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        return cell;
+    } else {
+        MSNewMeetingONOffCell *cell = [tableView dequeueReusableCellWithIdentifier:@"MSNewMeetingONOffCell"];
+        [cell title:@"隱藏個人半身照" mustItem:NO];
         return cell;
     }
 }

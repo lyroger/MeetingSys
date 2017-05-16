@@ -10,4 +10,6 @@
 
 @interface MSNewMeetingTimeCell : UITableViewCell
 
+- (void)title:(NSString *)title mustItem:(BOOL)must begin:(NSString *)begin end:(NSString*)end;
+
 @end
