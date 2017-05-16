@@ -16,7 +16,8 @@
 @property (nonatomic, copy) NSString *token;            //用户token
 @property (nonatomic, copy) NSString *headerImg;           //用户头像
 @property (nonatomic, copy) NSString *title;            //职称
-@property (nonatomic, copy) NSString *cpName;           //部门名称
+@property (nonatomic, copy) NSString *dpName;           //部门名称
+@property (nonatomic, copy) NSString *cpName;           //公司名称
 
 //附加功能属性
 @property (nonatomic, copy) NSString *userAcount;   //账号

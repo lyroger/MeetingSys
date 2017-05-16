@@ -10,6 +10,11 @@
 
 @implementation MSAllMeetingModel
 
++ (NSDictionary *)mj_objectClassInArray{
+    return @{@"todayList" : [MSMeetingDetailModel class],
+             @"dayGroupList" : [MSDayGroupList class]};
+}
+
 - (NSMutableArray*)dayGroupList
 {
     if (!_dayGroupList) {
@@ -26,10 +31,25 @@
     return _todayList;
 }
 
++ (NSURLSessionDataTask *)meetingListNetworkHUD:(NetworkHUD)hud
+                                           page:(NSInteger)page
+                                         target:(id)target
+                                        success:(NetResponseBlock)success
+{
+    CreateParamsDic;
+    DicObjectSet(@(page), @"page");
+    DicObjectSet(@(5), @"rows");
+    return [self dataTaskMethod:HTTPMethodPOST path:@"api/meeting/listMeetings" params:ParamsDic networkHUD:hud target:target success:success];
+}
+
 @end
 
 
 @implementation MSDayGroupList
+
++ (NSDictionary *)mj_objectClassInArray{
+    return @{@"list" : [MSMeetingDetailModel class]};
+}
 
 - (NSMutableArray*)list
 {

@@ -51,6 +51,8 @@
     _username = userInfo.username;
     _token = userInfo.token;
     _mobile = userInfo.mobile;
+    _dpName = userInfo.dpName;
+    _cpName = userInfo.cpName;
     _headerImg = userInfo.headerImg;
     
     _isRememberPwd = userInfo.isRememberPwd;
@@ -110,14 +112,16 @@
     CreateParamsDic;
     DicObjectSet(loginId, @"username");
     DicObjectSet(password, @"password");
-    return [self dataTaskMethod:HTTPMethodGET path:@"api/user/login" params:ParamsDic networkHUD:hud target:target success:success];
+    return [self dataTaskMethod:HTTPMethodPOST path:@"api/user/login" params:ParamsDic networkHUD:hud target:target success:success];
 }
 
 + (NSURLSessionDataTask *)loginOutNetworkHUD:(NetworkHUD)hud
                                       target:(id)target
                                      success:(NetResponseBlock)success
 {
-    return [self dataTaskMethod:HTTPMethodDELETE path:[NSString stringWithFormat:@"v1/sessions/logout/%@",[MSUserInfo shareUserInfo].token] params:nil networkHUD:hud target:target success:success];
+//    CreateParamsDic;
+//    DicValueSet([MSUserInfo shareUserInfo].token, @"token");
+    return [self dataTaskMethod:HTTPMethodPOST path:@"api/user/logout" params:nil networkHUD:hud target:target success:success];
 }
 
 + (NSURLSessionDataTask *)feedbacks:(NSString*)content

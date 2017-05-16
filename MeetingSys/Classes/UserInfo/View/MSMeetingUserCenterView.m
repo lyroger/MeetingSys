@@ -110,19 +110,27 @@
         if (indexPath.row == 0) {
             cell.labelTitle.hidden = YES;
             cell.imageIcon.hidden = NO;
-            [cell.imageIcon sd_setImageWithURL:nil placeholderImage:[UIImage imageNamed:@"notice_icon_1"]];
+            [cell.imageIcon sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@,%@,%@",kServerHost,kServerCurrentPath,[MSUserInfo shareUserInfo].headerImg]] placeholderImage:[UIImage imageNamed:@"portrait_xiao"]];
         } else if (indexPath.row>0 && indexPath.row <= 4){
             cell.imageIcon.hidden = YES;
             cell.labelTitle.hidden = NO;
             if (indexPath.row == 1) {
                 cell.labelTitle.font = kFontPingFangRegularSize(18);
                 cell.labelTitle.textColor = UIColorHex(0x333333);
-                cell.labelTitle.text = @"Mancy Wong";
+                cell.labelTitle.text = [MSUserInfo shareUserInfo].username;
             } else {
                 cell.labelTitle.font = kFontPingFangRegularSize(14);
                 cell.labelTitle.textColor = UIColorHex(0x888888);
             }
-            cell.labelTitle.text = @"會議系統";
+            
+            if (indexPath.row == 2) {
+                cell.labelTitle.text = [MSUserInfo shareUserInfo].title;
+            } else if (indexPath.row == 3) {
+                cell.labelTitle.text = [MSUserInfo shareUserInfo].cpName;
+            } else {
+                cell.labelTitle.text = [MSUserInfo shareUserInfo].dpName;
+            }
+            
         } else {
             cell.labelTitle.text = 0;
             cell.labelTitle.hidden = YES;

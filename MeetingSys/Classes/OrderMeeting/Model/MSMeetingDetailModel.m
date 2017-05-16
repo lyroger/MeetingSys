@@ -15,6 +15,13 @@
 
 @implementation MSMeetingDetailModel
 
++ (NSDictionary *)mj_replacedKeyFromPropertyName
+{
+    return @{@"headerImg" : @[@"avater"],
+             @"userId":@[@"id"]
+             };
+}
+
 - (NSMutableArray*)members
 {
     if (!_members) {

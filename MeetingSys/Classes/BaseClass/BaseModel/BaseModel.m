@@ -30,7 +30,7 @@ typedef enum : NSUInteger {
 //        [HttpClient startWithURL:kServerHost];
         
         [HttpClient sharedInstance].responseType = ResponseJSON;
-        [HttpClient sharedInstance].requestType = RequestJSON;
+//        [HttpClient sharedInstance].requestType = RequestJSON;
     }
 }
 
@@ -475,33 +475,22 @@ static dispatch_once_t userOnceToken;
 {
     if (model.code == 401) {
         //token失效，需重新登录
-//        [[NSNotificationCenter defaultCenter] postNotificationName:kUserTokenExpireNotification object:nil];
+        [[NSNotificationCenter defaultCenter] postNotificationName:kUserTokenExpireNotification object:nil];
     }
 }
 
 + (NSDictionary *)parametersHandler:(NSDictionary *)params path:(NSString *)path {
-//    NSString *token = [SHMUserInfo shareUserInfo].token;
-//    if (token.nonNull) {
-//        [kHttpClient.requestSerializer setValue:token forHTTPHeaderField:@"X-Token"];
-//    }
-//    NSString *caseId = [SHMUserInfo shareUserInfo].caseId;
-//    if (caseId.nonNull) {
-//        NSString *cookie = [NSString stringWithFormat:@"caseId=%@",caseId];
-//        [kHttpClient.requestSerializer setValue:cookie forHTTPHeaderField:@"Cookie"];
-//    }
-//    if (caseId.nonNull) {
-//        [kHttpClient.requestSerializer setValue:caseId forHTTPHeaderField:@"X-CaseId"];
-//    }
-    
     //添加版本号
     NSDictionary *infoDic = [[NSBundle mainBundle] infoDictionary];
     NSString *currentVersion = [infoDic objectForKey:@"CFBundleShortVersionString"];
-    [kHttpClient.requestSerializer setValue:currentVersion forHTTPHeaderField:@"version"];
+    NSMutableDictionary *dicInfo = [NSMutableDictionary dictionaryWithDictionary:params];
+    [dicInfo setValue:currentVersion forKey:@"version"];
+    [dicInfo setValue:@"0" forKey:@"appOS"];
+    if ([MSUserInfo shareUserInfo].token.length) {
+        [dicInfo setValue:[MSUserInfo shareUserInfo].token forKey:@"token"];
+    }
     
-    //添加设备类型
-    [kHttpClient.requestSerializer setValue:@"0" forHTTPHeaderField:@"appOS"];
-    
-	return [self encryptForSomeFields:params];
+	return [self encryptForSomeFields:dicInfo];
 }
 
 + (NSString *)responseStringHandler:(NSString *)responseString {

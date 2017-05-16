@@ -74,6 +74,11 @@
     [tableAllMeetingView registerClass:[MSMeetingListCell class] forCellReuseIdentifier:@"MSMeetingListCell"];
     [tableAllMeetingView registerClass:[MSAllMeetingDetailCell class] forCellReuseIdentifier:@"MSAllMeetingDetailCell"];
     tableAllMeetingView.tableHeaderView = self.todayMeetingView;
+    @weakify(self)
+    tableAllMeetingView.mj_header = [MJDIYHeader headerWithRefreshingBlock:^{
+        @strongify(self);
+        [self loadAllMeetingNetData];
+    }];
     [mainScrollView addSubview:tableAllMeetingView];
     
     [self.todayMeetingView reloadWithDatas:self.allMeetingModel.todayList];
@@ -95,6 +100,24 @@
     [bottomView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.right.bottom.equalTo(@0);
         make.height.equalTo(@50);
+    }];
+}
+
+- (void)loadAllMeetingNetData
+{
+    [MSAllMeetingModel meetingListNetworkHUD:NetworkHUDBackground
+                                        page:self.allMeetingModel.page
+                                      target:self
+                                     success:^(StatusModel *data) {
+                                         
+                                         [tableAllMeetingView.mj_header endRefreshing];
+                                         [tableAllMeetingView.mj_footer endRefreshing];
+                                         
+                                         if (data.code == 0) {
+                                             
+                                         } else {
+                                             
+                                         }
     }];
 }
 
@@ -411,8 +434,11 @@
 
 - (void)userLoginOut
 {
+    [MSUserInfo loginOutNetworkHUD:NetworkHUDLockScreen target:self success:^(StatusModel *data) {
+        
+    }];
     //注销token 发送退出登录通知
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         [MSUserInfo shareUserInfo].token = nil;
         [[MSUserInfo shareUserInfo] deletePassword];
         MSUserInfo *userInfo = [MSUserInfo shareUserInfo];
