@@ -38,20 +38,20 @@
     return userInfo;
 }
 
++ (NSDictionary *)mj_replacedKeyFromPropertyName
+{
+    return @{@"headerImg" : @[@"avater"],
+             @"userId":@[@"id"]
+             };
+}
+
 - (void)setUserInfo:(MSUserInfo*)userInfo
 {
     _userId = userInfo.userId;
-    _userName = userInfo.userName;
-    _caseId = userInfo.caseId;
-    _caseName = userInfo.caseName;
+    _username = userInfo.username;
     _token = userInfo.token;
-    _phone = userInfo.phone;
+    _mobile = userInfo.mobile;
     _headerImg = userInfo.headerImg;
-    _declaration = userInfo.declaration;
-    _cityId = userInfo.cityId;
-    _cityName = userInfo.cityName;
-    _lastCityId = userInfo.lastCityId;
-    _lastCityName = userInfo.lastCityName;
     
     _isRememberPwd = userInfo.isRememberPwd;
     _userAcount = userInfo.userAcount;
@@ -108,10 +108,9 @@
                                     target:(id)target
                                    success:(NetResponseBlock)success {
     CreateParamsDic;
-    DicObjectSet(loginId, @"loginId");
+    DicObjectSet(loginId, @"username");
     DicObjectSet(password, @"password");
-    DicObjectSet(@"sellhouse", @"componentName");
-    return [self dataTaskMethod:HTTPMethodPOST path:@"v1/sessions/appLogin" params:ParamsDic networkHUD:hud target:target success:success];
+    return [self dataTaskMethod:HTTPMethodGET path:@"api/user/login" params:ParamsDic networkHUD:hud target:target success:success];
 }
 
 + (NSURLSessionDataTask *)loginOutNetworkHUD:(NetworkHUD)hud

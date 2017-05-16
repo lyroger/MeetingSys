@@ -11,17 +11,12 @@
 @interface MSUserInfo : BaseModel
 
 @property (nonatomic, copy) NSString *userId;           //用户ID
-@property (nonatomic, copy) NSString *userName;         //用户姓名
-@property (nonatomic, copy) NSString *caseId;           //案场ID
-@property (nonatomic, copy) NSString *caseName;         //案场名称
-@property (nonatomic, copy) NSString *phone;            //手机号码
+@property (nonatomic, copy) NSString *username;         //用户姓名
+@property (nonatomic, copy) NSString *mobile;            //手机号码
 @property (nonatomic, copy) NSString *token;            //用户token
-@property (nonatomic, copy) NSString *headerImg;        //用户头像
-@property (nonatomic, copy) NSString *declaration;      //用户宣言
-@property (nonatomic, copy) NSString *cityName;         //当前案场所在城市名称
-@property (nonatomic, assign) NSInteger cityId;         //当前案场所在城市id
-@property (nonatomic, copy) NSString *lastCityName;     //上次在app中选择的城市名称
-@property (nonatomic, assign) NSInteger lastCityId;     //上次在app中选择的城市ID
+@property (nonatomic, copy) NSString *headerImg;           //用户头像
+@property (nonatomic, copy) NSString *title;            //职称
+@property (nonatomic, copy) NSString *cpName;           //部门名称
 
 //附加功能属性
 @property (nonatomic, copy) NSString *userAcount;   //账号

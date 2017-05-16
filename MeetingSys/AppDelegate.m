@@ -37,7 +37,7 @@
     //加载本地用户信息
     [[MSUserInfo shareUserInfo] getUserInfoFromLocal];
     
-    [MSUserInfo shareUserInfo].token = @"aweifawenfalef";
+//    [MSUserInfo shareUserInfo].token = @"aweifawenfalef";
     //不需要加载启动页则判断是否需要登录
     if (![MSUserInfo shareUserInfo].token.length) {
         self.loginVC = [[MSLoginViewController alloc] init];

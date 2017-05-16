@@ -243,6 +243,9 @@
         make.left.mas_equalTo(labelAgree.mas_right).mas_offset(0);
         make.centerY.mas_equalTo(agreeButton.mas_centerY);
     }];
+    
+    userTextField.text = @"legend";
+    pwdTextField.text = @"123456";
 }
 
 - (void)agreeAction:(UIButton*)button
@@ -275,12 +278,14 @@
 - (void)loginAction:(UIButton*)button
 {
     [self hideKeyboard];
+    
+    if (![self verifyEnableLogin]) {
+        [HUDManager alertWithTitle:@"输入信息不正确!"];
+        return;
+    }
+    
     NSString *username = [userTextField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
     NSString *password = [pwdTextField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
-    
-    if (self.loginCompleteBlock) {
-        self.loginCompleteBlock(YES);
-    }
     
     if (username.length > 0 && password.length > 0) {
         DLog(@"账号密码格式正确");
@@ -288,29 +293,24 @@
             if (data.code == 0) {
                 //登录成功
                 MSUserInfo *userInfo = data.data;
-                //登录后的lastCityId应该取cityId的值
-                userInfo.lastCityId = userInfo.cityId;
-                userInfo.lastCityName = userInfo.cityName;
-                userInfo.userAcount = username;//账号信息
+                userInfo.token = data.token;
+                userInfo.userAcount = username;
                 [[MSUserInfo shareUserInfo] setUserInfo:userInfo];
-                
-                // 放在注册推送信息接口会调用保存。
-                //                [[SHMUserInfo getUsingLKDBHelper] insertToDB:userInfo callback:^(BOOL result) {
-                //                    NSLog(@"result = %zd",result);
-                //                }];
-                
-                
+                [[MSUserInfo getUsingLKDBHelper] insertToDB:userInfo callback:^(BOOL result) {
+                    NSLog(@"result = %zd",result);
+                    
+                }];
                 
                 [[NSUserDefaults standardUserDefaults] setObject:userInfo.userAcount forKey:kLastUserAcount];
                 
                 if (self.loginCompleteBlock) {
                     self.loginCompleteBlock(YES);
                 }
+                
             }
         }];
     } else {
         DLog(@"请输入8位长度的密码");
-        
     }
 }
 
@@ -318,7 +318,7 @@
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
 {
     if ([textField isEqual:pwdTextField]) {
-        [self loginAction:nil];
+        [pwdTextField resignFirstResponder];
     } else if ([textField isEqual:userTextField]) {
         [pwdTextField becomeFirstResponder];
     }
@@ -327,12 +327,17 @@
 
 - (void)textFieldTextDidChange:(NSNotification *)note
 {
+    loginButton.enabled = [self verifyEnableLogin];
+}
+
+- (BOOL)verifyEnableLogin
+{
     NSString *username = [userTextField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
     NSString *password = [pwdTextField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
     if (username.length > 0 && password.length > 0 && isAgreement) {
-        loginButton.enabled = YES;
+        return YES;
     } else {
-        loginButton.enabled = NO;
+        return NO;
     }
 }
 

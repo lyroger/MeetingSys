@@ -42,7 +42,7 @@ static dispatch_once_t userOnceToken;
 	NSString *dbName = [NSString stringWithFormat:@"MN%@",[MSUserInfo shareUserInfo].userId];
 	dispatch_once(&userOnceToken, ^{
         userHelper = [[LKDBHelper alloc] initWithDBName:dbName];
-        [userHelper setKey:[[dbName stringByAppendingString:@"qkjskl"] md5String]];
+        [userHelper setKey:[[dbName stringByAppendingString:@"qkjskl1234321"] md5String]];
         
 
 	});
@@ -68,10 +68,10 @@ static dispatch_once_t userOnceToken;
 + (LKDBHelper *)getDefaultLKDBHelper {
 	static LKDBHelper* helper;
 	static dispatch_once_t onceToken;
-	NSString *dbName = @"SHMDefault";
+	NSString *dbName = @"MSDefault";
 	dispatch_once(&onceToken, ^{
         helper = [[LKDBHelper alloc]initWithDBName:dbName];
-        [helper setKey:[[dbName stringByAppendingString:@"qkjskl"] md5String]];
+        [helper setKey:[[dbName stringByAppendingString:@"qkjskl1234321"] md5String]];
 	});
 	[helper setDBName:[NSString stringWithFormat:@"%@.db",dbName]];
 	return helper;
@@ -83,7 +83,7 @@ static dispatch_once_t userOnceToken;
 }
 
 + (StatusModel *)statusModelFromJSONObject:(id)object class:(Class) class {
-	StatusModel *statusModel = [StatusModel mj_objectWithKeyValues:object[@"status"]];
+	StatusModel *statusModel = [StatusModel mj_objectWithKeyValues:object];
 	id returnObject = nil;
 	id rs = object[@"data"];
 	if (rs) {
@@ -496,10 +496,10 @@ static dispatch_once_t userOnceToken;
     //添加版本号
     NSDictionary *infoDic = [[NSBundle mainBundle] infoDictionary];
     NSString *currentVersion = [infoDic objectForKey:@"CFBundleShortVersionString"];
-    [kHttpClient.requestSerializer setValue:currentVersion forHTTPHeaderField:@"X-version"];
+    [kHttpClient.requestSerializer setValue:currentVersion forHTTPHeaderField:@"version"];
     
     //添加设备类型
-    [kHttpClient.requestSerializer setValue:@"ios" forHTTPHeaderField:@"X-appOS"];
+    [kHttpClient.requestSerializer setValue:@"0" forHTTPHeaderField:@"appOS"];
     
 	return [self encryptForSomeFields:params];
 }

@@ -21,25 +21,12 @@ static NSString *kAppUrl;
     static HttpClient *client = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        // 添加支持多台服务器地址请求。
-//        NSURL *clientURL = [NSURL URLWithString:kAppUrl];
-//        
-//        if(!clientURL.host){
-//            NSLog(@"没有设置host，请先调用“startWithURL:”设置host");
-//        }
-//        
-//        if([clientURL.scheme isEqualToString:@"https"]){
-//            client.securityPolicy = [AFSecurityPolicy policyWithPinningMode:AFSSLPinningModeNone];
-//        } else {
-//            if (![clientURL.scheme isEqualToString:@"http"]) {
-//                clientURL = [NSURL URLWithString:[NSString stringWithFormat:@"http://%@",kAppUrl]];
-//            }
-//        }
         client = [[HttpClient alloc] init];
         client.securityPolicy = [AFSecurityPolicy policyWithPinningMode:AFSSLPinningModeNone];
         client.securityPolicy.allowInvalidCertificates = YES;
-        client.responseType = ResponseOther;
+        client.responseType = ResponseJSON;
         client.requestType = RequestOther;
+        
     });
     return client;
 }
@@ -51,6 +38,7 @@ static NSString *kAppUrl;
         self.responseSerializer = [AFXMLParserResponseSerializer serializer];
     }else if(responseType == ResponseJSON){
         self.responseSerializer = [AFJSONResponseSerializer serializer];
+        self.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"application/json", @"text/json", @"text/javascript",@"text/html", nil];
     }else{
         self.responseSerializer = [AFHTTPResponseSerializer serializer];
     }

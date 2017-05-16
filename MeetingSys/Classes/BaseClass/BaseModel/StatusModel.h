@@ -14,6 +14,7 @@
 @property (nonatomic, copy) NSString* msg;              //打印信息
 @property (nonatomic, strong) id data;                  //数据，对应的Model  eg. xxModel or xxModel数组
 @property (nonatomic, strong) id originalData;          //数据，未经过映射的原始数据
+@property (nonatomic, copy) NSString* token;            //用户登录凭证
 @property (nonatomic, strong) PageModel *pageModel;     //分页对象，items数据会解析到data，如想解析分页模型，请在解析类重写+ (BOOL)isPage并返回YES
 
 - (id)initWithCode:(NSInteger)code msg:(NSString *)msg;
