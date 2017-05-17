@@ -17,8 +17,8 @@
 
 + (NSDictionary *)mj_replacedKeyFromPropertyName
 {
-    return @{@"headerImg" : @[@"avater"],
-             @"userId":@[@"id"]
+    return @{@"demand" : @[@"requirement"],
+             @"organizeName":@[@"organizerName"]
              };
 }
 

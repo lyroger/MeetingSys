@@ -77,7 +77,7 @@
     @weakify(self)
     tableAllMeetingView.mj_header = [MJDIYHeader headerWithRefreshingBlock:^{
         @strongify(self);
-        [self loadAllMeetingNetData];
+        [self refreshAllMeetingData];
     }];
     [mainScrollView addSubview:tableAllMeetingView];
     
@@ -103,7 +103,13 @@
     }];
 }
 
-- (void)loadAllMeetingNetData
+- (void)refreshAllMeetingData
+{
+    self.allMeetingModel.page = 1;
+    [self loadAllMeetingData];
+}
+
+- (void)loadAllMeetingData
 {
     [MSAllMeetingModel meetingListNetworkHUD:NetworkHUDBackground
                                         page:self.allMeetingModel.page
@@ -112,11 +118,31 @@
                                          
                                          [tableAllMeetingView.mj_header endRefreshing];
                                          [tableAllMeetingView.mj_footer endRefreshing];
-                                         
+                                         MSAllMeetingModel *allMeetings = (MSAllMeetingModel*)data;
                                          if (data.code == 0) {
+                                             if (allMeetings.firstPage) {
+                                                 [self.allMeetingModel.dayGroupList removeAllObjects];
+                                             }
+                                             if (allMeetings.hasNextPage) {
+                                                 self.allMeetingModel.page ++;
+                                             } else {
+                                                 [tableAllMeetingView.mj_footer endRefreshingWithNoMoreData];
+                                             }
+                                             
+                                             //加载当天会议
+                                             [self.allMeetingModel.todayList removeAllObjects];
+                                             if (allMeetings.todayList.count) {
+                                                 [self.allMeetingModel.todayList addObjectsFromArray:allMeetings.todayList];
+                                             }
+                                             //加载全部会议
+                                             if (allMeetings.dayGroupList.count) {
+                                                 [self.allMeetingModel.dayGroupList addObjectsFromArray:allMeetings.dayGroupList];
+                                             }
+                                             
+                                             [tableAllMeetingView reloadData];
                                              
                                          } else {
-                                             
+                                             [HUDManager alertWithTitle:data.msg];
                                          }
     }];
 }
