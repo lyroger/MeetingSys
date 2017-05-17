@@ -119,21 +119,9 @@
                                       target:(id)target
                                      success:(NetResponseBlock)success
 {
-//    CreateParamsDic;
-//    DicValueSet([MSUserInfo shareUserInfo].token, @"token");
     return [self dataTaskMethod:HTTPMethodPOST path:@"api/user/logout" params:nil networkHUD:hud target:target success:success];
 }
 
-+ (NSURLSessionDataTask *)feedbacks:(NSString*)content
-                         networkHUD:(NetworkHUD)hud
-                             target:(id)target
-                            success:(NetResponseBlock)success
-{
-    
-    CreateParamsDic;
-    DicObjectSet(content, @"content");
-    return [self dataTaskMethod:HTTPMethodPOST path:@"api/v1/app/feedbacks" params:ParamsDic networkHUD:hud target:target success:success];
-}
 
 + (NSURLSessionDataTask *)uploadHeadPhoto:(UIImage *)headPhoto
                                       hud:(NetworkHUD)hud
@@ -150,7 +138,19 @@
                                                    mimeType:@"image/jpg"];
     [array addObject:fileDic];
     
-    return [self updataFile:@"api/v1/sysUsers/uploadHeadImg" files:array params:ParamsDic networkHUD:hud target:target success:success];
+    return [self updataFile:@"api/user/changeavater" files:array params:ParamsDic networkHUD:hud target:target success:success];
+}
+
++ (NSURLSessionDataTask *)updatePwd:(NSString *)newPwd
+                             oldPwd:(NSString *)oldPwd
+                                hud:(NetworkHUD)hud
+                             target:(id)target
+                            success:(NetResponseBlock)success
+{
+    CreateParamsDic;
+    DicObjectSet(oldPwd, @"oldPassword");
+    DicObjectSet(newPwd, @"newPassword");
+    return [self dataTaskMethod:HTTPMethodPOST path:@"api/user/changepwd" params:ParamsDic networkHUD:hud target:target success:success];
 }
 
 @end

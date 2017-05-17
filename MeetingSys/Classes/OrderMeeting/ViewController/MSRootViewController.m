@@ -18,6 +18,8 @@
 #import "MSTodayMeetingView.h"
 #import "MSNewMeetingViewController.h"
 #import "MSNavigationController.h"
+#import "MSUserHeadViewController.h"
+#import "MSUpdatePwdViewController.h"
 
 @interface MSRootViewController ()<MSNavTabbarViewDelegete,UITableViewDelegate,UITableViewDataSource,UIScrollViewDelegate,MSOrderMeetingButtonViewDelegate,MSAllMeetingDetailCellDelegate,MSMeetingUserCenterViewDelegate>
 {
@@ -444,11 +446,18 @@
 
 - (void)didClickMeetingUserCenterViewItem:(NSInteger)itemIndex
 {
+    [userCenterView hideUserCenterView];
     if (itemIndex == 0) {
-        //修改密碼
+        //修改头像
+        MSUserHeadViewController *headVC = [[MSUserHeadViewController alloc] init];
+        [self.navigationController pushViewController:headVC animated:YES];
     } else if (itemIndex == 1) {
-        //檢查更新
+        //修改密碼
+        MSUpdatePwdViewController *updatePwdVC = [[MSUpdatePwdViewController alloc] init];
+        [self.navigationController pushViewController:updatePwdVC animated:YES];
     } else if (itemIndex == 2) {
+        //檢查更新
+    } else if (itemIndex == 3) {
         //註銷
         [UIAlertView alertWithCallBackBlock:^(NSInteger buttonIndex) {
             if (buttonIndex == 1) {

@@ -50,14 +50,14 @@
                                       target:(id)target
                                      success:(NetResponseBlock)success;
 
-//用户反馈意见
-+ (NSURLSessionDataTask *)feedbacks:(NSString*)content
-                         networkHUD:(NetworkHUD)hud
-                             target:(id)target
-                            success:(NetResponseBlock)success;
-
 + (NSURLSessionDataTask *)uploadHeadPhoto:(UIImage *)headPhoto
                                       hud:(NetworkHUD)hud
-                                      target:(id)target
-                                     success:(NetResponseBlock)success;
+                                   target:(id)target
+                                  success:(NetResponseBlock)success;
+
++ (NSURLSessionDataTask *)updatePwd:(NSString *)newPwd
+                             oldPwd:(NSString *)oldPwd
+                                hud:(NetworkHUD)hud
+                             target:(id)target
+                            success:(NetResponseBlock)success;
 @end

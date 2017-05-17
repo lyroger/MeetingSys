@@ -16,6 +16,8 @@
 
 - (void)showUserCenterView;
 
+- (void)hideUserCenterView;
+
 @end
 
 @protocol MSMeetingUserCenterViewDelegate <NSObject>

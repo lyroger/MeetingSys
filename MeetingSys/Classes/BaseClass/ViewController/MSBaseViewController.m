@@ -333,6 +333,31 @@
     self.navigationItem.rightBarButtonItem = item;
 }
 
+// 设置导航栏右按钮
+- (void)rightBarButtonWithName:(NSString *)name
+                   normalColor:(UIColor*)normalrColor
+                  disableColor:(UIColor*)disableColor
+                        target:(id)target
+                        action:(SEL)action {
+    UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
+    
+    if (name && ![name isEqualToString:@""])
+    {
+        [btn setTitle:name forState:UIControlStateNormal];
+        btn.titleLabel.font = kFontSize16;
+        [btn setTitleColor:normalrColor forState:UIControlStateNormal];
+        [btn setTitleColor:disableColor forState:UIControlStateDisabled];
+        CGFloat nameWidth = [name widthWithFont:btn.titleLabel.font constrainedToHeight:CGFLOAT_MAX];
+        btn.frame=CGRectMake(0, 0, nameWidth+13, 30);
+    }
+    btn.titleEdgeInsets = UIEdgeInsetsMake(0, 13, 0, 0);
+    
+    [btn addTarget:target action:action forControlEvents:UIControlEventTouchUpInside];
+    
+    UIBarButtonItem *item = [[UIBarButtonItem alloc] initWithCustomView:btn];
+    self.navigationItem.rightBarButtonItem = item;
+}
+
 - (void)rightBarRoundedBtnNames:(NSArray *)names
                          target:(id)target
                          action:(SEL)action
@@ -410,7 +435,7 @@
     UIButton *bt = [UIButton buttonWithType:UIButtonTypeCustom];
     [bt setTitleColor:kMainColor forState:UIControlStateNormal];
     [bt setTitleColor:UIColorHex_Alpha(0x02b0f0,0.3) forState:UIControlStateHighlighted];
-    [bt setImage:[UIImage imageNamed:@"icon_nav_back"] forState:UIControlStateNormal];
+    [bt setImage:[UIImage imageNamed:@"return"] forState:UIControlStateNormal];
 //    [bt setImage:[UIImage imageNamed:@"icon_nav_back"] forState:UIControlStateHighlighted];
     bt.frame = CGRectMake(0, 0, 30, 30);
     bt.titleLabel.font = kFontSize16;

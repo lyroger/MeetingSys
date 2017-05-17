@@ -20,6 +20,12 @@
                         target:(id)target
                         action:(SEL)action;
 
+- (void)rightBarButtonWithName:(NSString *)name
+                   normalColor:(UIColor*)normalrColor
+                  disableColor:(UIColor*)disableColor
+                        target:(id)target
+                        action:(SEL)action;
+
 //白色圆框文字
 - (void)rightBarRoundedBtnNames:(NSArray *)names
                          target:(id)target
