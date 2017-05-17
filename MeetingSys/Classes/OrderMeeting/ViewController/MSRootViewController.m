@@ -136,19 +136,97 @@
                                              //加载当天会议
                                              [self.allMeetingModel.todayList removeAllObjects];
                                              if (allMeetings.todayList.count) {
+                                                 [self loadMember:allMeetings.todayList];
                                                  [self.allMeetingModel.todayList addObjectsFromArray:allMeetings.todayList];
+                                                 
                                              }
                                              //加载全部会议
                                              if (allMeetings.dayGroupList.count) {
+                                                 [self loadMember:allMeetings.dayGroupList];
                                                  [self.allMeetingModel.dayGroupList addObjectsFromArray:allMeetings.dayGroupList];
                                              }
                                              
+                                             //刷新UI
+                                             if (self.allMeetingModel.todayList.count) {
+                                                 tableAllMeetingView.tableHeaderView = self.todayMeetingView;
+                                                 [self.todayMeetingView reloadWithDatas:self.allMeetingModel.todayList];
+                                             } else {
+                                                 //隐藏
+                                                 tableAllMeetingView.tableHeaderView = nil;
+                                             }
                                              [tableAllMeetingView reloadData];
                                              
                                          } else {
                                              [HUDManager alertWithTitle:data.msg];
                                          }
     }];
+}
+
+- (void)loadMemberHeadImageWithMeetingDetailModel:(MSMeetingDetailModel*)model copyDetailModel:(MSMeetingDetailModel*)copyModel
+{
+    if (!model.members.count || model.isLoadedHeadURL) {
+        return;
+    }
+    [MSMemberModel memberHeadsWithIds:model.others
+                           NetworkHUD:NetworkHUDBackground
+                               target:self
+                              success:^(StatusModel *data) {
+                                  if (data.code == 0) {
+                                      NSArray *memberHeads = data.data;
+                                      model.isLoadedHeadURL = YES;
+                                      [model.members enumerateObjectsUsingBlock:^(MSMemberModel  *member, NSUInteger idx, BOOL * _Nonnull stop) {
+                                          [self updateMemberHeadImageDatas:memberHeads matchMember:member];
+                                      }];
+                                      
+                                      [copyModel.members enumerateObjectsUsingBlock:^(MSMemberModel  *member, NSUInteger idx, BOOL * _Nonnull stop) {
+                                          [self updateMemberHeadImageDatas:memberHeads matchMember:member];
+                                      }];
+                                  }
+    }];
+}
+
+- (void)updateMemberHeadImageDatas:(NSArray*)datas matchMember:(MSMemberModel*)matchModel
+{
+    for (int i = 0; i<datas.count; i++) {
+        MSMemberModel *model = [datas objectAtIndex:i];
+        if ([model.memberId isEqualToString:matchModel.memberId]) {
+            matchModel.headURL = model.headURL;
+            break;
+        }
+    }
+}
+
+- (void)loadMember:(NSArray *)list
+{
+    for (int i = 0; i<list.count; i++) {
+        id obj = [list objectAtIndex:i];
+        if ([obj isKindOfClass:[MSMeetingDetailModel class]]) {
+            MSMeetingDetailModel *mode = (MSMeetingDetailModel*)obj;
+            [self createMemberWithModel:mode];
+        } else if ([obj isKindOfClass:[MSDayGroupList class]]){
+            MSDayGroupList *dayGroupList = (MSDayGroupList*)obj;
+            for (int j = 0; j < dayGroupList.list.count; j++) {
+                MSMeetingDetailModel *model = [dayGroupList.list objectAtIndex:j];
+                [self createMemberWithModel:model];
+            }
+        }
+    }
+}
+
+- (void)createMemberWithModel:(MSMeetingDetailModel*)model
+{
+    if (model.others.length && model.othersName.length) {
+        NSArray *memberIds = [model.others componentsSeparatedByString:@","];
+        NSArray *memberNames = [model.othersName componentsSeparatedByString:@","];
+        for (int j = 0; j<memberNames.count; j++) {
+            MSMemberModel *member = [[MSMemberModel alloc] init];
+            if (memberIds.count>j) {
+                member.memberId = [memberIds objectAtIndex:j];
+            }
+            member.name = [memberNames objectAtIndex:j];
+            [model.members addObject:member];
+        }
+    }
 }
 
 - (void)loadDemoData
@@ -290,6 +368,8 @@
                 [dayGroupList.list insertObject:copyDetail atIndex:indexPath.row+1];
                 NSIndexPath *indexP = [NSIndexPath indexPathForRow:indexPath.row+1 inSection:indexPath.section];
                 [tableView insertRowsAtIndexPaths:@[indexP] withRowAnimation:UITableViewRowAnimationFade];
+                
+                [self loadMemberHeadImageWithMeetingDetailModel:dayDetailModel copyDetailModel:copyDetail];
             }
             
             dayDetailModel.isUnfold = !dayDetailModel.isUnfold;
@@ -467,6 +547,26 @@
         [self.navigationController pushViewController:updatePwdVC animated:YES];
     } else if (itemIndex == 2) {
         //檢查更新
+        [HUDManager showHUDWithMessage:@"版本檢測中..."];
+        [MSUserInfo checkVersionNetworkHUD:NetworkHUDError target:self success:^(StatusModel *data) {
+            [HUDManager hiddenHUD];
+            if (0 == data.code) {
+                BOOL isLatest = [[data.originalData objectForKey:@"isLatest"] boolValue];
+                BOOL force = [[data.originalData objectForKey:@"force"] boolValue];
+                NSString *url = [data.originalData objectForKey:@"url"];
+                if (!isLatest) {
+                    //提示跟新
+                    [UIAlertView alertWithCallBackBlock:^(NSInteger buttonIndex) {
+                        if (buttonIndex == 1) {
+                            [self openURL:url];
+                        }
+                    } title:@"提示" message:@"發現有新版本！" cancelButtonName:@"取消" otherButtonTitles:@"立即更新", nil];
+                    
+                } else {
+                    [HUDManager alertWithTitle:@"当前为最新版本"];
+                }
+            }
+        }];
     } else if (itemIndex == 3) {
         //註銷
         [UIAlertView alertWithCallBackBlock:^(NSInteger buttonIndex) {
@@ -474,6 +574,21 @@
                 [self userLoginOut];
             }
         } title:@"提示" message:@"確定要註銷？" cancelButtonName:@"取消" otherButtonTitles:@"確定", nil];
+    }
+}
+
+- (void)openURL:(NSString *)urlString
+{
+    urlString = [NSString stringWithFormat:@"itms-apps://itunes.apple.com/cn/app/jie-zou-da-shi/id493901993?mt=8"];
+    NSURL * url = [NSURL URLWithString:urlString];
+    
+    if ([[UIApplication sharedApplication] canOpenURL:url])
+    {
+        [[UIApplication sharedApplication] openURL:url];
+    }
+    else
+    {
+        NSLog(@"can not open");
     }
 }
 

@@ -86,7 +86,7 @@
 
 - (void)data:(MSMeetingDetailModel*)model
 {
-    [imageIcon sd_setImageWithURL:[NSURL URLWithString:model.organizerHeadURL] placeholderImage:[UIImage imageNamed:@"portrait_xiao"]];
+    [imageIcon sd_setImageWithURL:kImageURLWithLastString(model.organizerHeadURL) placeholderImage:[UIImage imageNamed:@"portrait_xiao"]];
     titleLabel.text = model.title;
     timeLabel.text = [NSString stringWithFormat:@"%@-%@",[model.beginTime dateWithFormat:@"HH:mm"],[model.endTime dateWithFormat:@"HH:mm"]];
     organizerLabel.text = model.organizeName;

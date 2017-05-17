@@ -80,6 +80,7 @@
 
 // url
 #define URLWithString(str)  [NSURL URLWithString:str]
+#define kImageURLWithLastString(str) [NSURL URLWithString:[NSString stringWithFormat:@"%@%@%@",kServerHost,kServerCurrentPath,str]]
 
 //方法简介
 #define AddNotification(observer,sel,key,obj)   [[NSNotificationCenter defaultCenter] addObserver:observer selector:sel name:key object:obj]

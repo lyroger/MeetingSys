@@ -7,11 +7,16 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "MSMeetingDetailModel.h"
+//#import "MSMemberModel.h"
 
 @interface MSMemberCellView : UIView
 
 @property (nonatomic,strong) UIImageView *imageHead;
 @property (nonatomic,strong) UILabel     *labelName;
+@property (nonatomic,strong) MSMemberModel *memberModel;
+
+- (void)bindRAC;
 
 @end
 

@@ -7,14 +7,13 @@
 //
 
 #import "MSMemberView.h"
-#import "MSMeetingDetailModel.h"
 
 @interface MSMemberCellView()
 {
     
 }
-
 @end
+
 
 @implementation MSMemberCellView
 
@@ -46,6 +45,13 @@
         
     }
     return self;
+}
+
+- (void)bindRAC
+{
+    [RACObserve(self,self.memberModel.headURL) subscribeNext:^(NSString *headURL) {
+        [self.imageHead sd_setImageWithURL:kImageURLWithLastString(headURL) placeholderImage:[UIImage imageNamed:@"portrait_xiao"]];
+    }];
 }
 
 @end
@@ -110,7 +116,9 @@
         MSMemberModel *member = [datas objectAtIndex:i];
         
         MSMemberCellView *memberCell = [[MSMemberCellView alloc] initWithFrame:CGRectMake(10 + (width+marginWidth)*i, 0, width, 97)];
-        [memberCell.imageHead sd_setImageWithURL:[NSURL URLWithString:member.headURL] placeholderImage:[UIImage imageNamed:@"portrait_xiao"]];
+        [memberCell.imageHead sd_setImageWithURL:kImageURLWithLastString(member.headURL) placeholderImage:[UIImage imageNamed:@"portrait_xiao"]];
+        memberCell.memberModel = member;
+        [memberCell bindRAC];
         memberCell.labelName.text = member.name;
         [memberScrollView addSubview:memberCell];
     }

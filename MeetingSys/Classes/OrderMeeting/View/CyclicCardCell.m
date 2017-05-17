@@ -88,10 +88,10 @@
 
 - (void)data:(MSMeetingDetailModel*)model
 {
-    [self.imageView sd_setImageWithURL:[NSURL URLWithString:model.organizerHeadURL] placeholderImage:[UIImage imageNamed:@"portrait_xiao"]];
+    [self.imageView sd_setImageWithURL:kImageURLWithLastString(model.organizerHeadURL) placeholderImage:[UIImage imageNamed:@"portrait_xiao"]];
     self.nameLabel.text = model.organizeName;
     self.titleLabel.text = model.title;
-    self.timeLabel.text = [NSString stringWithFormat:@"%@-%@",[model.beginTime dateWithFormat:@"yyyy-MM-dd HH:mm"],[model.endTime dateWithFormat:@"yyyy-MM-dd HH:mm"]];
+    self.timeLabel.text = [NSString stringWithFormat:@"%@-%@",[model.beginTime dateWithFormat:@"HH:mm"],[model.endTime dateWithFormat:@"HH:mm"]];
     self.statusLabel.text = @"進行中";
 }
 

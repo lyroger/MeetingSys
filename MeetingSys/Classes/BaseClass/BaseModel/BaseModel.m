@@ -484,7 +484,7 @@ static dispatch_once_t userOnceToken;
     NSDictionary *infoDic = [[NSBundle mainBundle] infoDictionary];
     NSString *currentVersion = [infoDic objectForKey:@"CFBundleShortVersionString"];
     NSMutableDictionary *dicInfo = [NSMutableDictionary dictionaryWithDictionary:params];
-    [dicInfo setValue:currentVersion forKey:@"version"];
+    [dicInfo setValue:currentVersion forKey:@"currentVersion"];
     [dicInfo setValue:@"0" forKey:@"appOS"];
     if ([MSUserInfo shareUserInfo].token.length) {
         [dicInfo setValue:[MSUserInfo shareUserInfo].token forKey:@"token"];

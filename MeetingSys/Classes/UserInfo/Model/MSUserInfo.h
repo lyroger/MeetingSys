@@ -60,4 +60,8 @@
                                 hud:(NetworkHUD)hud
                              target:(id)target
                             success:(NetResponseBlock)success;
+
++ (NSURLSessionDataTask *)checkVersionNetworkHUD:(NetworkHUD)hud
+                                          target:(id)target
+                                         success:(NetResponseBlock)success;
 @end

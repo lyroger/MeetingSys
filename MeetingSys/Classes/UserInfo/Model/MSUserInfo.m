@@ -153,4 +153,11 @@
     return [self dataTaskMethod:HTTPMethodPOST path:@"api/user/changepwd" params:ParamsDic networkHUD:hud target:target success:success];
 }
 
++ (NSURLSessionDataTask *)checkVersionNetworkHUD:(NetworkHUD)hud
+                                          target:(id)target
+                                         success:(NetResponseBlock)success
+{
+    return [self dataTaskMethod:HTTPMethodPOST path:@"api/app/checkupdate" params:nil networkHUD:hud target:target success:success];
+}
+
 @end

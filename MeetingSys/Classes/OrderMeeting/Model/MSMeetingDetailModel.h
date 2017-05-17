@@ -10,8 +10,14 @@
 
 @interface MSMemberModel : BaseModel
 
+@property (nonatomic,copy) NSString *memberId;
 @property (nonatomic,copy) NSString *name;
 @property (nonatomic,copy) NSString *headURL;
+
++ (NSURLSessionDataTask *)memberHeadsWithIds:(NSString *)ids
+                                  NetworkHUD:(NetworkHUD)hud
+                                      target:(id)target
+                                     success:(NetResponseBlock)success;
 
 @end
 
@@ -33,6 +39,7 @@
 
 @property (nonatomic, assign) BOOL   isDetail;
 @property (nonatomic, assign) BOOL   isUnfold;
+@property (nonatomic, assign) BOOL   isLoadedHeadURL;
 
 
 @end

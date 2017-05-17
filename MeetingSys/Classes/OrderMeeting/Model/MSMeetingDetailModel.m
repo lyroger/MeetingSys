@@ -8,8 +8,24 @@
 
 #import "MSMeetingDetailModel.h"
 
+
 @implementation MSMemberModel
 
++ (NSDictionary *)mj_replacedKeyFromPropertyName
+{
+    return @{@"memberId":@"id",
+             @"headURL" : @"avater"};
+}
+
++ (NSURLSessionDataTask *)memberHeadsWithIds:(NSString *)ids
+                                  NetworkHUD:(NetworkHUD)hud
+                                      target:(id)target
+                                     success:(NetResponseBlock)success
+{
+    CreateParamsDic;
+    DicObjectSet(ids, @"ids");
+    return [self dataTaskMethod:HTTPMethodPOST path:@"api/user/getusersavater" params:ParamsDic networkHUD:hud target:target success:success];
+}
 
 @end
 
