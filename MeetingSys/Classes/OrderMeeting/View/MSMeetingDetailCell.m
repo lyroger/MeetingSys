@@ -104,10 +104,10 @@
 - (void)data:(MSNoticeModel*)model
 {
     beginTimeView.titleLabel.text = @"會議開始時間";
-    beginTimeView.detailLabel.text = model.meetingDetailModel.beginTime;
+    beginTimeView.detailLabel.text = [model.meetingDetailModel.beginTime dateWithFormat:@"yyyy-MM-dd HH:mm"];
     
     endTimeView.titleLabel.text = @"會議結束時間";
-    endTimeView.detailLabel.text = model.meetingDetailModel.endTime;
+    endTimeView.detailLabel.text = [model.meetingDetailModel.endTime dateWithFormat:@"yyyy-MM-dd HH:mm"];
     
     meetindAddressView.titleLabel.text = @"會議地址";
     meetindAddressView.detailLabel.text = model.meetingDetailModel.address;

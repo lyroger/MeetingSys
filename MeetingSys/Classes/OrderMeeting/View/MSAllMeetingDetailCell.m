@@ -55,10 +55,10 @@
 - (void)data:(MSMeetingDetailModel*)model
 {
     beginTimeView.titleLabel.text = @"會議開始時間";
-    beginTimeView.detailLabel.text = model.beginTime;
+    beginTimeView.detailLabel.text = [model.beginTime dateWithFormat:@"HH:mm"];
     
     endTimeView.titleLabel.text = @"會議結束時間";
-    endTimeView.detailLabel.text = model.endTime;
+    endTimeView.detailLabel.text = [model.endTime dateWithFormat:@"HH:mm"];
     
     meetindAddressView.titleLabel.text = @"會議地址";
     meetindAddressView.detailLabel.text = model.address;

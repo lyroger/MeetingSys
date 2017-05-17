@@ -40,7 +40,7 @@
     repeatPwdView  = [[MSInputView alloc] initWithFrame:CGRectMake(0, height*2, kScreenWidth, height)];
     [repeatPwdView title:@"確認密碼" placeholder:@"請確認密碼"];
     
-    UILabel *tipsLabel = [[UILabel alloc] initWithFrame:CGRectMake(15, repeatPwdView.origin.y+repeatPwdView.height+10, kScreenWidth-15*2, 25)];
+    UILabel *tipsLabel = [[UILabel alloc] initWithFrame:CGRectMake(15, repeatPwdView.origin.y+repeatPwdView.height+30, kScreenWidth-15*2, 25)];
     tipsLabel.text = @"注意事項：密碼長度為6到16位長度";
     tipsLabel.font = kFontPingFangRegularSize(12);
     tipsLabel.textColor = UIColorHex(0xbbbbbb);
@@ -54,7 +54,11 @@
 
 - (void)updatePwd
 {
-//    [MSUserInfo updatePwd: oldPwd:<#(NSString *)#> hud:<#(NetworkHUD)#> target:<#(id)#> success:<#^(StatusModel *data)success#>]
+    [MSUserInfo updatePwd:newPwdView.textField.text oldPwd:oldPwdView.textField.text hud:NetworkHUDLockScreen target:self success:^(StatusModel *data) {
+        if (0 == data.code) {
+            [self.navigationController popViewControllerAnimated:YES];
+        } 
+    }];
 }
 
 - (void)racForNavRightBt

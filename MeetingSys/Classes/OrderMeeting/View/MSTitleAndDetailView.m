@@ -37,7 +37,7 @@
             make.centerX.equalTo(self);
             make.left.right.equalTo(@0);
             make.top.mas_equalTo(self.titleLabel.mas_bottom).mas_offset(10);
-            make.bottom.equalTo(@(-16));
+            make.bottom.equalTo(@(-14));
         }];
         
         self.bottomLine = [UILabel new];

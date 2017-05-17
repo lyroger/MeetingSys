@@ -17,8 +17,11 @@
 
 + (NSDictionary *)mj_replacedKeyFromPropertyName
 {
-    return @{@"demand" : @[@"requirement"],
-             @"organizeName":@[@"organizerName"]
+    return @{@"beginTime":@"stTime",
+             @"demand" : @"requirement",
+             @"organizeName":@"organizerName",
+             @"address":@"mName",
+             @"organizerHeadURL":@"orgAvater"
              };
 }
 

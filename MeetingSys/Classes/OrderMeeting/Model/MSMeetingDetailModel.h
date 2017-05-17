@@ -17,8 +17,8 @@
 
 @interface MSMeetingDetailModel : BaseModel<NSCopying>
 
-@property (nonatomic, copy) NSString *beginTime;
-@property (nonatomic, copy) NSString *endTime;
+@property (nonatomic, strong) NSDate *beginTime;
+@property (nonatomic, strong) NSDate *endTime;
 @property (nonatomic, copy) NSString *address;
 @property (nonatomic, copy) NSString *agenda;
 @property (nonatomic, copy) NSString *demand;

@@ -72,7 +72,7 @@
     tableAllMeetingView.backgroundColor = UIColorHex(0xf6f6f6);
     tableAllMeetingView.delegate = self;
     tableAllMeetingView.dataSource = self;
-    tableAllMeetingView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    tableAllMeetingView.separatorColor = kSplitLineColor;
     [tableAllMeetingView registerClass:[MSMeetingListCell class] forCellReuseIdentifier:@"MSMeetingListCell"];
     [tableAllMeetingView registerClass:[MSAllMeetingDetailCell class] forCellReuseIdentifier:@"MSAllMeetingDetailCell"];
     tableAllMeetingView.tableHeaderView = self.todayMeetingView;
@@ -120,13 +120,15 @@
                                          
                                          [tableAllMeetingView.mj_header endRefreshing];
                                          [tableAllMeetingView.mj_footer endRefreshing];
-                                         MSAllMeetingModel *allMeetings = (MSAllMeetingModel*)data;
+                                         MSAllMeetingModel *allMeetings = (MSAllMeetingModel*)data.data;
                                          if (data.code == 0) {
                                              if (allMeetings.firstPage) {
                                                  [self.allMeetingModel.dayGroupList removeAllObjects];
                                              }
                                              if (allMeetings.hasNextPage) {
                                                  self.allMeetingModel.page ++;
+                                                 tableAllMeetingView.mj_footer = [MJDIYFooter footerWithRefreshingTarget:self refreshingAction:@selector(loadAllMeetingData)];
+                                                 
                                              } else {
                                                  [tableAllMeetingView.mj_footer endRefreshingWithNoMoreData];
                                              }
@@ -163,8 +165,8 @@
 //        model.isUnfold = i==0?YES:NO;
         
         MSMeetingDetailModel *detailModel = [[MSMeetingDetailModel alloc] init];
-        detailModel.beginTime = @"2017-04-04 10:00";
-        detailModel.endTime = @"2017-04-04 10:30";
+        detailModel.beginTime = [NSDate new];
+        detailModel.endTime = [NSDate new];
         detailModel.address = @"s1";
         detailModel.agenda = @"保險專業知識培訓保險專業知識培訓保險專業知識培訓保險專業知識培訓";
         detailModel.demand = @"保險專業知識培訓保險專業知識培訓保險專業知識培訓";
@@ -192,8 +194,8 @@
             MSMeetingDetailModel *detailModel = [[MSMeetingDetailModel alloc] init];
             detailModel.title = @"月度總結報告";
             detailModel.organizeName = @"roger";
-            detailModel.beginTime = @"10:00";
-            detailModel.endTime = @"10:30";
+            detailModel.beginTime = [NSDate new];
+            detailModel.endTime = [NSDate new];
             detailModel.address = @"s1";
             detailModel.agenda = @"保險專業知識培訓保險專業知識培訓保險專業知識培訓保險專業知識培訓";
             detailModel.demand = @"保險專業知識培訓保險專業知識培訓保險專業知識培訓";
@@ -215,8 +217,8 @@
         MSMeetingDetailModel *detailModel = [[MSMeetingDetailModel alloc] init];
         detailModel.title = @"月度總結報告";
         detailModel.organizeName = @"roger";
-        detailModel.beginTime = @"10:00";
-        detailModel.endTime = @"10:30";
+        detailModel.beginTime = [NSDate new];
+        detailModel.endTime = [NSDate new];
         detailModel.address = @"s1";
         detailModel.agenda = @"保險專業知識培訓保險專業知識培訓保險專業知識培訓保險專業知識培訓";
         detailModel.demand = @"保險專業知識培訓保險專業知識培訓保險專業知識培訓";
@@ -419,6 +421,14 @@
             [cell data:dayDetailModel];
             return cell;
         }
+    }
+}
+
+- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableView *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (tableView == tableAllMeetingView) {
+        [cell setSeparatorInset:UIEdgeInsetsZero];
+        [cell setLayoutMargins:UIEdgeInsetsZero];
     }
 }
 
