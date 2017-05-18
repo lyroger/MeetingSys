@@ -16,7 +16,6 @@ target ‘MeetingSys’ do
   # use_frameworks!
 
   # Pods for MeNote
-  pod 'BmobSDK'
   pod 'Masonry'
   pod 'AFNetworking'
   pod 'FMDB/SQLCipher'

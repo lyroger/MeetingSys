@@ -12,12 +12,21 @@
 
 @property (nonatomic,copy) NSString *memberId;
 @property (nonatomic,copy) NSString *name;
+@property (nonatomic,copy) NSString *title;
 @property (nonatomic,copy) NSString *headURL;
+
+@property (nonatomic,assign) BOOL isSelected;
 
 + (NSURLSessionDataTask *)memberHeadsWithIds:(NSString *)ids
                                   NetworkHUD:(NetworkHUD)hud
                                       target:(id)target
                                      success:(NetResponseBlock)success;
+
++ (NSURLSessionDataTask *)getuserlistKeywords:(NSString *)keywords
+                                         page:(NSInteger)page
+                                   networkHUD:(NetworkHUD)hud
+                                       target:(id)target
+                                      success:(NetResponseBlock)success;
 
 @end
 

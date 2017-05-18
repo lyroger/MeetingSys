@@ -160,4 +160,25 @@
     return [self dataTaskMethod:HTTPMethodPOST path:@"api/app/checkupdate" params:nil networkHUD:hud target:target success:success];
 }
 
++ (NSURLSessionDataTask *)registerPush:(NSString *)registerID
+                           deviceToken:(NSString *)deviceToken
+                                target:(id)target
+                               success:(NetResponseBlock)success
+{
+    CreateParamsDic;
+    DicObjectSet(registerID, @"registerID");
+    DicObjectSet(deviceToken, @"deviceToken");
+    return [self dataTaskMethod:HTTPMethodPOST path:@"api/push/register" params:ParamsDic networkHUD:NetworkHUDBackground target:target success:success];
+}
+
++ (NSURLSessionDataTask *)unRegisterPush:(NSString *)registerID
+                             deviceToken:(NSString *)deviceToken
+                                  target:(id)target
+                                 success:(NetResponseBlock)success
+{
+    CreateParamsDic;
+    DicObjectSet(registerID, @"registerID");
+    DicObjectSet(deviceToken, @"deviceToken");
+    return [self dataTaskMethod:HTTPMethodPOST path:@"api/push/unregister" params:ParamsDic networkHUD:NetworkHUDBackground target:target success:success];
+}
 @end

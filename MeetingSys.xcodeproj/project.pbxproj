@@ -158,6 +158,10 @@
 		A789FCBD1EBC101B004CA763 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = A789FCBC1EBC101B004CA763 /* main.m */; };
 		A789FCC01EBC101B004CA763 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = A789FCBF1EBC101B004CA763 /* AppDelegate.m */; };
 		A789FCC81EBC101B004CA763 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A789FCC71EBC101B004CA763 /* Assets.xcassets */; };
+		A7D79CA41ECD370D00549F67 /* SHMSelectActionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A7D79CA11ECD370D00549F67 /* SHMSelectActionCell.m */; };
+		A7D79CA51ECD370D00549F67 /* SHMSelectActionView.m in Sources */ = {isa = PBXBuildFile; fileRef = A7D79CA31ECD370D00549F67 /* SHMSelectActionView.m */; };
+		A7D79CA81ECD419100549F67 /* MSSelectMemeberViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A7D79CA71ECD419100549F67 /* MSSelectMemeberViewController.m */; };
+		A7D79CAC1ECD844200549F67 /* MSSelMemberCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A7D79CAB1ECD844200549F67 /* MSSelMemberCell.m */; };
 		A7D9C8A41EC3F600000FB05C /* MSAgreementViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A7D9C8A31EC3F600000FB05C /* MSAgreementViewController.m */; };
 		A7D9C8A71EC44A98000FB05C /* MSNoticeModel.m in Sources */ = {isa = PBXBuildFile; fileRef = A7D9C8A61EC44A98000FB05C /* MSNoticeModel.m */; };
 		A7D9C8AA1EC4584F000FB05C /* MSTitleAndDetailView.m in Sources */ = {isa = PBXBuildFile; fileRef = A7D9C8A91EC4584F000FB05C /* MSTitleAndDetailView.m */; };
@@ -490,6 +494,14 @@
 		A789FCBF1EBC101B004CA763 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		A789FCC71EBC101B004CA763 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A789FCCC1EBC101B004CA763 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		A7D79CA01ECD370D00549F67 /* SHMSelectActionCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SHMSelectActionCell.h; sourceTree = "<group>"; };
+		A7D79CA11ECD370D00549F67 /* SHMSelectActionCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SHMSelectActionCell.m; sourceTree = "<group>"; };
+		A7D79CA21ECD370D00549F67 /* SHMSelectActionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SHMSelectActionView.h; sourceTree = "<group>"; };
+		A7D79CA31ECD370D00549F67 /* SHMSelectActionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SHMSelectActionView.m; sourceTree = "<group>"; };
+		A7D79CA61ECD419100549F67 /* MSSelectMemeberViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSSelectMemeberViewController.h; sourceTree = "<group>"; };
+		A7D79CA71ECD419100549F67 /* MSSelectMemeberViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSSelectMemeberViewController.m; sourceTree = "<group>"; };
+		A7D79CAA1ECD844200549F67 /* MSSelMemberCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSSelMemberCell.h; sourceTree = "<group>"; };
+		A7D79CAB1ECD844200549F67 /* MSSelMemberCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSSelMemberCell.m; sourceTree = "<group>"; };
 		A7D9C8A21EC3F600000FB05C /* MSAgreementViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSAgreementViewController.h; sourceTree = "<group>"; };
 		A7D9C8A31EC3F600000FB05C /* MSAgreementViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSAgreementViewController.m; sourceTree = "<group>"; };
 		A7D9C8A51EC44A98000FB05C /* MSNoticeModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSNoticeModel.h; sourceTree = "<group>"; };
@@ -1239,6 +1251,8 @@
 				A7D9C8A91EC4584F000FB05C /* MSTitleAndDetailView.m */,
 				A71024AD1EC9A1C40036CFF0 /* MSMustInputItemView.h */,
 				A71024AE1EC9A1C40036CFF0 /* MSMustInputItemView.m */,
+				A7D79CA91ECD83E000549F67 /* SelectMemberView */,
+				A7D79C9F1ECD370D00549F67 /* SelectActionView */,
 				A71EC73E1EC6F39B00E22577 /* NewMeeting */,
 				A7FA35F61EC5E4700053B682 /* ToDayMeeting */,
 				A77327371EC4971F005A89AE /* Meeting */,
@@ -1254,6 +1268,8 @@
 				A7186FD11EBC2CC300DE4B67 /* MSRootViewController.m */,
 				A71EC73B1EC6EE1B00E22577 /* MSNewMeetingViewController.h */,
 				A71EC73C1EC6EE1B00E22577 /* MSNewMeetingViewController.m */,
+				A7D79CA61ECD419100549F67 /* MSSelectMemeberViewController.h */,
+				A7D79CA71ECD419100549F67 /* MSSelectMemeberViewController.m */,
 			);
 			path = ViewController;
 			sourceTree = "<group>";
@@ -1339,6 +1355,26 @@
 				A7186FCB1EBC221900DE4B67 /* MeetingSysPrefixHeader.pch */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		A7D79C9F1ECD370D00549F67 /* SelectActionView */ = {
+			isa = PBXGroup;
+			children = (
+				A7D79CA01ECD370D00549F67 /* SHMSelectActionCell.h */,
+				A7D79CA11ECD370D00549F67 /* SHMSelectActionCell.m */,
+				A7D79CA21ECD370D00549F67 /* SHMSelectActionView.h */,
+				A7D79CA31ECD370D00549F67 /* SHMSelectActionView.m */,
+			);
+			path = SelectActionView;
+			sourceTree = "<group>";
+		};
+		A7D79CA91ECD83E000549F67 /* SelectMemberView */ = {
+			isa = PBXGroup;
+			children = (
+				A7D79CAA1ECD844200549F67 /* MSSelMemberCell.h */,
+				A7D79CAB1ECD844200549F67 /* MSSelMemberCell.m */,
+			);
+			name = SelectMemberView;
 			sourceTree = "<group>";
 		};
 		A7FA35F61EC5E4700053B682 /* ToDayMeeting */ = {
@@ -1540,6 +1576,7 @@
 				A7186FA81EBC219F00DE4B67 /* UIImage+Orientation.m in Sources */,
 				A7186F5A1EBC219F00DE4B67 /* MNBottomTitleButton.m in Sources */,
 				A7186FA11EBC219F00DE4B67 /* UIControl+Block.m in Sources */,
+				A7D79CAC1ECD844200549F67 /* MSSelMemberCell.m in Sources */,
 				A715109C1EC1F61800B2361F /* MSUserInfoCell.m in Sources */,
 				A7186FB61EBC219F00DE4B67 /* UITextField+Select.m in Sources */,
 				A7186F941EBC219F00DE4B67 /* UIButton+Block.m in Sources */,
@@ -1567,6 +1604,7 @@
 				A71EC73D1EC6EE1B00E22577 /* MSNewMeetingViewController.m in Sources */,
 				A7186F961EBC219F00DE4B67 /* UIButton+CountDown.m in Sources */,
 				A7186F5E1EBC219F00DE4B67 /* NSArray+SafeAccess.m in Sources */,
+				A7D79CA51ECD370D00549F67 /* SHMSelectActionView.m in Sources */,
 				A7186FAA1EBC219F00DE4B67 /* UIImage+SuperCompress.m in Sources */,
 				A7186F4D1EBC219F00DE4B67 /* HttpClient.m in Sources */,
 				A71EC7471EC6F44700E22577 /* MSNewMeetingInputCell.m in Sources */,
@@ -1640,8 +1678,10 @@
 				A7186F681EBC219F00DE4B67 /* NSDictionary+JSONString.m in Sources */,
 				A7186FAD1EBC219F00DE4B67 /* UINavigationBar+Awesome.m in Sources */,
 				A7186F671EBC219F00DE4B67 /* NSDictionary+Block.m in Sources */,
+				A7D79CA81ECD419100549F67 /* MSSelectMemeberViewController.m in Sources */,
 				A7186F891EBC219F00DE4B67 /* NSString+UUID.m in Sources */,
 				A7186FA51EBC219F00DE4B67 /* UIImage+Color.m in Sources */,
+				A7D79CA41ECD370D00549F67 /* SHMSelectActionCell.m in Sources */,
 				A7186F7D1EBC219F00DE4B67 /* NSString+Hash.m in Sources */,
 				A7186F9A1EBC219F00DE4B67 /* UIButton+MiddleAligning.m in Sources */,
 				A7D9C8A71EC44A98000FB05C /* MSNoticeModel.m in Sources */,
@@ -1789,7 +1829,8 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_ENTITLEMENTS = MeetingSys/MeetingSys.entitlements;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: AGATE TECHNOLOGY LIMITED (5BM8VR28B7)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: AGATE TECHNOLOGY LIMITED (5BM8VR28B7)";
 				DEVELOPMENT_TEAM = 5BM8VR28B7;
 				GCC_PREFIX_HEADER = "$(SRCROOT)/MeetingSys/MeetingSysPrefixHeader.pch";
 				INFOPLIST_FILE = MeetingSys/Info.plist;

@@ -12,14 +12,20 @@
 #import "MSNewMeetingSelectCell.h"
 #import "MSNewMeetingHeadView.h"
 #import "MSNewMeetingONOffCell.h"
+#import "SHMSelectActionView.h"
+#import "MSSelectMemeberViewController.h"
 
-@interface MSNewMeetingViewController ()<UITableViewDelegate,UITableViewDataSource>
+@interface MSNewMeetingViewController ()<SHMSelectActionViewDelegate,UITableViewDelegate,UITableViewDataSource>
 {
     UITableView *newMeetingTableView;
     UIButton    *newMeetingButton;
+    SHMSelectActionView *selectThemeView;
 }
 
 @property (nonatomic, strong) MSNewMeetingHeadView *headView;
+
+@property (nonatomic, strong) NSMutableArray *meetingTypeData;
+
 
 @end
 
@@ -40,16 +46,18 @@
     return _headView;
 }
 
+- (NSMutableArray*)meetingTypeData
+{
+    if (!_meetingTypeData) {
+        _meetingTypeData = [[NSMutableArray alloc] init];
+        [_meetingTypeData addObject:@"會議"];
+        [_meetingTypeData addObject:@"洽談"];
+    }
+    return _meetingTypeData;
+}
+
 - (void)loadSubView
 {
-    UIImage *bgImage = [UIImage imageWithColor:UIColorHex(0xFF845F)];
-    bgImage = [bgImage resizableImageWithCapInsets:UIEdgeInsetsMake(0, 1, 2,1) resizingMode:UIImageResizingModeStretch];
-    [self.navigationController.navigationBar setBackgroundImage:bgImage forBarMetrics:UIBarMetricsDefault];
-    [self.navigationController.navigationBar setShadowImage:[UIImage new]];
-    [self.navigationController.navigationBar setBarTintColor:UIColorHex(0xFF845F)];
-    [self.navigationController.navigationBar setTintColor:UIColorHex(0xFF845F)];
-    [self.navigationController.navigationBar setTitleTextAttributes:@{NSForegroundColorAttributeName:UIColorHex(0xffffff), NSFontAttributeName:kNavTitleFont}];
-
     [self leftBarButtonWithName:@"" image:[UIImage imageNamed:@"guanbi"] target:self action:@selector(closeView:)];
     
     [self rightBarButtonWithName:@"確認" normalImgName:@"" highlightImgName:@"" target:self action:@selector(submitMeetingAction:)];
@@ -74,10 +82,59 @@
 
 }
 
+- (void)selectMeetingTheme
+{
+    if (!selectThemeView) {
+        selectThemeView = [[SHMSelectActionView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, kScreenHeight)];
+        selectThemeView.delegate = self;
+    }
+    selectThemeView.title = @"會議類型";
+    selectThemeView.isMutibleSelect = NO;
+    
+    selectThemeView.dataArray = self.meetingTypeData;
+    [selectThemeView showSelectActionView];
+}
+
+#pragma mark SHMSelectActionViewDelegate
+/**
+ *  视图隐藏完成时调用的代理方法
+ *
+ *  @param view 返回操作的视图对象
+ */
+- (void)didHideSelectItemView:(SHMSelectActionView *)view
+{
+    //取消先前选中的状态
+//    [tableViewList deselectRowAtIndexPath:tableViewList.indexPathForSelectedRow animated:YES];
+}
+
+/**
+ *  选择完选项代理方法
+ *
+ *  @param view   返回操作的视图对选
+ *  @param indexs 返回选择操作的数据索引，若是单选，数组只包含一个索引，若为多选是选中的数据索引集合。
+ */
+- (void)didSelectItemWithView:(SHMSelectActionView*)view itemIndexs:(NSMutableArray*)indexs
+{
+    [self didSelectItemReloadDataWith:indexs title:view.title];
+}
+
+- (void)didSelectItemReloadDataWith:(NSMutableArray*)indexs title:(NSString*)title
+{
+
+}
+
 #pragma mark UITableViewDelegate & UITableViewDataSource
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    if (indexPath.row == 3) {
+        [self selectMeetingTheme];
+    } else if (indexPath.row == 5 || indexPath.row == 6) {
+        MSSelectMemeberViewController *memberVC = [[MSSelectMemeberViewController alloc] init];
+        memberVC.title = indexPath.row == 5 ? @"選擇組織者":@"選擇參與人員";
+        memberVC.memberType = indexPath.row == 5 ? MSSelectMemeber_Organizer:MSSelectMemeber_Others;
+        [self.navigationController pushViewController:memberVC animated:YES];
+    }
     
 }
 
@@ -149,6 +206,13 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    UIImage *bgImage = [UIImage imageWithColor:UIColorHex(0xFF845F)];
+    bgImage = [bgImage resizableImageWithCapInsets:UIEdgeInsetsMake(0, 1, 2,1) resizingMode:UIImageResizingModeStretch];
+    [self.navigationController.navigationBar setBackgroundImage:bgImage forBarMetrics:UIBarMetricsDefault];
+    [self.navigationController.navigationBar setShadowImage:[UIImage new]];
+    [self.navigationController.navigationBar setBarTintColor:UIColorHex(0xFF845F)];
+    [self.navigationController.navigationBar setTintColor:UIColorHex(0xFF845F)];
+    [self.navigationController.navigationBar setTitleTextAttributes:@{NSForegroundColorAttributeName:UIColorHex(0xffffff), NSFontAttributeName:kNavTitleFont}];
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
 }
 

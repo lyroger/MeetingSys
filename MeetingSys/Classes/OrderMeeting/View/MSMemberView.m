@@ -22,8 +22,13 @@
     if (self = [super initWithFrame:frame]) {
         self.imageHead = [UIImageView new];
         self.imageHead.layer.cornerRadius = 26;
+        self.imageHead.layer.masksToBounds = YES;
         self.imageHead.contentMode = UIViewContentModeScaleAspectFill;
+        self.imageHead.userInteractionEnabled = YES;
         [self addSubview:self.imageHead];
+        
+        UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(deleteMember)];
+        [self.imageHead addGestureRecognizer:tap];
         
         self.labelName = [UILabel new];
         self.labelName.font = kFontPingFangRegularSize(10);
@@ -54,6 +59,13 @@
     }];
 }
 
+- (void)deleteMember
+{
+    if (self.clickBlock) {
+        self.clickBlock(self);
+    }
+}
+
 @end
 
 @interface MSMemberView()
@@ -79,6 +91,10 @@
         memberScrollView.showsHorizontalScrollIndicator = NO;
         [self addSubview:memberScrollView];
         
+        self.bottomLine = [UILabel new];
+        self.bottomLine.backgroundColor = UIColorHex(0xE3E3E3);
+        [self addSubview:self.bottomLine];
+        
         [titleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
             make.top.equalTo(@16);
             make.left.equalTo(@10);
@@ -92,9 +108,6 @@
             make.height.mas_equalTo(97);
         }];
         
-        self.bottomLine = [UILabel new];
-        self.bottomLine.backgroundColor = UIColorHex(0xE3E3E3);
-        [self addSubview:self.bottomLine];
         [self.bottomLine mas_makeConstraints:^(MASConstraintMaker *make) {
             make.left.right.bottom.equalTo(@0);
             make.height.equalTo(@(0.6));
@@ -121,8 +134,19 @@
         [memberCell bindRAC];
         memberCell.labelName.text = member.name;
         [memberScrollView addSubview:memberCell];
+        
+        memberCell.clickBlock = ^(MSMemberCellView *view) {
+            [self deleteMember:view];
+        };
     }
     
     [memberScrollView setContentSize:CGSizeMake(10 + (width+marginWidth)*datas.count, memberScrollView.height)];
+}
+
+- (void)deleteMember:(MSMemberCellView*)cell
+{
+    if (self.delegate && [self.delegate respondsToSelector:@selector(didClickMemberCell:)]) {
+        [self.delegate didClickMemberCell:cell];
+    }
 }
 @end

@@ -298,7 +298,6 @@
                 [[MSUserInfo shareUserInfo] setUserInfo:userInfo];
                 [[MSUserInfo getUsingLKDBHelper] insertToDB:userInfo callback:^(BOOL result) {
                     NSLog(@"result = %zd",result);
-                    
                 }];
                 
                 [[NSUserDefaults standardUserDefaults] setObject:userInfo.userAcount forKey:kLastUserAcount];

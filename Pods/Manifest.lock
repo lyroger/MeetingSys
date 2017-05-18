@@ -29,7 +29,6 @@ PODS:
   - BlocksKit/UIKit (2.2.5):
     - BlocksKit/Core
     - BlocksKit/DynamicDelegate
-  - BmobSDK (2.1.7)
   - DACircularProgress (2.3.1)
   - FMDB (2.6.2):
     - FMDB/standard (= 2.6.2)
@@ -75,7 +74,6 @@ PODS:
 DEPENDENCIES:
   - AFNetworking
   - BlocksKit
-  - BmobSDK
   - FMDB/SQLCipher
   - HZActivityIndicatorView
   - IQKeyboardManager (~> 3.3.7)
@@ -97,7 +95,6 @@ DEPENDENCIES:
 SPEC CHECKSUMS:
   AFNetworking: 5e0e199f73d8626b11e79750991f5d173d1f8b67
   BlocksKit: 7f422b971407001178d181a43b99014ea2591fe6
-  BmobSDK: 23cbfbde2a7cfaeb0c8a946953a266fe5211e7f6
   DACircularProgress: 4dd437c0fc3da5161cb289e07ac449493d41db71
   FMDB: 854a0341b4726e53276f2a8996f06f1b80f9259a
   HZActivityIndicatorView: c866c50275ab126bbb5333d71760565c205aaf35
@@ -119,6 +116,6 @@ SPEC CHECKSUMS:
   SSZipArchive: 2cf2a6d3ac9f03252b7d96f93728b9b983be9afb
   TZImagePickerController: 0a8ff228d287ebdd7d485e8c42a2a932894f1fba
 
-PODFILE CHECKSUM: 15ae7205fa0f7b41a872f996588bc57fee30ef97
+PODFILE CHECKSUM: 39a318d59409092686025df59465d351dc0de8b1
 
 COCOAPODS: 1.2.1

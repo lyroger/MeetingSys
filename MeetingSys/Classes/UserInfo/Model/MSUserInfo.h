@@ -64,4 +64,14 @@
 + (NSURLSessionDataTask *)checkVersionNetworkHUD:(NetworkHUD)hud
                                           target:(id)target
                                          success:(NetResponseBlock)success;
+
++ (NSURLSessionDataTask *)registerPush:(NSString *)registerID
+                           deviceToken:(NSString *)deviceToken
+                                target:(id)target
+                               success:(NetResponseBlock)success;
+
++ (NSURLSessionDataTask *)unRegisterPush:(NSString *)registerID
+                             deviceToken:(NSString *)deviceToken
+                                  target:(id)target
+                                 success:(NetResponseBlock)success;
 @end

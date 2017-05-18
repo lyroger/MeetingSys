@@ -597,6 +597,20 @@
     [MSUserInfo loginOutNetworkHUD:NetworkHUDLockScreen target:self success:^(StatusModel *data) {
         
     }];
+    
+    //注销推送信息
+    NSString *deviceTokenString = [[[[[[MSUserInfo shareUserInfo] getDeviceToken] description]
+                                     stringByReplacingOccurrencesOfString:@"<"withString:@""]
+                                    stringByReplacingOccurrencesOfString:@">" withString:@""]
+                                   stringByReplacingOccurrencesOfString:@" " withString:@""];
+    NSLog(@"deviceTokenString：%@", deviceTokenString);
+    NSString *jPushRegistrationID = [[NSUserDefaults standardUserDefaults] objectForKey:@"kJPushRegistrationID"];
+    NSString *registerId = jPushRegistrationID.length?jPushRegistrationID:@"";
+    deviceTokenString = deviceTokenString.length?deviceTokenString:@"";
+    [MSUserInfo unRegisterPush:registerId deviceToken:deviceTokenString target:self success:^(StatusModel *data) {
+        
+    }];
+    
     //注销token 发送退出登录通知
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         [MSUserInfo shareUserInfo].token = nil;

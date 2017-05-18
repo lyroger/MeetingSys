@@ -14,7 +14,8 @@
 + (NSDictionary *)mj_replacedKeyFromPropertyName
 {
     return @{@"memberId":@"id",
-             @"headURL" : @"avater"};
+             @"headURL" : @"avater",
+             @"name":@"nickName"};
 }
 
 + (NSURLSessionDataTask *)memberHeadsWithIds:(NSString *)ids
@@ -25,6 +26,20 @@
     CreateParamsDic;
     DicObjectSet(ids, @"ids");
     return [self dataTaskMethod:HTTPMethodPOST path:@"api/user/getusersavater" params:ParamsDic networkHUD:hud target:target success:success];
+}
+
+
++ (NSURLSessionDataTask *)getuserlistKeywords:(NSString *)keywords
+                                         page:(NSInteger)page
+                                   networkHUD:(NetworkHUD)hud
+                                       target:(id)target
+                                      success:(NetResponseBlock)success
+{
+    CreateParamsDic;
+    DicObjectSet(keywords, @"keywords");
+    DicObjectSet(@(page), @"page");
+    DicObjectSet(@(15), @"rows");
+    return [self dataTaskMethod:HTTPMethodPOST path:@"api/user/getuserlist" params:ParamsDic networkHUD:hud target:target success:success];
 }
 
 @end

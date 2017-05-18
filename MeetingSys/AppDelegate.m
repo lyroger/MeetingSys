@@ -46,12 +46,16 @@
         self.loginVC.loginCompleteBlock = ^(BOOL success){
             @strongify(self)
             if (success) {
+                [self registerDeviceInfoForUser];
                 [self enterRootView];
             }
         };
         self.window.rootViewController = rootNav;
         
     } else {
+        if (![MSUserInfo shareUserInfo].isRegisterPushInfo) {
+            [self registerDeviceInfoForUser];
+        }
         [self enterRootView];
     }
 }
@@ -200,6 +204,21 @@
     NSString *registerId = jPushRegistrationID.length?jPushRegistrationID:@"";
     NSString *account = [MSUserInfo shareUserInfo].userId?[MSUserInfo shareUserInfo].userId:@"";
     NSLog(@"registerAppAccountDevices:deviceToken=%@,registerId=%@,account=%@",deviceTokenString,registerId,account);
+    
+    [MSUserInfo registerPush:registerId deviceToken:deviceTokenString target:self success:^(StatusModel *data) {
+        if (data.code == 0) {
+            //注册成功
+            [MSUserInfo shareUserInfo].isRegisterPushInfo = YES;
+        } else {
+            [MSUserInfo shareUserInfo].isRegisterPushInfo = NO;
+        }
+        
+        MSUserInfo *userInfo = [MSUserInfo shareUserInfo];
+        [[MSUserInfo getUsingLKDBHelper] insertToDB:userInfo callback:^(BOOL result) {
+            NSLog(@"result = %zd",result);
+        }];
+    }];
+    
 //    [HybridFrameModel registerAppAccountDevices:deviceTokenString registerId:registerId accountInfo:account success:^(StatusModel *data) {
 //        if (data.code == 0) {
 //            //注册成功

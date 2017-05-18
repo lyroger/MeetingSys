@@ -435,7 +435,7 @@
     UIButton *bt = [UIButton buttonWithType:UIButtonTypeCustom];
     [bt setTitleColor:kMainColor forState:UIControlStateNormal];
     [bt setTitleColor:UIColorHex_Alpha(0x02b0f0,0.3) forState:UIControlStateHighlighted];
-    [bt setImage:[UIImage imageNamed:@"return"] forState:UIControlStateNormal];
+    [bt setImage:[UIImage imageNamed:@"return_hui"] forState:UIControlStateNormal];
 //    [bt setImage:[UIImage imageNamed:@"icon_nav_back"] forState:UIControlStateHighlighted];
     bt.frame = CGRectMake(0, 0, 30, 30);
     bt.titleLabel.font = kFontSize16;
