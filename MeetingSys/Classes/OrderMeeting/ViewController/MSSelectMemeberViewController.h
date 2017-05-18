@@ -14,8 +14,13 @@ typedef NS_ENUM(NSUInteger, MSSelectMemeberType)
     MSSelectMemeber_Others,
 };
 
+typedef void(^SelectedMemberBlock)(MSSelectMemeberType selectType,NSArray *members);
+
 @interface MSSelectMemeberViewController : MSBaseViewController
 
 @property (nonatomic, assign) MSSelectMemeberType memberType;
+@property (nonatomic, strong) NSMutableArray *selectedMemebers;
+@property (nonatomic, copy)   SelectedMemberBlock selectBlock;
 
 @end
+

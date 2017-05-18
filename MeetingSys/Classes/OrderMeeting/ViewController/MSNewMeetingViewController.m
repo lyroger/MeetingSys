@@ -14,6 +14,7 @@
 #import "MSNewMeetingONOffCell.h"
 #import "SHMSelectActionView.h"
 #import "MSSelectMemeberViewController.h"
+#import "MSMeetingDetailModel.h"
 
 @interface MSNewMeetingViewController ()<SHMSelectActionViewDelegate,UITableViewDelegate,UITableViewDataSource>
 {
@@ -24,8 +25,11 @@
 
 @property (nonatomic, strong) MSNewMeetingHeadView *headView;
 
-@property (nonatomic, strong) NSMutableArray *meetingTypeData;
+@property (nonatomic, strong) NSMutableArray *meetingTypeData;//會議類型
 
+@property (nonatomic, strong) NSMutableArray *meetingOthers;//參與人員
+
+@property (nonatomic, strong) MSMeetingDetailModel *meetingInfoObj;
 
 @end
 
@@ -36,6 +40,14 @@
     self.title = @"新增預約";
     [self loadSubView];
     // Do any additional setup after loading the view.
+}
+
+- (MSMeetingDetailModel*)meetingInfoObj
+{
+    if (!_meetingInfoObj) {
+        _meetingInfoObj = [[MSMeetingDetailModel alloc] init];
+    }
+    return _meetingInfoObj;
 }
 
 - (MSNewMeetingHeadView*)headView
@@ -50,10 +62,18 @@
 {
     if (!_meetingTypeData) {
         _meetingTypeData = [[NSMutableArray alloc] init];
-        [_meetingTypeData addObject:@"會議"];
-        [_meetingTypeData addObject:@"洽談"];
+        [_meetingTypeData addObject:@"會議使用"];
+        [_meetingTypeData addObject:@"洽談使用"];
     }
     return _meetingTypeData;
+}
+
+- (NSMutableArray*)meetingOthers
+{
+    if (!_meetingOthers) {
+        _meetingOthers = [[NSMutableArray alloc] init];
+    }
+    return _meetingOthers;
 }
 
 - (void)loadSubView
@@ -115,13 +135,14 @@
  */
 - (void)didSelectItemWithView:(SHMSelectActionView*)view itemIndexs:(NSMutableArray*)indexs
 {
-    [self didSelectItemReloadDataWith:indexs title:view.title];
+    NSInteger indexItem = [[indexs objectAtIndex:0] integerValue];
+    NSString *meetingTypeString = [self.meetingTypeData objectAtIndex:indexItem];
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:3 inSection:0];
+    MSNewMeetingSelectCell *cell = [newMeetingTableView cellForRowAtIndexPath:indexPath];
+    self.meetingInfoObj.meetingType = indexItem+1;
+    [cell contentText:meetingTypeString];
 }
 
-- (void)didSelectItemReloadDataWith:(NSMutableArray*)indexs title:(NSString*)title
-{
-
-}
 
 #pragma mark UITableViewDelegate & UITableViewDataSource
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
@@ -130,9 +151,40 @@
     if (indexPath.row == 3) {
         [self selectMeetingTheme];
     } else if (indexPath.row == 5 || indexPath.row == 6) {
+        MSNewMeetingSelectCell *cell = [tableView cellForRowAtIndexPath:indexPath];
         MSSelectMemeberViewController *memberVC = [[MSSelectMemeberViewController alloc] init];
-        memberVC.title = indexPath.row == 5 ? @"選擇組織者":@"選擇參與人員";
         memberVC.memberType = indexPath.row == 5 ? MSSelectMemeber_Organizer:MSSelectMemeber_Others;
+        if (indexPath.row == 6) {
+            [memberVC.selectedMemebers addObjectsFromArray:self.meetingOthers];
+        }
+        @weakify(self)
+        memberVC.selectBlock = ^(MSSelectMemeberType selectType, NSArray *members) {
+            @strongify(self)
+            if (selectType == MSSelectMemeber_Organizer) {
+                MSMemberModel *model = [members objectAtIndex:0];
+                self.meetingInfoObj.organizeName = model.name;
+                self.meetingInfoObj.organizeId = model.memberId;
+                [cell contentText:model.name];
+            } else {
+                NSMutableString *names = [[NSMutableString alloc] init];
+                NSMutableString *ids = [[NSMutableString alloc] init];
+                for (int i = 0; i< members.count; i++) {
+                    MSMemberModel *model = [members objectAtIndex:i];
+                    if (i == 0) {
+                        [names appendString:model.name];
+                        [ids appendString:model.memberId];
+                    } else {
+                        [names appendFormat:@",%@",model.name];
+                        [ids appendFormat:@",%@",model.memberId];
+                    }
+                }
+                self.meetingInfoObj.others = ids;
+                self.meetingInfoObj.othersName = names;
+                [self.meetingOthers removeAllObjects];
+                [self.meetingOthers addObjectsFromArray:members];
+                [cell contentText:names];
+            }
+        };
         [self.navigationController pushViewController:memberVC animated:YES];
     }
     

@@ -24,7 +24,7 @@
                                      success:(NetResponseBlock)success
 {
     CreateParamsDic;
-    DicObjectSet(ids, @"ids");
+    DicValueSet(ids, @"ids");
     return [self dataTaskMethod:HTTPMethodPOST path:@"api/user/getusersavater" params:ParamsDic networkHUD:hud target:target success:success];
 }
 

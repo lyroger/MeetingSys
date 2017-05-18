@@ -19,8 +19,8 @@
 
 @property (nonatomic, strong) UITableView    *memberTableView;
 @property (nonatomic, strong) NSMutableArray *members;
-@property (nonatomic, strong) NSMutableArray *selectedMemebers;
 @property (nonatomic, strong) MSMemberView   *headMemberView;
+@property (nonatomic, assign) NSInteger      selectedItemCount;
 
 @end
 
@@ -44,8 +44,6 @@
 
 - (void)loadSubView
 {
-    [self rightBarButtonWithName:@"確定" normalColor:UIColorHex(0xFF7B54) disableColor:UIColorHex_Alpha(0xFF7B54, 0.6) target:self action:@selector(selectMemeberOK)];
-    
     /* searchbar */
     _searchBar = [[UISearchBar alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, 46)];
     _searchBar.placeholder = @"請輸入姓名或職位";
@@ -58,6 +56,7 @@
     UIView *searchTextField = [[[_searchBar.subviews firstObject] subviews] lastObject];
     searchTextField.backgroundColor = UIColorHex(0xeeeeee);
     [self.view addSubview:_searchBar];
+    [_searchBar becomeFirstResponder];
     
     self.memberTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 46, kScreenWidth,kScreenHeight-64-50) style:UITableViewStylePlain];
     self.memberTableView.backgroundColor = UIColorHex(0xf6f6f6);
@@ -71,11 +70,36 @@
         [self refreshMemberData];
     }];
     [self.view addSubview:self.memberTableView];
+    
+    
+    if (self.memberType == MSSelectMemeber_Others) {
+        self.title = @"選擇參與人員";
+        [self rightBarButtonWithName:@"確定" normalColor:UIColorHex(0xFF7B54) disableColor:UIColorHex_Alpha(0xFF7B54, 0.6) target:self action:@selector(selectMemeberOK)];
+        [self racForNavRightBt];
+        self.selectedItemCount = self.selectedMemebers.count;
+        if (self.selectedMemebers.count) {
+            [self.memberTableView reloadData];
+            [self.headMemberView membersData:self.selectedMemebers];
+        }
+    } else {
+        self.title = @"選擇組織者";
+    }
+}
+
+- (void)racForNavRightBt
+{
+    //满足条件的情况才使得按钮可用
+    RAC(self.navigationItem.rightBarButtonItem, enabled) = [RACSignal combineLatest:@[RACObserve(self, selectedItemCount)] reduce:^(NSNumber *countVal){
+        return @([countVal integerValue] > 0);
+    }];
 }
 
 - (void)selectMemeberOK
 {
-    
+    if (self.selectBlock) {
+        self.selectBlock(self.memberType, self.selectedMemebers);
+        [self.navigationController popViewControllerAnimated:YES];
+    }
 }
 
 - (void)doSearch
@@ -110,6 +134,8 @@
     if (self.selectedMemebers.count==0) {
         [self.memberTableView reloadData];
     }
+    
+    self.selectedItemCount = self.selectedMemebers.count;
 }
 
 /*  选中的元素和数据源同步 */
@@ -180,20 +206,28 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    
     MSMemberModel *model = [self.members objectAtIndex:indexPath.row];
-    MSSelMemberCell *cell = [tableView cellForRowAtIndexPath:indexPath];
-    if ([self fetchMemberOfSelectedIndex:model]>=0) {
-        [cell showSelected:NO];
-        model.isSelected = NO;
-        [self.selectedMemebers removeObject:model];
-    } else {
-        [cell showSelected:YES];
-        model.isSelected = YES;
-        [self.selectedMemebers addObject:model];
+    if (self.memberType == MSSelectMemeber_Others) {
+        MSSelMemberCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+        if ([self fetchMemberOfSelectedIndex:model]>=0) {
+            [cell showSelected:NO];
+            model.isSelected = NO;
+            [self.selectedMemebers removeObject:model];
+        } else {
+            [cell showSelected:YES];
+            model.isSelected = YES;
+            [self.selectedMemebers addObject:model];
+        }
+        [self.headMemberView membersData:self.selectedMemebers];
+        [self.memberTableView reloadData];
+        self.selectedItemCount = self.selectedMemebers.count;
+    } else if (self.memberType == MSSelectMemeber_Organizer) {
+        if (self.selectBlock) {
+            self.selectBlock(self.memberType, @[model]);
+            [self.navigationController popViewControllerAnimated:YES];
+        }
     }
-    [self.headMemberView membersData:self.selectedMemebers];
-    [self.memberTableView reloadData];
+    
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath

@@ -12,4 +12,5 @@
 
 - (void)title:(NSString*)title placeholder:(NSString*)placeholder mustItem:(BOOL)must rightView:(BOOL)hide;
 
+- (void)contentText:(NSString*)text;
 @end

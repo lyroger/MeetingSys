@@ -48,6 +48,7 @@
             make.left.equalTo(mustView);
             make.top.equalTo(mustView.mas_bottom).offset(10);
             make.right.equalTo(accessView.mas_left).offset(-5);
+            make.height.equalTo(@(20));
         }];
         
         [accessView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -72,8 +73,17 @@
 - (void)title:(NSString*)title placeholder:(NSString*)placeholder mustItem:(BOOL)must rightView:(BOOL)hide
 {
     [mustView title:title mustItem:must];
-    textLabel.text = @"请选择";
+    textLabel.text = placeholder;
     accessView.hidden = hide;
+}
+
+- (void)contentText:(NSString*)text
+{
+    if (text.length) {
+        textLabel.text = text;
+    } else {
+        textLabel.text = @"請選擇";
+    }
 }
 
 - (void)awakeFromNib {
