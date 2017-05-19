@@ -8,8 +8,12 @@
 
 #import <UIKit/UIKit.h>
 
+typedef void(^MeetingONOffCellActionBlock)(BOOL isON);
+
 @interface MSNewMeetingONOffCell : UITableViewCell
 
-- (void)title:(NSString *)title mustItem:(BOOL)must;
+@property (nonatomic,copy) MeetingONOffCellActionBlock actionBlock;
+
+- (void)title:(NSString *)title mustItem:(BOOL)must on:(BOOL)on;
 
 @end

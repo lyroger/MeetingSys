@@ -152,6 +152,8 @@
 		A7416AEB1EC0867300E42EB0 /* MSNoticeCellView.m in Sources */ = {isa = PBXBuildFile; fileRef = A7416AEA1EC0867300E42EB0 /* MSNoticeCellView.m */; };
 		A7416AEE1EC086B200E42EB0 /* MSMeetingListCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A7416AED1EC086B200E42EB0 /* MSMeetingListCell.m */; };
 		A7416AF11EC086E700E42EB0 /* MSMeetingDetailCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A7416AF01EC086E700E42EB0 /* MSMeetingDetailCell.m */; };
+		A759CBCA1ECEE44E008C4228 /* CSDatePickView.m in Sources */ = {isa = PBXBuildFile; fileRef = A759CBC91ECEE44E008C4228 /* CSDatePickView.m */; };
+		A759CBCD1ECEF812008C4228 /* MSMeetingRoomModel.m in Sources */ = {isa = PBXBuildFile; fileRef = A759CBCC1ECEF812008C4228 /* MSMeetingRoomModel.m */; };
 		A76002641ECBFB64006BCEEF /* MSUpdatePwdViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A76002631ECBFB64006BCEEF /* MSUpdatePwdViewController.m */; };
 		A76002671ECBFBB1006BCEEF /* MSInputView.m in Sources */ = {isa = PBXBuildFile; fileRef = A76002661ECBFBB1006BCEEF /* MSInputView.m */; };
 		A773273A1EC498B1005A89AE /* MSMemberView.m in Sources */ = {isa = PBXBuildFile; fileRef = A77327391EC498B1005A89AE /* MSMemberView.m */; };
@@ -482,6 +484,10 @@
 		A7416AED1EC086B200E42EB0 /* MSMeetingListCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSMeetingListCell.m; sourceTree = "<group>"; };
 		A7416AEF1EC086E700E42EB0 /* MSMeetingDetailCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSMeetingDetailCell.h; sourceTree = "<group>"; };
 		A7416AF01EC086E700E42EB0 /* MSMeetingDetailCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSMeetingDetailCell.m; sourceTree = "<group>"; };
+		A759CBC81ECEE44E008C4228 /* CSDatePickView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSDatePickView.h; sourceTree = "<group>"; };
+		A759CBC91ECEE44E008C4228 /* CSDatePickView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSDatePickView.m; sourceTree = "<group>"; };
+		A759CBCB1ECEF812008C4228 /* MSMeetingRoomModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSMeetingRoomModel.h; sourceTree = "<group>"; };
+		A759CBCC1ECEF812008C4228 /* MSMeetingRoomModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSMeetingRoomModel.m; sourceTree = "<group>"; };
 		A76002621ECBFB64006BCEEF /* MSUpdatePwdViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSUpdatePwdViewController.h; sourceTree = "<group>"; };
 		A76002631ECBFB64006BCEEF /* MSUpdatePwdViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSUpdatePwdViewController.m; sourceTree = "<group>"; };
 		A76002651ECBFBB1006BCEEF /* MSInputView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSInputView.h; sourceTree = "<group>"; };
@@ -1236,6 +1242,8 @@
 				A7D9C8AC1EC46B9B000FB05C /* MSMeetingDetailModel.m */,
 				A70CE67B1EC5A5F70046F536 /* MSAllMeetingModel.h */,
 				A70CE67C1EC5A5F70046F536 /* MSAllMeetingModel.m */,
+				A759CBCB1ECEF812008C4228 /* MSMeetingRoomModel.h */,
+				A759CBCC1ECEF812008C4228 /* MSMeetingRoomModel.m */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -1251,6 +1259,7 @@
 				A7D9C8A91EC4584F000FB05C /* MSTitleAndDetailView.m */,
 				A71024AD1EC9A1C40036CFF0 /* MSMustInputItemView.h */,
 				A71024AE1EC9A1C40036CFF0 /* MSMustInputItemView.m */,
+				A759CBC71ECEE437008C4228 /* SelectDateTime */,
 				A7D79CA91ECD83E000549F67 /* SelectMemberView */,
 				A7D79C9F1ECD370D00549F67 /* SelectActionView */,
 				A71EC73E1EC6F39B00E22577 /* NewMeeting */,
@@ -1289,6 +1298,15 @@
 				A70F16C61ECA93D90093B56B /* MSNewMeetingONOffCell.m */,
 			);
 			name = NewMeeting;
+			sourceTree = "<group>";
+		};
+		A759CBC71ECEE437008C4228 /* SelectDateTime */ = {
+			isa = PBXGroup;
+			children = (
+				A759CBC81ECEE44E008C4228 /* CSDatePickView.h */,
+				A759CBC91ECEE44E008C4228 /* CSDatePickView.m */,
+			);
+			name = SelectDateTime;
 			sourceTree = "<group>";
 		};
 		A77327361EC496B1005A89AE /* Notice */ = {
@@ -1628,6 +1646,7 @@
 				A7D9C8AD1EC46B9B000FB05C /* MSMeetingDetailModel.m in Sources */,
 				A7186FC11EBC219F00DE4B67 /* UIView+SplitLine.m in Sources */,
 				A7186F811EBC219F00DE4B67 /* NSString+Pinyin.m in Sources */,
+				A759CBCD1ECEF812008C4228 /* MSMeetingRoomModel.m in Sources */,
 				A7186F7B1EBC219F00DE4B67 /* NSString+DictionaryValue.m in Sources */,
 				A7186F7E1EBC219F00DE4B67 /* NSString+ImageSizeUrl.m in Sources */,
 				A7186F621EBC219F00DE4B67 /* NSDate+Extension.m in Sources */,
@@ -1659,6 +1678,7 @@
 				A7186F761EBC219F00DE4B67 /* NSObject+KVOBlocks.m in Sources */,
 				A7186F6B1EBC219F00DE4B67 /* NSDictionary+URL.m in Sources */,
 				A7186FAE1EBC219F00DE4B67 /* UINavigationController+FDFullscreenPopGesture.m in Sources */,
+				A759CBCA1ECEE44E008C4228 /* CSDatePickView.m in Sources */,
 				A71024AF1EC9A1C40036CFF0 /* MSMustInputItemView.m in Sources */,
 				A7186F8B1EBC219F00DE4B67 /* NSTimer+Blocks.m in Sources */,
 				A76002641ECBFB64006BCEEF /* MSUpdatePwdViewController.m in Sources */,

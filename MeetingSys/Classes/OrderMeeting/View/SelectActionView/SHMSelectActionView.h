@@ -51,6 +51,8 @@
  *  隐藏选择页面
  */
 - (void)hideSelectActionView;
+
+- (void)showLoading:(BOOL)show;
 @end
 
 

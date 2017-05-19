@@ -28,7 +28,7 @@ typedef void(^MSMemberCellViewClickBlock)(MSMemberCellView* view);
 @interface MSMemberView : UIView
 
 @property (nonatomic, strong) UILabel *bottomLine;
-@property (nonatomic,weak) id<MSMemberCellViewDelegate> delegate;
+@property (nonatomic, weak) id<MSMemberCellViewDelegate> delegate;
 
 - (void)membersData:(NSArray*)datas;
 

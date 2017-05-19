@@ -162,7 +162,7 @@
      */
     [logoImage mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(@(100*ScreenMutiple6));
-        make.size.mas_equalTo(CGSizeMake(146, 36));
+        make.size.mas_equalTo(CGSizeMake(230, 82));
         make.centerX.mas_equalTo(self.view.mas_centerX);
     }];
     

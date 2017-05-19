@@ -36,6 +36,7 @@
         
         switchOnOff = [UISwitch new];
         [switchOnOff setOn:NO];
+        [switchOnOff addTarget:self action:@selector(onOffAction:) forControlEvents:UIControlEventValueChanged];
         [self.contentView addSubview:switchOnOff];
         
         [switchOnOff mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -56,9 +57,17 @@
     return self;
 }
 
-- (void)title:(NSString *)title mustItem:(BOOL)must
+- (void)onOffAction:(UISwitch*)switchView
+{
+    if (self.actionBlock) {
+        self.actionBlock(switchOnOff.isOn);
+    }
+}
+
+- (void)title:(NSString *)title mustItem:(BOOL)must on:(BOOL)on
 {
     [mustView title:title mustItem:must];
+    [switchOnOff setOn:on];
 }
 
 - (void)awakeFromNib {

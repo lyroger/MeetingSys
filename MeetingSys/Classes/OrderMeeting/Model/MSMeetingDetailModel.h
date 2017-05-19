@@ -52,6 +52,6 @@
 @property (nonatomic, assign) BOOL   isDetail;
 @property (nonatomic, assign) BOOL   isUnfold;
 @property (nonatomic, assign) BOOL   isLoadedHeadURL;
-
+@property (nonatomic, assign) NSInteger hideThemeHead;
 
 @end

@@ -21,6 +21,7 @@
     UITableView *dataTableView;
     UIButton    *buttonOK;
     UILabel     *titleLabel;
+    UIActivityIndicatorView *loadingView;
 }
 
 @property (nonatomic,strong) NSMutableArray *selectItemIndexs;
@@ -51,6 +52,7 @@
     _dataArray = dataArray;
     if (_dataArray.count > 0) {
         self.contentView.height = [self tableHeight];
+        [self showSelectActionView];
     }
     [dataTableView reloadData];
 }
@@ -174,7 +176,7 @@
     [self.contentView addSubview:navContentView];
     
     if (!dataTableView) {
-        dataTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, kButtonViewHeight, kScreenWidth,[self tableHeight]) style:UITableViewStyleGrouped];
+        dataTableView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStyleGrouped];
         dataTableView.delegate = self;
         dataTableView.dataSource = self;
         dataTableView.backgroundColor = GreyishWhiteColor;
@@ -183,6 +185,31 @@
         dataTableView.contentInset = UIEdgeInsetsMake(-0.5, 0, 10, 0);
         [dataTableView registerClass:[SHMSelectActionCell class] forCellReuseIdentifier:kSelectActionCellIndentifier];
         [self.contentView addSubview:dataTableView];
+        
+        [dataTableView mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.top.equalTo(@kButtonViewHeight);
+            make.left.right.bottom.equalTo(@0);
+        }];
+    }
+    
+    loadingView = [UIActivityIndicatorView new];
+    loadingView.activityIndicatorViewStyle = UIActivityIndicatorViewStyleGray;
+    [self.contentView addSubview:loadingView];
+    
+    [loadingView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.center.equalTo(self.contentView);
+        make.size.mas_equalTo(CGSizeMake(36, 36));
+    }];
+}
+
+- (void)showLoading:(BOOL)show
+{
+    loadingView.hidden = !show;
+    dataTableView.hidden = show;
+    if (show) {
+        [loadingView startAnimating];
+    } else {
+        [loadingView stopAnimating];
     }
 }
 
