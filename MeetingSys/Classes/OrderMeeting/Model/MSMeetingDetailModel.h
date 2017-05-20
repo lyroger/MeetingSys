@@ -40,6 +40,8 @@
 @property (nonatomic, strong) NSMutableArray *members;
 @property (nonatomic, assign) NSInteger meetingType;//會議類型；
 @property (nonatomic, copy) NSString *roomId;//會議室ID
+@property (nonatomic, copy) NSString *roomTheme;//主题
+@property (nonatomic, copy) NSString *roomTimeTips;//最大时长提示
 @property (nonatomic, copy) NSString *others; // 參會人員 id 列表
 @property (nonatomic, copy) NSString *othersName; // 參會人員名稱列表
 @property (nonatomic, copy) NSString *mtStatus;// 會議狀態  0-初始  1-正常結束  2- No show 3-已確認
@@ -53,5 +55,10 @@
 @property (nonatomic, assign) BOOL   isUnfold;
 @property (nonatomic, assign) BOOL   isLoadedHeadURL;
 @property (nonatomic, assign) NSInteger hideThemeHead;
+
++ (NSURLSessionDataTask *)submitOrderMeetingInfo:(MSMeetingDetailModel*)model
+                                      networkHUD:(NetworkHUD)hud
+                                          target:(id)target
+                                         success:(NetResponseBlock)success;
 
 @end

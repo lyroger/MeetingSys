@@ -115,12 +115,12 @@
 
 - (void)theme:(NSString*)theme hideImage:(BOOL)hide
 {
-    if ([theme isEqualToString:@""]) {
+    if ([theme isEqualToString:@"Classic"]) {
         //金典主题
         themeClassics.hidden = NO;
         themeNoPictures.hidden = YES;
         themeLegend.hidden = YES;
-    } else if ([theme isEqualToString:@""]) {
+    } else if ([theme isEqualToString:@"Legend"]) {
         //legend主题
         themeClassics.hidden = YES;
         themeNoPictures.hidden = !hide;

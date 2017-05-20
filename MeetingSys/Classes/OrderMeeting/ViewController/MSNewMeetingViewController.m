@@ -114,7 +114,11 @@
 
 - (void)submitMeetingAction:(UIButton*)button
 {
-
+    [MSMeetingDetailModel submitOrderMeetingInfo:self.meetingInfoObj networkHUD:NetworkHUDLockScreenButNavWithMsg target:self success:^(StatusModel *data) {
+        if (data.code == 0) {
+            [self closeView:nil];
+        }
+    }];
 }
 
 - (void)selectMeetingTheme
@@ -130,7 +134,7 @@
     [selectThemeView showSelectActionView];
 }
 
-- (void)selectRooms
+- (void)selectRooms:(NSMutableArray *)rooms
 {
     if (!selectRoomsView) {
         selectRoomsView = [[SHMSelectActionView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, kScreenHeight)];
@@ -138,9 +142,8 @@
     }
     selectRoomsView.title = @"會議地點";
     selectRoomsView.isMutibleSelect = NO;
+    selectRoomsView.dataArray = rooms;
     [selectRoomsView showSelectActionView];
-    
-    [self loadMeetingRooms];
 }
 
 - (void)loadMeetingRooms
@@ -148,7 +151,7 @@
     [MSMeetingRoomModel getRoomsWithMeetingType:self.meetingInfoObj.meetingType
                                       beginTime:self.meetingInfoObj.beginTime
                                         endTime:self.meetingInfoObj.endTime
-                                     networkHUD:NetworkHUDBackground
+                                     networkHUD:NetworkHUDLockScreenButNavWithError
                                          target:self
                                         success:^(StatusModel *data) {
         
@@ -156,11 +159,7 @@
                                                 NSArray *rooms = [MSMeetingRoomModel mj_objectArrayWithKeyValuesArray:[data.originalData objectForKey:@"rooms"]];
                                                 [self.roomsData removeAllObjects];
                                                 [self.roomsData addObjectsFromArray:rooms];
-                                                selectRoomsView.dataArray = [self roomsName];
-                                                [selectRoomsView showLoading:NO];
-                                            } else {
-                                                [HUDManager alertWithTitle:data.msg];
-                                                [selectRoomsView hideSelectActionView];
+                                                [self selectRooms:[self roomsName]];
                                             }
     }];
 }
@@ -174,18 +173,21 @@
     return names;
 }
 
-#pragma mark SHMSelectActionViewDelegate
-/**
- *  视图隐藏完成时调用的代理方法
- *
- *  @param view 返回操作的视图对象
- */
-- (void)didHideSelectItemView:(SHMSelectActionView *)view
+- (void)checkInfoComplete
 {
-    //取消先前选中的状态
-//    [tableViewList deselectRowAtIndexPath:tableViewList.indexPathForSelectedRow animated:YES];
+    if (self.meetingInfoObj.title.length
+        && self.meetingInfoObj.beginTime
+        && self.meetingInfoObj.endTime
+        && self.meetingInfoObj.meetingType
+        && self.meetingInfoObj.roomId.length
+        && self.meetingInfoObj.organizeId.length) {
+        self.navigationItem.rightBarButtonItem.enabled = YES;
+    } else {
+        self.navigationItem.rightBarButtonItem.enabled = NO;
+    }
 }
 
+#pragma mark SHMSelectActionViewDelegate
 /**
  *  选择完选项代理方法
  *
@@ -206,10 +208,13 @@
         MSMeetingRoomModel *room = [self.roomsData objectAtIndex:indexItem];
         self.meetingInfoObj.roomId = room.roomId;
         self.meetingInfoObj.address = room.mName;
+        self.meetingInfoObj.roomTheme = room.roomStyle;
+        self.meetingInfoObj.roomTimeTips = [NSString stringWithFormat:@"最長可預訂%zd分鐘",room.maxMinutes];
         NSIndexPath *indexPath = [NSIndexPath indexPathForRow:4 inSection:0];
         MSNewMeetingSelectCell *cell = [newMeetingTableView cellForRowAtIndexPath:indexPath];
-        [cell contentText:self.meetingInfoObj.address];
+        [cell contentText:[NSString stringWithFormat:@"%@(%@)",self.meetingInfoObj.address,self.meetingInfoObj.roomTimeTips]];
     }
+    [self checkInfoComplete];
 }
 
 - (void)didClickSelectDateTimeView:(MSNewMeetingTimeCell*)cell itemIndex:(NSInteger)index
@@ -253,12 +258,14 @@
             //不需要比較
             self.meetingInfoObj.beginTime = date;
             [newMeetingTableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+            [self checkInfoComplete];
         } else {
             if ([date compare:self.meetingInfoObj.endTime] != NSOrderedAscending) {
                 [HUDManager alertWithTitle:@"開始時間不能大於結束時間！"];
             } else {
                 self.meetingInfoObj.beginTime = date;
                 [newMeetingTableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+                [self checkInfoComplete];
             }
         }
     } else {
@@ -266,12 +273,14 @@
             //不需要比較
             self.meetingInfoObj.endTime = date;
             [newMeetingTableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+            [self checkInfoComplete];
         } else {
             if ([self.meetingInfoObj.beginTime compare:date] != NSOrderedAscending) {
                 [HUDManager alertWithTitle:@"結束時間不能小於開始時間！"];
             } else {
                 self.meetingInfoObj.endTime = date;
                 [newMeetingTableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+                [self checkInfoComplete];
             }
         }
     }
@@ -298,6 +307,7 @@
                 self.meetingInfoObj.organizeName = model.name;
                 self.meetingInfoObj.organizeId = model.memberId;
                 [cell contentText:model.name];
+                [self checkInfoComplete];
             } else {
                 NSMutableString *names = [[NSMutableString alloc] init];
                 NSMutableString *ids = [[NSMutableString alloc] init];
@@ -327,7 +337,7 @@
             [HUDManager alertWithTitle:@"請選擇會議類型！"];
             return;
         } else {
-            [self selectRooms];
+            [self loadMeetingRooms];
         }
     }
     
@@ -371,8 +381,29 @@
         NSArray *placeholders = @[@"請輸入會議主題",@"請輸入會議議程",@"請輸入會議要求"];
         MSNewMeetingInputCell *cell = [tableView dequeueReusableCellWithIdentifier:@"MSNewMeetingInputCell"];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        @weakify(self)
+        cell.inputBlock = ^(NSString *inputText) {
+            @strongify(self)
+            if (indexPath.row == 1) {
+                self.meetingInfoObj.title = inputText;
+            } else if (indexPath.row == 7) {
+                self.meetingInfoObj.agenda = inputText;
+            } else if (indexPath.row == 8) {
+                self.meetingInfoObj.demand = inputText;
+            }
+            [self checkInfoComplete];
+        };
         NSInteger index = indexPath.row==1?0:indexPath.row-6;
         [cell multipleLineInput:indexPath.row == 1?NO:YES title:titles[index] placeholder:placeholders[index] must:indexPath.row==1?YES:NO];
+        
+        if (indexPath.row == 1) {
+            [cell contentText:self.meetingInfoObj.title multipleLine:NO];
+        } else if (indexPath.row == 7) {
+            [cell contentText:self.meetingInfoObj.agenda multipleLine:YES];
+        } else if (indexPath.row == 8) {
+            [cell contentText:self.meetingInfoObj.demand multipleLine:YES];
+        }
+        
         return cell;
     } else if (indexPath.row >= 3 && indexPath.row <= 6) {
         NSArray *titles = @[@"會議類型",@"會議地點",@"會議組織者",@"參與人員"];
@@ -401,10 +432,12 @@
         return cell;
     } else {
         MSNewMeetingONOffCell *cell = [tableView dequeueReusableCellWithIdentifier:@"MSNewMeetingONOffCell"];
-        
         [cell title:@"隱藏個人半身照" mustItem:NO on:self.meetingInfoObj.hideThemeHead];
+        @weakify(self)
         cell.actionBlock = ^(BOOL isON) {
+            @strongify(self)
             self.meetingInfoObj.hideThemeHead = !isON;
+            [self.headView theme:self.meetingInfoObj.roomTheme hideImage:!isON];
         };
         return cell;
     }

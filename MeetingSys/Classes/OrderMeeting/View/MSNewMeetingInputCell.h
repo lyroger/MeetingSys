@@ -8,8 +8,13 @@
 
 #import <UIKit/UIKit.h>
 
+typedef void(^MeetingInputBlock)(NSString *inputText);
+
 @interface MSNewMeetingInputCell : UITableViewCell
+
+@property (nonatomic,copy) MeetingInputBlock inputBlock;
 
 - (void)multipleLineInput:(BOOL)multiple title:(NSString *)title placeholder:(NSString *)placeholder must:(BOOL)must;
 
+- (void)contentText:(NSString*)text multipleLine:(BOOL)multiple;
 @end

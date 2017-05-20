@@ -57,7 +57,7 @@
 
 
 @protocol SHMSelectActionViewDelegate <NSObject>
-
+@optional
 /**
  *  选择完选项代理方法
  *

@@ -9,7 +9,7 @@
 #import "MSNewMeetingInputCell.h"
 #import "MSMustInputItemView.h"
 
-@interface MSNewMeetingInputCell()
+@interface MSNewMeetingInputCell()<UITextViewDelegate,UITextFieldDelegate>
 {
     MSMustInputItemView *mustView;
     UITextField         *textField;
@@ -31,7 +31,9 @@
         textField = [UITextField new];
         textField.font = kFontPingFangRegularSize(14);
         textField.textColor = UIColorHex(0x888888);
+        textField.delegate = self;
         [self.contentView addSubview:textField];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textFieldTextDidChange:) name:UITextFieldTextDidChangeNotification object:nil];
         
         textView = [UITextView new];
         textView.font = kFontPingFangRegularSize(14);
@@ -100,9 +102,37 @@
     }
 }
 
+- (void)contentText:(NSString*)text multipleLine:(BOOL)multiple
+{
+    if (text.length) {
+        if (multiple) {
+            textView.text = text;
+        } else {
+            textField.text = text;
+        }
+    }
+}
+
 - (void)textViewDidChange:(UITextView *)textV
 {
     placeholderLabel.hidden = textV.text.length;
+    NSString *text = [textV.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+    if (self.inputBlock) {
+        self.inputBlock(text);
+    }
+}
+
+- (void)textFieldTextDidChange:(NSNotificationCenter*)note
+{
+    NSString *text = [textField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+    if (self.inputBlock) {
+        self.inputBlock(text);
+    }
+}
+
+- (void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 - (void)awakeFromNib {

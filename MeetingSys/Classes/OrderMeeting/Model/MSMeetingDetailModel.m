@@ -82,4 +82,25 @@
     return detail;
 }
 
++ (NSURLSessionDataTask *)submitOrderMeetingInfo:(MSMeetingDetailModel*)model
+                                      networkHUD:(NetworkHUD)hud
+                                          target:(id)target
+                                         success:(NetResponseBlock)success
+{
+    CreateParamsDic;
+    DicValueSet(@(model.hideThemeHead), @"disImg");
+    DicValueSet(model.title, @"title");
+    DicValueSet(@(model.meetingType), @"meetingType");
+    DicValueSet([model.beginTime dateWithFormat:@"yyyy-MM-dd HH:mm"], @"stTime");
+    DicValueSet([model.endTime dateWithFormat:@"yyyy-MM-dd HH:mm"], @"endtime");
+    DicValueSet(model.roomId, @"roomId");
+    DicValueSet(model.organizeId, @"organizer");
+    DicValueSet(model.organizeName, @"organizerName");
+    DicValueSet(model.others, @"others");
+    DicValueSet(model.othersName, @"othersName");
+    DicValueSet(model.agenda, @"agenda");
+    DicValueSet(model.demand, @"requirement");
+    return [self dataTaskMethod:HTTPMethodPOST path:@"api/meeting/saveorupdate" params:ParamsDic networkHUD:hud target:target success:success];
+}
+
 @end
