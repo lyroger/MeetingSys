@@ -39,6 +39,16 @@
     return self;
 }
 
+- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
+{
+    CGFloat sizeWidth = kScreenWidth-100;
+    NSInteger index = floor((scrollView.contentOffset.x - sizeWidth / 2) / sizeWidth) + 1;
+    NSLog(@"显示第%zd",index);
+    if (self.delegate && [self.delegate respondsToSelector:@selector(scrollEndToDayMeetingView:itemIndex:)]) {
+        [self.delegate scrollEndToDayMeetingView:self itemIndex:index];
+    }
+}
+
 - (void)reloadWithDatas:(NSArray*)datas
 {
     [self.dataSource removeAllObjects];
@@ -50,6 +60,9 @@
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
     NSLog(@"点击了：%zd",indexPath.row);
+    if (self.delegate && [self.delegate respondsToSelector:@selector(didClickToDayMeetingView:itemIndex:)]) {
+        [self.delegate didClickToDayMeetingView:self itemIndex:indexPath.row];
+    }
 }
 
 #pragma mark UICollectionDataSource

@@ -26,6 +26,7 @@
         
         self.imageView = [UIImageView new];
         self.imageView.layer.cornerRadius = 18;
+        self.imageView.layer.masksToBounds = YES;
         self.imageView.contentMode = UIViewContentModeScaleAspectFill;
         [self.contentView addSubview:self.imageView];
         
@@ -92,7 +93,28 @@
     self.nameLabel.text = model.organizeName;
     self.titleLabel.text = model.title;
     self.timeLabel.text = [NSString stringWithFormat:@"%@-%@",[model.beginTime dateWithFormat:@"HH:mm"],[model.endTime dateWithFormat:@"HH:mm"]];
-    self.statusLabel.text = @"進行中";
+    self.statusLabel.text = [self getStatusStringWithStatus:[model.mtStatus integerValue]];
+}
+
+- (NSString *)getStatusStringWithStatus:(NSInteger)status
+{
+    switch (status) {
+        case 0:
+            return @"未开始";
+            break;
+        case 1:
+            return @"已结束";
+            break;
+        case 2:
+            return @"no show";
+            break;
+        case 3:
+            return @"已确认";
+            break;
+        default:
+            return @"未开始";
+            break;
+    }
 }
 
 @end

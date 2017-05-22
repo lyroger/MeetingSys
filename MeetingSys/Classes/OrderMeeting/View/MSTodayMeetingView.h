@@ -7,9 +7,20 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "MSAllMeetingDetailCell.h"
+
+@protocol MSToDayMeetingViewDelegate;
 
 @interface MSTodayMeetingView : UIView
 
+@property (nonatomic, weak) id<MSToDayMeetingViewDelegate> delegate;
+
 - (void)reloadWithDatas:(NSArray*)datas;
+@end
+
+@protocol MSToDayMeetingViewDelegate <NSObject>
+
+- (void)didClickToDayMeetingView:(MSTodayMeetingView*)view itemIndex:(NSInteger)index;
+- (void)scrollEndToDayMeetingView:(MSTodayMeetingView*)view itemIndex:(NSInteger)index;
 
 @end

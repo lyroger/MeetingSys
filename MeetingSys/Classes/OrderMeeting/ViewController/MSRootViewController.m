@@ -22,7 +22,7 @@
 #import "MSUpdatePwdViewController.h"
 #import "CSErrorTips.h"
 
-@interface MSRootViewController ()<MSNavTabbarViewDelegete,UITableViewDelegate,UITableViewDataSource,UIScrollViewDelegate,MSOrderMeetingButtonViewDelegate,MSAllMeetingDetailCellDelegate,MSMeetingUserCenterViewDelegate,MSNoticeDetailCellDelegate>
+@interface MSRootViewController ()<MSNavTabbarViewDelegete,UITableViewDelegate,UITableViewDataSource,UIScrollViewDelegate,MSOrderMeetingButtonViewDelegate,MSAllMeetingDetailCellDelegate,MSMeetingUserCenterViewDelegate,MSNoticeDetailCellDelegate,MSToDayMeetingViewDelegate>
 {
     UITableView *tableNoticeView;
     UITableView *tableAllMeetingView;
@@ -30,12 +30,15 @@
     MSNavTabbarView *navTabbarView;
     MSMeetingUserCenterView *userCenterView;
     BOOL isLoadedAllMeetingData;
+    BOOL isViewToDayDetail;
+    NSInteger lastViewToDayDetailIndex;
 }
 
 @property (nonatomic, strong) NSMutableArray *noticeArray;
 @property (nonatomic, strong) MSAllMeetingModel *allMeetingModel;
 @property (nonatomic, strong) MSTodayMeetingView *todayMeetingView;
 @property (nonatomic, strong) CSErrorTips *noMeetingDataTipsView;
+@property (nonatomic, strong) MSMeetingDetailModel *todayMeetingDetail;
 
 @end
 
@@ -273,80 +276,6 @@
     }
 }
 
-- (void)loadDemoData
-{
-    //加载提醒demo数据
-    for (int i = 0; i < 10; i++) {
-        
-        MSMeetingDetailModel *detailModel = [[MSMeetingDetailModel alloc] init];
-        detailModel.beginTime = [NSDate new];
-        detailModel.endTime = [NSDate new];
-        detailModel.address = @"s1";
-        detailModel.agenda = @"保險專業知識培訓保險專業知識培訓保險專業知識培訓保險專業知識培訓";
-        detailModel.demand = @"保險專業知識培訓保險專業知識培訓保險專業知識培訓";
-        
-        for (int j = 0; j < 8; j++) {
-            MSMemberModel *member = [[MSMemberModel alloc] init];
-            member.headURL = @"";
-            member.name = @"roger";
-            [detailModel.members addObject:member];
-        }
-        
-        [self.noticeArray addObject:detailModel];
-    }
-    
-    //加载所有会议数据
-    self.allMeetingModel = [[MSAllMeetingModel alloc] init];
-    NSArray *meetingDate = @[@"2017-05-05",@"2017-05-06",@"2017-05-07",@"2017-05-08",@"2017-05-09"];
-    
-    for (int section = 0; section < meetingDate.count; section++) {
-        MSDayGroupList *dayGroupList = [[MSDayGroupList alloc] init];
-        dayGroupList.meetingDate = meetingDate[section];
-        
-        for (int row = 0; row < 3; row++) {
-            MSMeetingDetailModel *detailModel = [[MSMeetingDetailModel alloc] init];
-            detailModel.title = @"月度總結報告";
-            detailModel.organizeName = @"roger";
-            detailModel.beginTime = [NSDate new];
-            detailModel.endTime = [NSDate new];
-            detailModel.address = @"s1";
-            detailModel.agenda = @"保險專業知識培訓保險專業知識培訓保險專業知識培訓保險專業知識培訓";
-            detailModel.demand = @"保險專業知識培訓保險專業知識培訓保險專業知識培訓";
-            
-            
-            for (int j = 0; j < 8; j++) {
-                MSMemberModel *member = [[MSMemberModel alloc] init];
-                member.headURL = @"";
-                member.name = @"roger";
-                [detailModel.members addObject:member];
-            }
-            [dayGroupList.list addObject:detailModel];
-        }
-        [self.allMeetingModel.dayGroupList addObject:dayGroupList];
-    }
-    
-    //加載當天數據
-    for (int i = 0; i<4; i++) {
-        MSMeetingDetailModel *detailModel = [[MSMeetingDetailModel alloc] init];
-        detailModel.title = @"月度總結報告";
-        detailModel.organizeName = @"roger";
-        detailModel.beginTime = [NSDate new];
-        detailModel.endTime = [NSDate new];
-        detailModel.address = @"s1";
-        detailModel.agenda = @"保險專業知識培訓保險專業知識培訓保險專業知識培訓保險專業知識培訓";
-        detailModel.demand = @"保險專業知識培訓保險專業知識培訓保險專業知識培訓";
-        
-        
-        for (int j = 0; j < 8; j++) {
-            MSMemberModel *member = [[MSMemberModel alloc] init];
-            member.headURL = @"";
-            member.name = @"roger";
-            [detailModel.members addObject:member];
-        }
-        [self.allMeetingModel.todayList addObject:detailModel];
-    }
-}
-
 - (NSInteger)fetchOtherUnfoldCell:(NSInteger)section
 {
     __block NSInteger otherUnfoldSection = 0;
@@ -376,13 +305,43 @@
 - (void)didClickSureActionCell:(MSAllMeetingDetailCell*)cell
 {
     NSIndexPath *indexPath = [tableAllMeetingView indexPathForCell:cell];
+    if (isViewToDayDetail && indexPath.section == 0) {
+        isViewToDayDetail = NO;
+        lastViewToDayDetailIndex = -1;
+        [tableAllMeetingView reloadData];
+    } else {
+        MSDayGroupList *dayGroupList = [self.allMeetingModel.dayGroupList objectAtIndex:indexPath.section];
+        MSMeetingDetailModel *dayDetailModel = [dayGroupList.list objectAtIndex:indexPath.row-1];
+        dayDetailModel.isUnfold = NO;
+        
+        [dayGroupList.list removeObjectAtIndex:indexPath.row];
+        [tableAllMeetingView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+    }
     
-    MSDayGroupList *dayGroupList = [self.allMeetingModel.dayGroupList objectAtIndex:indexPath.section];
-    MSMeetingDetailModel *dayDetailModel = [dayGroupList.list objectAtIndex:indexPath.row-1];
-    dayDetailModel.isUnfold = NO;
-    
-    [dayGroupList.list removeObjectAtIndex:indexPath.row];
-    [tableAllMeetingView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+}
+
+- (void)didClickToDayMeetingView:(MSTodayMeetingView *)view itemIndex:(NSInteger)index
+{
+    if (index == lastViewToDayDetailIndex) {
+        isViewToDayDetail = !isViewToDayDetail;
+    } else {
+        isViewToDayDetail = YES;
+    }
+    lastViewToDayDetailIndex = index;
+    self.todayMeetingDetail = [self.allMeetingModel.todayList objectAtIndex:index];
+    [tableAllMeetingView reloadData];
+}
+
+- (void)scrollEndToDayMeetingView:(MSTodayMeetingView*)view itemIndex:(NSInteger)index
+{
+    if (isViewToDayDetail) {
+        if (index != lastViewToDayDetailIndex) {
+            isViewToDayDetail = NO;
+            self.todayMeetingDetail = nil;
+            lastViewToDayDetailIndex = -1;
+            [tableAllMeetingView reloadData];
+        }
+    }
 }
 
 #pragma mark UITableViewDelegate & UITableViewDataSource
@@ -401,20 +360,29 @@
             [tableNoticeView reloadSections:[NSIndexSet indexSetWithIndex:otherUnfoldSecion] withRowAnimation:UITableViewRowAnimationFade];
         }
     } else {
-        MSDayGroupList *dayGroupList = [self.allMeetingModel.dayGroupList objectAtIndex:indexPath.section];
-        MSMeetingDetailModel *dayDetailModel = [dayGroupList.list objectAtIndex:indexPath.row];
+        NSInteger section = indexPath.section;
+        NSInteger row = indexPath.row;
+        if (isViewToDayDetail) {
+            if (section == 0) {
+                return;
+            } else {
+                section = section - 1;
+            }
+        }
+        MSDayGroupList *dayGroupList = [self.allMeetingModel.dayGroupList objectAtIndex:section];
+        MSMeetingDetailModel *dayDetailModel = [dayGroupList.list objectAtIndex:row];
         if (!dayDetailModel.isDetail) {
             if (dayDetailModel.isUnfold) {
                 //折叠详情
-                [dayGroupList.list removeObjectAtIndex:indexPath.row+1];
-                NSIndexPath *indexP = [NSIndexPath indexPathForRow:indexPath.row+1 inSection:indexPath.section];
+                [dayGroupList.list removeObjectAtIndex:row+1];
+                NSIndexPath *indexP = [NSIndexPath indexPathForRow:row+1 inSection:section];
                 [tableView deleteRowsAtIndexPaths:@[indexP] withRowAnimation:UITableViewRowAnimationFade];
             } else {
                 //展开详情
                 MSMeetingDetailModel *copyDetail = [dayDetailModel copy];
                 copyDetail.isDetail = YES;
-                [dayGroupList.list insertObject:copyDetail atIndex:indexPath.row+1];
-                NSIndexPath *indexP = [NSIndexPath indexPathForRow:indexPath.row+1 inSection:indexPath.section];
+                [dayGroupList.list insertObject:copyDetail atIndex:row+1];
+                NSIndexPath *indexP = [NSIndexPath indexPathForRow:row+1 inSection:section];
                 [tableView insertRowsAtIndexPaths:@[indexP] withRowAnimation:UITableViewRowAnimationFade];
                 
                 [self loadMemberHeadImageWithMeetingDetailModel:dayDetailModel copyDetailModel:copyDetail];
@@ -439,9 +407,17 @@
             return [MSNoticeCellView noticeCellHeight];
         }
     } else {
-        
-        MSDayGroupList *dayGroupList = [self.allMeetingModel.dayGroupList objectAtIndex:indexPath.section];
-        MSMeetingDetailModel *dayDetailModel = [dayGroupList.list objectAtIndex:indexPath.row];
+        NSInteger section = indexPath.section;
+        NSInteger row = indexPath.row;
+        if (isViewToDayDetail) {
+            if (indexPath.section == 0) {
+                return [MSAllMeetingDetailCell meetingDetailHeight:self.todayMeetingDetail];
+            } else {
+                section = indexPath.section - 1;
+            }
+        }
+        MSDayGroupList *dayGroupList = [self.allMeetingModel.dayGroupList objectAtIndex:section];
+        MSMeetingDetailModel *dayDetailModel = [dayGroupList.list objectAtIndex:row];
         if (!dayDetailModel.isDetail) {
             return [MSMeetingListCell meetingListCellHeight];
         } else {
@@ -459,7 +435,11 @@
             return 8;
         }
     } else {
-        return 46;
+        if (isViewToDayDetail && section == 0) {
+            return 0.001;
+        } else {
+            return 46;
+        }
     }
     
 }
@@ -475,7 +455,15 @@
         MSMeetingDetailModel *model = [self.noticeArray objectAtIndex:section];
         return model.isUnfold?2:1;
     } else {
-        MSDayGroupList *dayGroupList = [self.allMeetingModel.dayGroupList objectAtIndex:section];
+        NSInteger index = section;
+        if (isViewToDayDetail) {
+            if (section == 0) {
+                return 1;
+            } else {
+                index = section-1;
+            }
+        }
+        MSDayGroupList *dayGroupList = [self.allMeetingModel.dayGroupList objectAtIndex:index];
         return dayGroupList.list.count;
     }
 }
@@ -485,14 +473,21 @@
     if (tableView == tableNoticeView) {
         return self.noticeArray.count;
     } else {
-        return self.allMeetingModel.dayGroupList.count;
+        return isViewToDayDetail?self.allMeetingModel.dayGroupList.count+1:self.allMeetingModel.dayGroupList.count;
     }
 }
 
 - (UIView*)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
     if (tableView == tableAllMeetingView) {
-        MSDayGroupList *dayGroupList = [self.allMeetingModel.dayGroupList objectAtIndex:section];
+        NSInteger index = section;
+        if (isViewToDayDetail) {
+            index = section-1;
+            if (section == 0) {
+                return nil;
+            }
+        }
+        MSDayGroupList *dayGroupList = [self.allMeetingModel.dayGroupList objectAtIndex:index];
         UIView *sectionContentView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, 46)];
         sectionContentView.backgroundColor = UIColorHex(0xf6f6f6);
         UILabel *titleLabel = [UILabel new];
@@ -534,8 +529,24 @@
         }
         return cell;
     } else {
-        MSDayGroupList *dayGroupModel = [self.allMeetingModel.dayGroupList objectAtIndex:indexPath.section];
-        MSMeetingDetailModel *dayDetailModel = [dayGroupModel.list objectAtIndex:indexPath.row];
+        
+        NSInteger section = indexPath.section;
+        NSInteger row = indexPath.row;
+        if (isViewToDayDetail) {
+            if (section == 0) {
+                //展开的详情
+                MSAllMeetingDetailCell *cell = [tableView dequeueReusableCellWithIdentifier:@"MSAllMeetingDetailCell"];
+                cell.delegate = self;
+                cell.selectionStyle = UITableViewCellSelectionStyleNone;
+                [cell data:self.todayMeetingDetail];
+                return cell;
+            } else {
+                section = section - 1;
+            }
+        }
+        
+        MSDayGroupList *dayGroupModel = [self.allMeetingModel.dayGroupList objectAtIndex:section];
+        MSMeetingDetailModel *dayDetailModel = [dayGroupModel.list objectAtIndex:row];
         
         if (dayDetailModel.isDetail) {
             //展开的详情
@@ -716,6 +727,7 @@
 {
     if (!_todayMeetingView) {
         _todayMeetingView = [[MSTodayMeetingView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, 212)];
+        _todayMeetingView.delegate = self;
     }
     return _todayMeetingView;
 }
