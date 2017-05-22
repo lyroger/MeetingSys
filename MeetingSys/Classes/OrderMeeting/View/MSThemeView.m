@@ -29,11 +29,14 @@
         menuImage.image = [UIImage imageNamed:@"display_menu"];
         [self addSubview:menuImage];
         
-        self.portraitView = [UIImageView new];
-        self.portraitView.image = [UIImage imageNamed:@"display_portrait"];
+        self.portraitView = [UIButton buttonWithType:UIButtonTypeCustom];
+        [self.portraitView setBackgroundImage:[UIImage imageNamed:@"display_portrait"] forState:UIControlStateNormal];
+        [self.portraitView addTarget:self action:@selector(tapHeadAction) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:self.portraitView];
+
         
         self.inuseImage = [UIImageView new];
+        self.inuseImage.userInteractionEnabled = NO;
         self.inuseImage.image = [UIImage imageNamed:@"display_inuse"];
         [self addSubview:self.inuseImage];
         
@@ -63,6 +66,13 @@
     }
     
     return self;
+}
+
+- (void)tapHeadAction
+{
+    if (self.clickHeadBlock) {
+        self.clickHeadBlock();
+    }
 }
 
 @end

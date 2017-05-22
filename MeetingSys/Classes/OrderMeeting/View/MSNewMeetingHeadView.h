@@ -8,8 +8,19 @@
 
 #import <UIKit/UIKit.h>
 
+@protocol MSNewMeetingHeadViewDelegate;
 @interface MSNewMeetingHeadView : UIView
 
+@property (nonatomic,weak) id<MSNewMeetingHeadViewDelegate> delegate;
+
 - (void)theme:(NSString*)theme hideImage:(BOOL)hide;
+
+- (void)reloadHeadImage:(UIImage*)image;
+
+@end
+
+@protocol MSNewMeetingHeadViewDelegate <NSObject>
+
+- (void)didClickHeadView;
 
 @end

@@ -8,9 +8,13 @@
 
 #import <UIKit/UIKit.h>
 
+typedef void(^didClickHeadImageBlock)();
+
 @interface MSThemeView : UIView
 
-@property (nonatomic, strong) UIImageView *portraitView;
+@property (nonatomic, strong) UIButton *portraitView;
 @property (nonatomic, strong) UIImageView *inuseImage;
+
+@property (nonatomic, copy) didClickHeadImageBlock clickHeadBlock;
 
 @end

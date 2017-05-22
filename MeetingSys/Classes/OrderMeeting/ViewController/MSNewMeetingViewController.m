@@ -17,8 +17,10 @@
 #import "MSMeetingDetailModel.h"
 #import "CSDatePickView.h"
 #import "MSMeetingRoomModel.h"
+#import "HAlertController.h"
+#import <TZImagePickerController/TZImagePickerController.h>
 
-@interface MSNewMeetingViewController ()<MSNewMeetingTimeCellDelegate,CSDatePickViewDelegate,SHMSelectActionViewDelegate,UITableViewDelegate,UITableViewDataSource>
+@interface MSNewMeetingViewController ()<MSNewMeetingTimeCellDelegate,CSDatePickViewDelegate,SHMSelectActionViewDelegate,UITableViewDelegate,UITableViewDataSource,MSNewMeetingHeadViewDelegate,UIScrollViewDelegate,UINavigationControllerDelegate, UIImagePickerControllerDelegate,TZImagePickerControllerDelegate>
 {
     UITableView *newMeetingTableView;
     UIButton    *newMeetingButton;
@@ -27,6 +29,8 @@
     CSDatePickView *_datePickerView;
     BOOL isSelectBeginTimeing;
 }
+
+@property (nonatomic, strong) UIImagePickerController *imagePickerVc;
 
 @property (nonatomic, strong) MSNewMeetingHeadView *headView;
 
@@ -61,6 +65,7 @@
 {
     if (!_headView) {
         _headView = [[MSNewMeetingHeadView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, 240)];
+        _headView.delegate = self;
     }
     return _headView;
 }
@@ -295,6 +300,12 @@
     }
 }
 
+//换头像
+- (void)didClickHeadView
+{
+    [self selectPic];
+}
+
 #pragma mark UITableViewDelegate & UITableViewDataSource
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -470,6 +481,157 @@
     [self.navigationController.navigationBar setTintColor:UIColorHex(0xFF845F)];
     [self.navigationController.navigationBar setTitleTextAttributes:@{NSForegroundColorAttributeName:UIColorHex(0xffffff), NSFontAttributeName:kNavTitleFont}];
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
+}
+
+- (void)selectPic
+{
+    // 上传头像
+    @weakify(self);
+    HAlertController *alertController = [HAlertController alertControllerWithTitle:nil message:nil cannelButton:@"取消" otherButtons:@[@"從手機相冊選取",@"拍照"] type:HAlertControllerTypeCustomValue1 complete:^(NSUInteger buttonIndex, HAlertController *actionController) {
+        @strongify(self)
+        if (buttonIndex == 2) {
+            // 拍照
+            [self takePhoto];
+        } else if (buttonIndex == 1) {
+            // 从相册选择
+            [self pushImagePickerController];
+        }
+    }];
+    NSArray *array = [alertController buttonArrayWithCustomValue1];
+    [array[0] setTitleColor:kFontBlackColor forState:UIControlStateNormal];
+    [array[1] setTitleColor:kFontBlackColor forState:UIControlStateNormal];
+    [array[2] setTitleColor:kFontGrayColor forState:UIControlStateNormal];
+    [alertController showInController:self];
+}
+
+- (void)takePhoto {
+    if (![[MicAssistant sharedInstance] checkAccessPermissions:NoAccessCamaratype]) {
+        return;
+    }
+    
+    UIImagePickerControllerSourceType sourceType = UIImagePickerControllerSourceTypeCamera;
+    if ([UIImagePickerController isSourceTypeAvailable: UIImagePickerControllerSourceTypeCamera]) {
+        self.imagePickerVc.sourceType = sourceType;
+        if(iOS8Later) {
+            self.imagePickerVc.modalPresentationStyle = UIModalPresentationOverCurrentContext;
+        }
+        [self.navigationController presentViewController:self.imagePickerVc animated:YES completion:nil];
+    } else {
+        NSLog(@"模拟器中无法打开照相机,请在真机中使用");
+    }
+}
+
+#pragma mark- UIImagePickerControllerDelegate
+- (void)imagePickerController:(UIImagePickerController*)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
+    [picker dismissViewControllerAnimated:YES completion:nil];
+    UIImage *image = [info objectForKey:UIImagePickerControllerEditedImage];
+    if (image) {
+        // 上传头像
+        [self uploadPhoto:image];
+    }
+}
+
+- (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker {
+    [picker dismissViewControllerAnimated:YES completion:nil];
+}
+
+#pragma mark- upload
+- (void)uploadPhoto:(UIImage *)photo
+{
+    if (!photo) {
+        [HUDManager alertWithTitle:@"上传的头像为空!"];
+        return;
+    }
+    
+    @weakify(self);
+    [MSUserInfo uploadHeadPhoto:photo hud:NetworkHUDLockScreenAndError target:self success:^(StatusModel *data) {
+        @strongify(self);
+        if (0 == data.code) {
+            [HUDManager alertWithTitle:@"头像设置成功!"];
+            [self.headView reloadHeadImage:photo];
+            [MSUserInfo shareUserInfo].headerImg = [data.data string];
+        } else {
+            [HUDManager alertWithTitle:data.msg];
+        }
+    }];
+}
+
+#pragma mark - UIImagePickerController
+- (UIImagePickerController *)imagePickerVc {
+    if (_imagePickerVc == nil) {
+        _imagePickerVc = [[UIImagePickerController alloc] init];
+        _imagePickerVc.delegate = self;
+        _imagePickerVc.allowsEditing = YES;
+    }
+    return _imagePickerVc;
+}
+
+#pragma mark - TZImagePickerController
+- (void)pushImagePickerController {
+    //    if (![[MicAssistant sharedInstance] checkAccessPermissions:NoAccessPhotoType]) {
+    //        return;
+    //    }
+    
+    @weakify(self);
+    [[MicAssistant sharedInstance] checkPhotoServiceOnCompletion:^(BOOL isPermision, BOOL isFirstAsked) {
+        @strongify(self);
+        if (isPermision) {
+            TZImagePickerController *imagePickerVc = [[TZImagePickerController alloc] initWithMaxImagesCount:1 delegate:self];
+            imagePickerVc.isSelectOriginalPhoto = NO;
+            imagePickerVc.allowTakePicture = NO;
+            imagePickerVc.navigationBar.barTintColor = UIColorHex(0xffffff);
+            imagePickerVc.navigationBar.tintColor = UIColorHex(0xffffff);
+            [imagePickerVc.navigationBar setTitleTextAttributes:@{NSForegroundColorAttributeName:UIColorHex(0x262626), NSFontAttributeName:[UIFont systemFontOfSize:17]}];
+            [self setNaviBack];
+            imagePickerVc.barItemTextColor = UIColorHex(0x262626);
+            imagePickerVc.oKButtonTitleColorDisabled = [UIColor lightGrayColor];
+            imagePickerVc.oKButtonTitleColorNormal = [UIColor greenColor];
+            imagePickerVc.allowPickingVideo = NO;
+            imagePickerVc.allowPickingOriginalPhoto = NO;
+            imagePickerVc.sortAscendingByModificationDate = YES;
+            [self presentViewController:imagePickerVc animated:YES completion:^{
+                [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault];
+            }];
+            [imagePickerVc setDidFinishPickingPhotosHandle:^(NSArray<UIImage *> *photos, NSArray *assets, BOOL isSelectOriginalPhoto) {
+                if (photos.count > 0) {
+                    [self uploadPhoto:photos[0]];
+                }
+            }];
+        } else {
+            [MicAssistant guidUserToSettingsWhenNoAccessRight:NoAccessPhotoType];
+        }
+    }];
+    
+}
+
+- (void)setNaviBack{
+    
+    UINavigationBar * navigationBar = [UINavigationBar appearance];
+    
+    //返回按钮的箭头颜色
+    
+    [navigationBar setTintColor:UIColorHex(0x262626)];
+    
+    //设置返回样式图片
+    
+    UIImage *image = [UIImage imageNamed:@"return_bar"];
+    
+    image = [image imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+    
+    navigationBar.backIndicatorImage = image;
+    
+    navigationBar.backIndicatorTransitionMaskImage = image;
+    
+    UIBarButtonItem *buttonItem = [UIBarButtonItem appearanceWhenContainedIn:[UINavigationBar class], nil];
+    
+    UIOffset offset;
+    
+    offset.horizontal = - 500;
+    
+    offset.vertical =  - 500;
+    
+    [buttonItem setBackButtonTitlePositionAdjustment:offset forBarMetrics:UIBarMetricsDefault];
+    
 }
 
 - (void)didReceiveMemoryWarning {

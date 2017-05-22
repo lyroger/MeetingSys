@@ -40,6 +40,7 @@
         }];
         
         UIImageView *borderBgView = [UIImageView new];
+        borderBgView.userInteractionEnabled = YES;
         borderBgView.image = [UIImage imageNamed:@"display_bg"];
         [self addSubview:borderBgView];
         
@@ -61,7 +62,7 @@
         }];
         
         themeNoPictures = [MSThemeView new];
-        themeNoPictures.portraitView.image = [UIImage imageNamed:@"display_portrait_off"];
+        [themeNoPictures.portraitView setBackgroundImage:[UIImage imageNamed:@"display_portrait_off"] forState:UIControlStateNormal];
         [borderBgView addSubview:themeNoPictures];
         
         [themeNoPictures mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -72,6 +73,13 @@
         }];
         
         themeLegend = [MSThemeView new];
+        @weakify(self)
+        themeLegend.clickHeadBlock = ^{
+            @strongify(self)
+            if (self.delegate && [self.delegate respondsToSelector:@selector(didClickHeadView)]) {
+                [self.delegate didClickHeadView];
+            }
+        };
         [borderBgView addSubview:themeLegend];
         
         [themeLegend mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -83,6 +91,11 @@
     }
     
     return self;
+}
+
+- (void)reloadHeadImage:(UIImage*)image
+{
+    [themeLegend.portraitView setBackgroundImage:image forState:UIControlStateNormal];
 }
 
 - (void)theme:(NSString*)theme hideImage:(BOOL)hide
