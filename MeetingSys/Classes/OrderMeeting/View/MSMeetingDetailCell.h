@@ -7,7 +7,6 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "MSNoticeModel.h"
 #import "MSTitleAndDetailView.h"
 #import "MSMemberView.h"
 
@@ -25,8 +24,8 @@
     MSTitleAndDetailView *meetingDemandView;//會議要求
 }
 
-- (void)data:(MSNoticeModel*)model;
+- (void)data:(MSMeetingDetailModel*)model;
 
-+ (CGFloat)meetingDetailHeight:(MSNoticeModel*)model;
++ (CGFloat)meetingDetailHeight:(MSMeetingDetailModel*)model;
 
 @end

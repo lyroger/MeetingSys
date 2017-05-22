@@ -52,8 +52,9 @@
              @"demand" : @"requirement",
              @"organizeName":@"organizerName",
              @"address":@"mName",
-             @"organizerHeadURL":@"orgAvater"
-             };
+             @"organizerHeadURL":@"orgAvater",
+             @"sendDate":@"createDate",
+             @"remindId":@"id"};
 }
 
 - (NSMutableArray*)members
@@ -101,6 +102,23 @@
     DicValueSet(model.agenda, @"agenda");
     DicValueSet(model.demand, @"requirement");
     return [self dataTaskMethod:HTTPMethodPOST path:@"api/meeting/saveorupdate" params:ParamsDic networkHUD:hud target:target success:success];
+}
+
++ (NSURLSessionDataTask *)getNoticesNetworkHUD:(NetworkHUD)hud
+                                        target:(id)target
+                                       success:(NetResponseBlock)success
+{
+    return [self dataTaskMethod:HTTPMethodPOST path:@"api/remind/userreminds" params:nil networkHUD:hud target:target success:success];
+}
+
++ (NSURLSessionDataTask *)didReadNoticeInfo:(NSString*)infoId
+                                 networkHUD:(NetworkHUD)hud
+                                     target:(id)target
+                                    success:(NetResponseBlock)success
+{
+    CreateParamsDic;
+    DicValueSet(infoId, @"id");
+    return [self dataTaskMethod:HTTPMethodPOST path:@"api/remind/setread" params:ParamsDic networkHUD:hud target:target success:success];
 }
 
 @end

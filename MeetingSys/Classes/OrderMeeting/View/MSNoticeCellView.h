@@ -7,10 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "MSNoticeModel.h"
+#import "MSMeetingDetailModel.h"
 
 @interface MSNoticeCellView : UITableViewCell
 
-- (void)data:(MSNoticeModel*)dataModel;
+- (void)data:(MSMeetingDetailModel*)dataModel;
 + (CGFloat)noticeCellHeight;
 @end

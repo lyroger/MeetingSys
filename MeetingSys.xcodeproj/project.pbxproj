@@ -148,6 +148,7 @@
 		A71EC7471EC6F44700E22577 /* MSNewMeetingInputCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A71EC7461EC6F44700E22577 /* MSNewMeetingInputCell.m */; };
 		A71EC74A1EC6F47D00E22577 /* MSNewMeetingTimeCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A71EC7491EC6F47D00E22577 /* MSNewMeetingTimeCell.m */; };
 		A736CFF71ED2827600C9E762 /* agreement.html in Resources */ = {isa = PBXBuildFile; fileRef = A736CFF61ED2827600C9E762 /* agreement.html */; };
+		A736CFFA1ED2C23800C9E762 /* MSNoticeDetailCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A736CFF91ED2C23800C9E762 /* MSNoticeDetailCell.m */; };
 		A7416AE51EC064F300E42EB0 /* MSNavTabbarView.m in Sources */ = {isa = PBXBuildFile; fileRef = A7416AE41EC064F300E42EB0 /* MSNavTabbarView.m */; };
 		A7416AE81EC0797C00E42EB0 /* MSOrderMeetingButtonView.m in Sources */ = {isa = PBXBuildFile; fileRef = A7416AE71EC0797C00E42EB0 /* MSOrderMeetingButtonView.m */; };
 		A7416AEB1EC0867300E42EB0 /* MSNoticeCellView.m in Sources */ = {isa = PBXBuildFile; fileRef = A7416AEA1EC0867300E42EB0 /* MSNoticeCellView.m */; };
@@ -166,7 +167,6 @@
 		A7D79CA81ECD419100549F67 /* MSSelectMemeberViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A7D79CA71ECD419100549F67 /* MSSelectMemeberViewController.m */; };
 		A7D79CAC1ECD844200549F67 /* MSSelMemberCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A7D79CAB1ECD844200549F67 /* MSSelMemberCell.m */; };
 		A7D9C8A41EC3F600000FB05C /* MSAgreementViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A7D9C8A31EC3F600000FB05C /* MSAgreementViewController.m */; };
-		A7D9C8A71EC44A98000FB05C /* MSNoticeModel.m in Sources */ = {isa = PBXBuildFile; fileRef = A7D9C8A61EC44A98000FB05C /* MSNoticeModel.m */; };
 		A7D9C8AA1EC4584F000FB05C /* MSTitleAndDetailView.m in Sources */ = {isa = PBXBuildFile; fileRef = A7D9C8A91EC4584F000FB05C /* MSTitleAndDetailView.m */; };
 		A7D9C8AD1EC46B9B000FB05C /* MSMeetingDetailModel.m in Sources */ = {isa = PBXBuildFile; fileRef = A7D9C8AC1EC46B9B000FB05C /* MSMeetingDetailModel.m */; };
 		A7FA35F91EC5E58B0053B682 /* MSTodayMeetingView.m in Sources */ = {isa = PBXBuildFile; fileRef = A7FA35F81EC5E58B0053B682 /* MSTodayMeetingView.m */; };
@@ -475,6 +475,8 @@
 		A71EC7481EC6F47D00E22577 /* MSNewMeetingTimeCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSNewMeetingTimeCell.h; sourceTree = "<group>"; };
 		A71EC7491EC6F47D00E22577 /* MSNewMeetingTimeCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSNewMeetingTimeCell.m; sourceTree = "<group>"; };
 		A736CFF61ED2827600C9E762 /* agreement.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = agreement.html; sourceTree = "<group>"; };
+		A736CFF81ED2C23800C9E762 /* MSNoticeDetailCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSNoticeDetailCell.h; sourceTree = "<group>"; };
+		A736CFF91ED2C23800C9E762 /* MSNoticeDetailCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSNoticeDetailCell.m; sourceTree = "<group>"; };
 		A7416AE21EC05C7D00E42EB0 /* MeetingSys.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MeetingSys.entitlements; sourceTree = "<group>"; };
 		A7416AE31EC064F300E42EB0 /* MSNavTabbarView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSNavTabbarView.h; sourceTree = "<group>"; };
 		A7416AE41EC064F300E42EB0 /* MSNavTabbarView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSNavTabbarView.m; sourceTree = "<group>"; };
@@ -512,8 +514,6 @@
 		A7D79CAB1ECD844200549F67 /* MSSelMemberCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSSelMemberCell.m; sourceTree = "<group>"; };
 		A7D9C8A21EC3F600000FB05C /* MSAgreementViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSAgreementViewController.h; sourceTree = "<group>"; };
 		A7D9C8A31EC3F600000FB05C /* MSAgreementViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSAgreementViewController.m; sourceTree = "<group>"; };
-		A7D9C8A51EC44A98000FB05C /* MSNoticeModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSNoticeModel.h; sourceTree = "<group>"; };
-		A7D9C8A61EC44A98000FB05C /* MSNoticeModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSNoticeModel.m; sourceTree = "<group>"; };
 		A7D9C8A81EC4584F000FB05C /* MSTitleAndDetailView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSTitleAndDetailView.h; sourceTree = "<group>"; };
 		A7D9C8A91EC4584F000FB05C /* MSTitleAndDetailView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSTitleAndDetailView.m; sourceTree = "<group>"; };
 		A7D9C8AB1EC46B9B000FB05C /* MSMeetingDetailModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSMeetingDetailModel.h; sourceTree = "<group>"; };
@@ -1238,8 +1238,6 @@
 		A7186FCD1EBC233D00DE4B67 /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				A7D9C8A51EC44A98000FB05C /* MSNoticeModel.h */,
-				A7D9C8A61EC44A98000FB05C /* MSNoticeModel.m */,
 				A7D9C8AB1EC46B9B000FB05C /* MSMeetingDetailModel.h */,
 				A7D9C8AC1EC46B9B000FB05C /* MSMeetingDetailModel.m */,
 				A70CE67B1EC5A5F70046F536 /* MSAllMeetingModel.h */,
@@ -1318,6 +1316,8 @@
 				A7416AEA1EC0867300E42EB0 /* MSNoticeCellView.m */,
 				A7416AEF1EC086E700E42EB0 /* MSMeetingDetailCell.h */,
 				A7416AF01EC086E700E42EB0 /* MSMeetingDetailCell.m */,
+				A736CFF81ED2C23800C9E762 /* MSNoticeDetailCell.h */,
+				A736CFF91ED2C23800C9E762 /* MSNoticeDetailCell.m */,
 				A77327381EC498B1005A89AE /* MSMemberView.h */,
 				A77327391EC498B1005A89AE /* MSMemberView.m */,
 			);
@@ -1606,6 +1606,7 @@
 				A7186F6C1EBC219F00DE4B67 /* NSFileManager+Paths.m in Sources */,
 				A7186F6F1EBC219F00DE4B67 /* NSDecimalNumber+Extensions.m in Sources */,
 				A7186F521EBC219F00DE4B67 /* CSErrorTips.m in Sources */,
+				A736CFFA1ED2C23800C9E762 /* MSNoticeDetailCell.m in Sources */,
 				A7416AEE1EC086B200E42EB0 /* MSMeetingListCell.m in Sources */,
 				A7186F991EBC219F00DE4B67 /* UIButton+LXMImagePosition.m in Sources */,
 				A7FA36011EC5E5C80053B682 /* CyclicCardFlowLayout.m in Sources */,
@@ -1708,7 +1709,6 @@
 				A7D79CA41ECD370D00549F67 /* SHMSelectActionCell.m in Sources */,
 				A7186F7D1EBC219F00DE4B67 /* NSString+Hash.m in Sources */,
 				A7186F9A1EBC219F00DE4B67 /* UIButton+MiddleAligning.m in Sources */,
-				A7D9C8A71EC44A98000FB05C /* MSNoticeModel.m in Sources */,
 				A7186F9C1EBC219F00DE4B67 /* UIButton+TouchAreaInsets.m in Sources */,
 				A7186F9E1EBC219F00DE4B67 /* UIColor+HEX.m in Sources */,
 				A7186FC61EBC219F00DE4B67 /* DataHelper.m in Sources */,

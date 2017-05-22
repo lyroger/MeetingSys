@@ -46,6 +46,10 @@
 @property (nonatomic, copy) NSString *othersName; // 參會人員名稱列表
 @property (nonatomic, copy) NSString *mtStatus;// 會議狀態  0-初始  1-正常結束  2- No show 3-已確認
 
+@property (nonatomic, copy) NSString *remindConent;//提醒內容
+@property (nonatomic,strong) NSDate  *sendDate;//發送時間
+@property (nonatomic, copy) NSString *remindId;//提醒ID；
+
 @property (nonatomic, copy) NSString *organizerHeadURL;
 @property (nonatomic, copy) NSString *title;
 @property (nonatomic, copy) NSString *organizeName;
@@ -60,5 +64,14 @@
                                       networkHUD:(NetworkHUD)hud
                                           target:(id)target
                                          success:(NetResponseBlock)success;
+
++ (NSURLSessionDataTask *)getNoticesNetworkHUD:(NetworkHUD)hud
+                                        target:(id)target
+                                       success:(NetResponseBlock)success;
+
++ (NSURLSessionDataTask *)didReadNoticeInfo:(NSString*)infoId
+                                 networkHUD:(NetworkHUD)hud
+                                     target:(id)target
+                                    success:(NetResponseBlock)success;
 
 @end

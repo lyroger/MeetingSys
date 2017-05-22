@@ -30,6 +30,8 @@
         [self.contentView addSubview:bgContentView];
         
         imageIcon = [UIImageView new];
+        imageIcon.layer.cornerRadius = 18;
+        imageIcon.layer.masksToBounds = YES;
         [bgContentView addSubview:imageIcon];
         
         titleLabel = [UILabel new];
@@ -77,6 +79,15 @@
             make.centerY.equalTo(bgContentView);
             make.width.lessThanOrEqualTo(@100);
             make.height.mas_equalTo(25);
+        }];
+        
+        UILabel *bottomLine = [UILabel new];
+        bottomLine.backgroundColor = kSplitLineColor;
+        [self.contentView addSubview:bottomLine];
+        [bottomLine mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.height.equalTo(@(0.6));
+            make.width.equalTo(self.contentView);
+            make.bottom.equalTo(self.contentView);
         }];
         
     }

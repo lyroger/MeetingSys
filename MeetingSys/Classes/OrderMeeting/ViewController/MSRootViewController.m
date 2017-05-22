@@ -11,7 +11,7 @@
 #import "MSOrderMeetingButtonView.h"
 #import "MSMeetingListCell.h"
 #import "MSNoticeCellView.h"
-#import "MSMeetingDetailCell.h"
+#import "MSNoticeDetailCell.h"
 #import "MSMeetingUserCenterView.h"
 #import "MSAllMeetingModel.h"
 #import "MSAllMeetingDetailCell.h"
@@ -20,19 +20,22 @@
 #import "MSNavigationController.h"
 #import "MSUserHeadViewController.h"
 #import "MSUpdatePwdViewController.h"
+#import "CSErrorTips.h"
 
-@interface MSRootViewController ()<MSNavTabbarViewDelegete,UITableViewDelegate,UITableViewDataSource,UIScrollViewDelegate,MSOrderMeetingButtonViewDelegate,MSAllMeetingDetailCellDelegate,MSMeetingUserCenterViewDelegate>
+@interface MSRootViewController ()<MSNavTabbarViewDelegete,UITableViewDelegate,UITableViewDataSource,UIScrollViewDelegate,MSOrderMeetingButtonViewDelegate,MSAllMeetingDetailCellDelegate,MSMeetingUserCenterViewDelegate,MSNoticeDetailCellDelegate>
 {
     UITableView *tableNoticeView;
     UITableView *tableAllMeetingView;
     UIScrollView *mainScrollView;
     MSNavTabbarView *navTabbarView;
     MSMeetingUserCenterView *userCenterView;
+    BOOL isLoadedAllMeetingData;
 }
 
 @property (nonatomic, strong) NSMutableArray *noticeArray;
 @property (nonatomic, strong) MSAllMeetingModel *allMeetingModel;
 @property (nonatomic, strong) MSTodayMeetingView *todayMeetingView;
+@property (nonatomic, strong) CSErrorTips *noMeetingDataTipsView;
 
 @end
 
@@ -50,8 +53,6 @@
 
 - (void)loadSubView
 {
-    [self loadDemoData];
-    
     mainScrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 40, kScreenWidth, kScreenHeight-64-50-40)];
     [mainScrollView setContentSize:CGSizeMake(kScreenWidth*2, mainScrollView.height)];
     mainScrollView.pagingEnabled = YES;
@@ -64,7 +65,7 @@
     tableNoticeView.delegate = self;
     tableNoticeView.dataSource = self;
     tableNoticeView.separatorStyle = UITableViewCellSeparatorStyleNone;
-    [tableNoticeView registerClass:[MSMeetingDetailCell class] forCellReuseIdentifier:@"MSMeetingDetailCell"];
+    [tableNoticeView registerClass:[MSNoticeDetailCell class] forCellReuseIdentifier:@"MSNoticeDetailCell"];
     [tableNoticeView registerClass:[MSNoticeCellView class] forCellReuseIdentifier:@"MSNoticeCellView"];
     [mainScrollView addSubview:tableNoticeView];
     @weakify(self)
@@ -72,16 +73,16 @@
         @strongify(self);
         [self refreshNoticeData];
     }];
+    [tableNoticeView.mj_header beginRefreshing];
     
     
     tableAllMeetingView = [[UITableView alloc] initWithFrame:CGRectMake(kScreenWidth, 0, kScreenWidth, mainScrollView.height) style:UITableViewStylePlain];
     tableAllMeetingView.backgroundColor = UIColorHex(0xf6f6f6);
     tableAllMeetingView.delegate = self;
     tableAllMeetingView.dataSource = self;
-    tableAllMeetingView.separatorColor = kSplitLineColor;
+    tableAllMeetingView.separatorStyle = UITableViewCellSelectionStyleNone;
     [tableAllMeetingView registerClass:[MSMeetingListCell class] forCellReuseIdentifier:@"MSMeetingListCell"];
     [tableAllMeetingView registerClass:[MSAllMeetingDetailCell class] forCellReuseIdentifier:@"MSAllMeetingDetailCell"];
-    tableAllMeetingView.tableHeaderView = self.todayMeetingView;
     
     tableAllMeetingView.mj_header = [MJDIYHeader headerWithRefreshingBlock:^{
         @strongify(self);
@@ -111,11 +112,36 @@
     }];
 }
 
-- (void)refreshNoticeData
+- (void)needReloadData
 {
-    
+    [self refreshNoticeData];
 }
 
+//加載提醒列表數據
+- (void)refreshNoticeData
+{
+    [MSMeetingDetailModel getNoticesNetworkHUD:NetworkHUDBackground target:self success:^(StatusModel *data) {
+        [tableNoticeView.mj_header endRefreshing];
+        [tableNoticeView.mj_footer endRefreshing];
+        
+        if (data.code == 0) {
+            NSArray *notices = data.data;
+            [self.noticeArray removeAllObjects];
+            [self.noticeArray addObjectsFromArray:notices];
+            
+            if (self.noticeArray.count) {
+                [self hideTipsView];
+            } else {
+                [self showLoadTips:@"您暫時還沒有提醒！" type:ErrorTipsType_NoData superView:tableNoticeView frame:CGRectMake(0, 0, kScreenWidth, mainScrollView.height)];
+            }
+            [tableNoticeView reloadData];
+        } else {
+            [HUDManager alertWithTitle:data.msg];
+        }
+    }];
+}
+
+//加載所有會議數據
 - (void)refreshAllMeetingData
 {
     self.allMeetingModel.page = 1;
@@ -128,7 +154,7 @@
                                         page:self.allMeetingModel.page
                                       target:self
                                      success:^(StatusModel *data) {
-                                         
+                                         isLoadedAllMeetingData = YES;
                                          [tableAllMeetingView.mj_header endRefreshing];
                                          [tableAllMeetingView.mj_footer endRefreshing];
                                          MSAllMeetingModel *allMeetings = (MSAllMeetingModel*)data.data;
@@ -164,6 +190,13 @@
                                              } else {
                                                  //隐藏
                                                  tableAllMeetingView.tableHeaderView = nil;
+                                             }
+                                             
+                                             if (!self.allMeetingModel.dayGroupList.count && !self.allMeetingModel.todayList.count) {
+                                                 self.noMeetingDataTipsView.hidden = NO;
+                                                 [self.noMeetingDataTipsView reloadTips:@"您還沒有預訂過會議室" subTips:nil withType:ErrorTipsType_NoData];
+                                             } else {
+                                                 self.noMeetingDataTipsView.hidden = YES;
                                              }
                                              [tableAllMeetingView reloadData];
                                              
@@ -244,14 +277,6 @@
 {
     //加载提醒demo数据
     for (int i = 0; i < 10; i++) {
-        MSNoticeModel *model = [[MSNoticeModel alloc] init];
-        model.noticeDate = @"五分鐘前";
-        model.noticeContent = @"保險專業知識培訓01";
-        model.noticeTitle = @"會議通知";
-        model.meetingDate = @"2017-04-04 10:00";
-        model.isUnfold = NO;
-        //第一个展开
-//        model.isUnfold = i==0?YES:NO;
         
         MSMeetingDetailModel *detailModel = [[MSMeetingDetailModel alloc] init];
         detailModel.beginTime = [NSDate new];
@@ -267,8 +292,7 @@
             [detailModel.members addObject:member];
         }
         
-        model.meetingDetailModel = detailModel;
-        [self.noticeArray addObject:model];
+        [self.noticeArray addObject:detailModel];
     }
     
     //加载所有会议数据
@@ -302,7 +326,7 @@
     }
     
     //加載當天數據
-    for (int i = 0; i<8; i++) {
+    for (int i = 0; i<4; i++) {
         MSMeetingDetailModel *detailModel = [[MSMeetingDetailModel alloc] init];
         detailModel.title = @"月度總結報告";
         detailModel.organizeName = @"roger";
@@ -326,7 +350,7 @@
 - (NSInteger)fetchOtherUnfoldCell:(NSInteger)section
 {
     __block NSInteger otherUnfoldSection = 0;
-    [self.noticeArray enumerateObjectsUsingBlock:^(MSNoticeModel *model, NSUInteger idx, BOOL * _Nonnull stop) {
+    [self.noticeArray enumerateObjectsUsingBlock:^(MSMeetingDetailModel *model, NSUInteger idx, BOOL * _Nonnull stop) {
         if (idx != section && model.isUnfold) {
             otherUnfoldSection = idx;
             model.isUnfold = NO;
@@ -334,6 +358,19 @@
         }
     }];
     return otherUnfoldSection;
+}
+
+- (void)didClickNoticeDetailSureActionCell:(MSNoticeDetailCell *)cell
+{
+    NSIndexPath *indexPath = [tableNoticeView indexPathForCell:cell];
+    MSMeetingDetailModel *model = [self.noticeArray objectAtIndex:indexPath.section];
+    [MSMeetingDetailModel didReadNoticeInfo:model.remindId networkHUD:NetworkHUDBackground target:self success:^(StatusModel *data) {
+        if (data.code == 0) {
+            NSLog(@"設置已讀成功");
+        }
+    }];
+    model.isUnfold = !model.isUnfold;
+    [tableNoticeView reloadSections:[NSIndexSet indexSetWithIndex:indexPath.section] withRowAnimation:UITableViewRowAnimationFade];
 }
 
 - (void)didClickSureActionCell:(MSAllMeetingDetailCell*)cell
@@ -353,7 +390,7 @@
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     if (tableView == tableNoticeView) {
-        MSNoticeModel *model = [self.noticeArray objectAtIndex:indexPath.section];
+        MSMeetingDetailModel *model = [self.noticeArray objectAtIndex:indexPath.section];
         if (indexPath.row == 0) {
             model.isUnfold = !model.isUnfold;
             [tableNoticeView reloadSections:[NSIndexSet indexSetWithIndex:indexPath.section] withRowAnimation:UITableViewRowAnimationFade];
@@ -391,12 +428,12 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (tableView == tableNoticeView) {
-        MSNoticeModel *model = [self.noticeArray objectAtIndex:indexPath.section];
+        MSMeetingDetailModel *model = [self.noticeArray objectAtIndex:indexPath.section];
         if (model.isUnfold) {
             if (indexPath.row == 0) {
                 return [MSNoticeCellView noticeCellHeight];
             } else {
-                return [MSMeetingDetailCell meetingDetailHeight:model];
+                return [MSNoticeDetailCell meetingDetailHeight:model];
             }
         } else {
             return [MSNoticeCellView noticeCellHeight];
@@ -435,7 +472,7 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     if (tableView == tableNoticeView) {
-        MSNoticeModel *model = [self.noticeArray objectAtIndex:section];
+        MSMeetingDetailModel *model = [self.noticeArray objectAtIndex:section];
         return model.isUnfold?2:1;
     } else {
         MSDayGroupList *dayGroupList = [self.allMeetingModel.dayGroupList objectAtIndex:section];
@@ -478,13 +515,14 @@
     if (tableView == tableNoticeView) {
         MSNoticeCellView *cell = [tableView dequeueReusableCellWithIdentifier:@"MSNoticeCellView"];
         cell.backgroundColor = tableNoticeView.backgroundColor;
-        MSNoticeModel *model = [self.noticeArray objectAtIndex:indexPath.section];
+        MSMeetingDetailModel *model = [self.noticeArray objectAtIndex:indexPath.section];
         if (model.isUnfold) {
             //考慮一個列表和一個詳情
             if (indexPath.row == 0) {
                 [cell data:model];
             } else {
-                MSMeetingDetailCell *detailCell = [tableView dequeueReusableCellWithIdentifier:@"MSMeetingDetailCell"];
+                MSNoticeDetailCell *detailCell = [tableView dequeueReusableCellWithIdentifier:@"MSNoticeDetailCell"];
+                detailCell.delegate = self;
                 detailCell.selectionStyle = UITableViewCellSeparatorStyleNone;
                 detailCell.backgroundColor = tableNoticeView.backgroundColor;
                 [detailCell data:model];
@@ -640,6 +678,9 @@
         [mainScrollView scrollToHorizontalPageIndex:0 animated:YES];
     } else {
         [mainScrollView scrollToHorizontalPageIndex:1 animated:YES];
+        if (!isLoadedAllMeetingData) {
+            [tableAllMeetingView.mj_header beginRefreshing];
+        }
     }
 }
 
@@ -649,6 +690,9 @@
     if (scrollView == mainScrollView) {
         NSInteger index = floor((scrollView.contentOffset.x - scrollView.frame.size.width / 2) / scrollView.frame.size.width) + 1;
         [navTabbarView selectedItemIndex:index];
+        if (index == 1 && !isLoadedAllMeetingData) {
+            [tableAllMeetingView.mj_header beginRefreshing];
+        }
     }
 }
 
@@ -660,12 +704,30 @@
     return _noticeArray;
 }
 
+- (MSAllMeetingModel*)allMeetingModel
+{
+    if (!_allMeetingModel) {
+        _allMeetingModel = [[MSAllMeetingModel alloc] init];
+    }
+    return _allMeetingModel;
+}
+
 - (MSTodayMeetingView*)todayMeetingView
 {
     if (!_todayMeetingView) {
         _todayMeetingView = [[MSTodayMeetingView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, 212)];
     }
     return _todayMeetingView;
+}
+
+- (CSErrorTips*)noMeetingDataTipsView
+{
+    if (!_noMeetingDataTipsView) {
+        _noMeetingDataTipsView = [[CSErrorTips alloc] initWithFrame:CGRectZero];
+        [tableAllMeetingView addSubview:_noMeetingDataTipsView];
+        _noMeetingDataTipsView.frame = CGRectMake(0, 0, kScreenWidth, mainScrollView.height);
+    }
+    return _noMeetingDataTipsView;
 }
 
 - (void)didReceiveMemoryWarning {

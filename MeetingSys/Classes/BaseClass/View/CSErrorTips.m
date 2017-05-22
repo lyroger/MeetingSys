@@ -155,7 +155,7 @@
         if (type == ErrorTipsType_NoCustomerData) {
             imageView.image = [UIImage imageNamed:@"common_nocustomer_bg"];
         } else {
-            imageView.image = [UIImage imageNamed:@"icon_nodata"];
+            imageView.image = [UIImage imageNamed:@"no_data"];
         }
         CGFloat imageWidth = 100*ScreenMutiple6;
         

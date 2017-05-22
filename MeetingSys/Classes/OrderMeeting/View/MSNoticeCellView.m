@@ -80,11 +80,12 @@
             make.top.mas_equalTo(titleLabel.mas_bottom).mas_offset(8);
             make.left.mas_equalTo(titleLabel.mas_left);
             make.right.mas_equalTo(bgContentView.mas_right).mas_offset(-10);
+            make.height.mas_equalTo(20);
         }];
         
         [timeLabel mas_makeConstraints:^(MASConstraintMaker *make) {
             make.right.mas_equalTo(bgContentView.mas_right).mas_offset(-10);
-            make.top.mas_equalTo(contentLabel.mas_bottom).mas_offset(8);
+            make.top.mas_equalTo(contentLabel.mas_bottom).mas_offset(5);
             make.left.equalTo(titleLabel.mas_left);
         }];
         
@@ -99,13 +100,13 @@
     return self;
 }
 
-- (void)data:(MSNoticeModel*)dataModel
+- (void)data:(MSMeetingDetailModel*)dataModel
 {
-    [imageIcon sd_setImageWithURL:[NSURL URLWithString:dataModel.headURL] placeholderImage:[UIImage imageNamed:@"portrait_xiao"]];
-    titleLabel.text = dataModel.noticeTitle;
-    contentLabel.text = dataModel.noticeContent;
-    timeLabel.text = dataModel.meetingDate;
-    noticeTimeLabel.text = dataModel.noticeDate;
+    imageIcon.image = [UIImage imageNamed:@"notice_icon_1"];
+    titleLabel.text = @"會議提醒";
+    contentLabel.text = dataModel.remindConent;
+    timeLabel.text = [dataModel.beginTime dateWithFormat:@"yyyy-MM-dd HH:mm"];
+    noticeTimeLabel.text = [dataModel.sendDate dateWithFormat:@"yyyy-MM-dd HH:mm"];
 }
 
 + (CGFloat)noticeCellHeight

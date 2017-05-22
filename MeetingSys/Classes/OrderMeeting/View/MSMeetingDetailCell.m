@@ -101,29 +101,29 @@
     return self;
 }
 
-- (void)data:(MSNoticeModel*)model
+- (void)data:(MSMeetingDetailModel*)model
 {
     beginTimeView.titleLabel.text = @"會議開始時間";
-    beginTimeView.detailLabel.text = [model.meetingDetailModel.beginTime dateWithFormat:@"yyyy-MM-dd HH:mm"];
+    beginTimeView.detailLabel.text = [model.beginTime dateWithFormat:@"yyyy-MM-dd HH:mm"];
     
     endTimeView.titleLabel.text = @"會議結束時間";
-    endTimeView.detailLabel.text = [model.meetingDetailModel.endTime dateWithFormat:@"yyyy-MM-dd HH:mm"];
+    endTimeView.detailLabel.text = [model.endTime dateWithFormat:@"yyyy-MM-dd HH:mm"];
     
     meetindAddressView.titleLabel.text = @"會議地址";
-    meetindAddressView.detailLabel.text = model.meetingDetailModel.address;
+    meetindAddressView.detailLabel.text = model.address;
     
-    [memberView membersData:model.meetingDetailModel.members];
+    [memberView membersData:model.members];
     
     meetingAgendaView.titleLabel.text = @"會議議程";
-    meetingAgendaView.detailLabel.text = model.meetingDetailModel.agenda;
+    meetingAgendaView.detailLabel.text = model.agenda;
     
     meetingDemandView.titleLabel.text = @"會議要求";
-    meetingDemandView.detailLabel.text = model.meetingDetailModel.demand;
+    meetingDemandView.detailLabel.text = model.demand;
 }
 
-+ (CGFloat)meetingDetailHeight:(MSNoticeModel*)model
++ (CGFloat)meetingDetailHeight:(MSMeetingDetailModel*)model
 {
-    CGFloat tottalHeight = 70+70+127+[MSTitleAndDetailView titleAndDetailViewHeight:model.meetingDetailModel.agenda width:kScreenWidth-10*2-10*2]+[MSTitleAndDetailView titleAndDetailViewHeight:model.meetingDetailModel.demand width:kScreenWidth-10*2-10*2];
+    CGFloat tottalHeight = 70+70+127+[MSTitleAndDetailView titleAndDetailViewHeight:model.agenda width:kScreenWidth-10*2-10*2]+[MSTitleAndDetailView titleAndDetailViewHeight:model.demand width:kScreenWidth-10*2-10*2];
     return tottalHeight;
 }
 
