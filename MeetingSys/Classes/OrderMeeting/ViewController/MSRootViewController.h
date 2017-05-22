@@ -10,4 +10,5 @@
 
 @interface MSRootViewController : MSBaseViewController
 
+- (void)handleNotification:(NSDictionary *)info isActive:(BOOL)isActive;
 @end

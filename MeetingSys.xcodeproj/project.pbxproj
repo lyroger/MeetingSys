@@ -163,6 +163,7 @@
 		A789FCBD1EBC101B004CA763 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = A789FCBC1EBC101B004CA763 /* main.m */; };
 		A789FCC01EBC101B004CA763 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = A789FCBF1EBC101B004CA763 /* AppDelegate.m */; };
 		A789FCC81EBC101B004CA763 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A789FCC71EBC101B004CA763 /* Assets.xcassets */; };
+		A7CF8E871ED31276000DE508 /* APSModel.m in Sources */ = {isa = PBXBuildFile; fileRef = A7CF8E861ED31276000DE508 /* APSModel.m */; };
 		A7D79CA41ECD370D00549F67 /* SHMSelectActionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A7D79CA11ECD370D00549F67 /* SHMSelectActionCell.m */; };
 		A7D79CA51ECD370D00549F67 /* SHMSelectActionView.m in Sources */ = {isa = PBXBuildFile; fileRef = A7D79CA31ECD370D00549F67 /* SHMSelectActionView.m */; };
 		A7D79CA81ECD419100549F67 /* MSSelectMemeberViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A7D79CA71ECD419100549F67 /* MSSelectMemeberViewController.m */; };
@@ -507,6 +508,8 @@
 		A789FCBF1EBC101B004CA763 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		A789FCC71EBC101B004CA763 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A789FCCC1EBC101B004CA763 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		A7CF8E851ED31276000DE508 /* APSModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APSModel.h; sourceTree = "<group>"; };
+		A7CF8E861ED31276000DE508 /* APSModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APSModel.m; sourceTree = "<group>"; };
 		A7D79CA01ECD370D00549F67 /* SHMSelectActionCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SHMSelectActionCell.h; sourceTree = "<group>"; };
 		A7D79CA11ECD370D00549F67 /* SHMSelectActionCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SHMSelectActionCell.m; sourceTree = "<group>"; };
 		A7D79CA21ECD370D00549F67 /* SHMSelectActionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SHMSelectActionView.h; sourceTree = "<group>"; };
@@ -635,6 +638,8 @@
 			children = (
 				A7186E311EBC219E00DE4B67 /* MSUserInfo.h */,
 				A7186E301EBC219E00DE4B67 /* MSUserInfo.m */,
+				A7CF8E851ED31276000DE508 /* APSModel.h */,
+				A7CF8E861ED31276000DE508 /* APSModel.m */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -1629,6 +1634,7 @@
 				A7186FB31EBC219F00DE4B67 /* UIScrollView+Addition.m in Sources */,
 				A7186FD21EBC2CC300DE4B67 /* MSRootViewController.m in Sources */,
 				A7186FA01EBC219F00DE4B67 /* UIColor+Random.m in Sources */,
+				A7CF8E871ED31276000DE508 /* APSModel.m in Sources */,
 				A71EC73D1EC6EE1B00E22577 /* MSNewMeetingViewController.m in Sources */,
 				A7186F961EBC219F00DE4B67 /* UIButton+CountDown.m in Sources */,
 				A7186F5E1EBC219F00DE4B67 /* NSArray+SafeAccess.m in Sources */,

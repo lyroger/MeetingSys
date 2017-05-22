@@ -265,10 +265,10 @@
 
 - (void)handlerPushMessage:(NSDictionary*)userInfo isActive:(BOOL)isActive
 {
-//    if (![self isNeedLogin]) {
-//        [self.tabBarVC handleNotification:userInfo isActive:isActive];
-//    } else {
-//        // 退出登录后，会注销推送，没登录理论上不会推送。
-//    }
+    if ([MSUserInfo shareUserInfo].token.length) {
+        [self.rootViewController handleNotification:userInfo isActive:isActive];
+    } else {
+        // 退出登录后，会注销推送，没登录理论上不会推送。
+    }
 }
 @end

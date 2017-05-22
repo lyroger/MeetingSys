@@ -21,6 +21,7 @@
 #import "MSUserHeadViewController.h"
 #import "MSUpdatePwdViewController.h"
 #import "CSErrorTips.h"
+#import "APSModel.h"
 
 @interface MSRootViewController ()<MSNavTabbarViewDelegete,UITableViewDelegate,UITableViewDataSource,UIScrollViewDelegate,MSOrderMeetingButtonViewDelegate,MSAllMeetingDetailCellDelegate,MSMeetingUserCenterViewDelegate,MSNoticeDetailCellDelegate,MSToDayMeetingViewDelegate>
 {
@@ -740,6 +741,18 @@
         _noMeetingDataTipsView.frame = CGRectMake(0, 0, kScreenWidth, mainScrollView.height);
     }
     return _noMeetingDataTipsView;
+}
+
+- (void)handleNotification:(NSDictionary *)userInfo isActive:(BOOL)isActive
+{
+    APSModel *apsMsg = [APSModel mj_objectWithKeyValues:userInfo];
+    
+    if (isActive) {
+        [UIAlertView alertWithCallBackBlock:^(NSInteger buttonIndex) {
+
+        } title:@"您有新的會議提醒" message:apsMsg.aps.alert cancelButtonName:@"我知道了" otherButtonTitles:nil];
+    }
+    
 }
 
 - (void)didReceiveMemoryWarning {
