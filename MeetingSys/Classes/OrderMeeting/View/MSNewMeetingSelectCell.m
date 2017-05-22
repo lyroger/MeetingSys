@@ -81,8 +81,10 @@
 {
     if (text.length) {
         textLabel.text = text;
+        textLabel.textColor = UIColorHex(0x333333);
     } else {
         textLabel.text = @"請選擇";
+        textLabel.textColor = UIColorHex(0x888888);
     }
 }
 

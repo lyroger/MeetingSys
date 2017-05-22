@@ -104,8 +104,8 @@
     MSOrderMeetingButtonView *bottomView = [MSOrderMeetingButtonView new];
     bottomView.backgroundColor = UIColorHex(0xFF845F);
     bottomView.delegate = self;
-    bottomView.layer.shadowColor = UIColorHex(0xf6f6f6).CGColor;
-    bottomView.layer.shadowOpacity = 0.8;
+    bottomView.layer.shadowColor = UIColorHex_Alpha(0x000000, 0.05).CGColor;
+    bottomView.layer.shadowOpacity = 1;
     bottomView.layer.shadowOffset = CGSizeMake(0, -5);
     [self.view addSubview:bottomView];
     

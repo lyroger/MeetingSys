@@ -64,6 +64,11 @@
     }
 }
 
+- (void)setSwitchEnble:(BOOL)enble
+{
+    switchOnOff.enabled = enble;
+}
+
 - (void)title:(NSString *)title mustItem:(BOOL)must on:(BOOL)on
 {
     [mustView title:title mustItem:must];

@@ -30,7 +30,7 @@
         
         textField = [UITextField new];
         textField.font = kFontPingFangRegularSize(14);
-        textField.textColor = UIColorHex(0x888888);
+        textField.textColor = UIColorHex(0x333333);
         textField.delegate = self;
         [self.contentView addSubview:textField];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textFieldTextDidChange:) name:UITextFieldTextDidChangeNotification object:nil];
@@ -107,8 +107,13 @@
     if (text.length) {
         if (multiple) {
             textView.text = text;
+            textView.textColor = UIColorHex(0x333333);
         } else {
             textField.text = text;
+        }
+    } else {
+        if (multiple) {
+            textView.textColor = UIColorHex(0x333333);
         }
     }
 }

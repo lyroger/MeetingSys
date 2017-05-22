@@ -16,4 +16,6 @@ typedef void(^MeetingONOffCellActionBlock)(BOOL isON);
 
 - (void)title:(NSString *)title mustItem:(BOOL)must on:(BOOL)on;
 
+- (void)setSwitchEnble:(BOOL)enble;
+
 @end

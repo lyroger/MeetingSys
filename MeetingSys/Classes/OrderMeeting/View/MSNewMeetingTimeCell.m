@@ -97,6 +97,16 @@
     [mustView title:title mustItem:must];
     beginTime.text = begin;
     endTime.text = end;
+    if ([begin isEqualToString:@"請選擇開始時間"]) {
+        beginTime.textColor = UIColorHex(0x888888);
+    } else {
+        beginTime.textColor = UIColorHex(0x333333);
+    }
+    if ([end isEqualToString:@"請選擇結束時間"]) {
+        endTime.textColor = UIColorHex(0x888888);
+    } else {
+        endTime.textColor = UIColorHex(0x333333);
+    }
 }
 
 - (void)selectDate:(UIGestureRecognizer*)gesture

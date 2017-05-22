@@ -69,9 +69,9 @@
         }];
         
         self.backgroundColor = [UIColor whiteColor];
-        self.layer.shadowColor = UIColorHex(0xf6f6f6).CGColor;
+        self.layer.shadowColor = UIColorHex_Alpha(0x000000, 0.05).CGColor;
         self.layer.shadowOffset = CGSizeMake(1, 6);// 阴影的范围
-        self.layer.shadowOpacity = 0.8;// 阴影透明度
+        self.layer.shadowOpacity = 1;// 阴影透明度
     }
     
     return self;

@@ -7,13 +7,14 @@
 //
 
 #import "MSNewMeetingHeadView.h"
+#import "MSThemeView.h"
 
 @interface MSNewMeetingHeadView()
 {
     UIView *bgView;
     UIImageView *themeClassics;
-    UIImageView *themeNoPictures;
-    UIView *themeLegend;
+    MSThemeView *themeNoPictures;
+    MSThemeView *themeLegend;
     
     UIImageView *portraitView;
 }
@@ -49,7 +50,7 @@
         }];
         
         themeClassics = [UIImageView new];
-        themeClassics.image = [UIImage imageNamed:@"display_portrait"];
+        themeClassics.image = [UIImage imageNamed:@"Classic"];
         [borderBgView addSubview:themeClassics];
         
         [themeClassics mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -59,8 +60,8 @@
             make.bottom.equalTo(@(-18));
         }];
         
-        themeNoPictures = [UIImageView new];
-        themeNoPictures.image = [UIImage imageNamed:@"display_portrait"];
+        themeNoPictures = [MSThemeView new];
+        themeNoPictures.portraitView.image = [UIImage imageNamed:@"display_portrait_off"];
         [borderBgView addSubview:themeNoPictures];
         
         [themeNoPictures mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -70,43 +71,14 @@
             make.bottom.equalTo(@(-18));
         }];
         
-        themeLegend = [UIView new];
+        themeLegend = [MSThemeView new];
         [borderBgView addSubview:themeLegend];
-        
-        UIImageView *titleImage = [UIImageView new];
-        titleImage.image = [UIImage imageNamed:@"display_title"];
-        [themeLegend addSubview:titleImage];
-        
-        UIImageView *menuImage = [UIImageView new];
-        menuImage.image = [UIImage imageNamed:@"display_menu"];
-        [themeLegend addSubview:menuImage];
-        
-        portraitView = [UIImageView new];
-        portraitView.image = [UIImage imageNamed:@"display_portrait"];
-        [themeLegend addSubview:portraitView];
         
         [themeLegend mas_makeConstraints:^(MASConstraintMaker *make) {
             make.left.equalTo(@15);
             make.top.equalTo(@12);
             make.right.equalTo(@(-15));
             make.bottom.equalTo(@(-18));
-        }];
-        
-        [titleImage mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.left.top.equalTo(@0);
-            make.height.equalTo(@20);
-            make.width.equalTo(@158);
-        }];
-        
-        [menuImage mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.right.top.bottom.equalTo(@0);
-            make.width.equalTo(@87);
-        }];
-        
-        [portraitView mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.top.equalTo(@20);
-            make.left.bottom.equalTo(@0);
-            make.right.equalTo(menuImage.mas_left);
         }];
     }
     

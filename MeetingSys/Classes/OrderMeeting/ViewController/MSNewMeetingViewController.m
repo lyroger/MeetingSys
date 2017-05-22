@@ -213,6 +213,15 @@
         NSIndexPath *indexPath = [NSIndexPath indexPathForRow:4 inSection:0];
         MSNewMeetingSelectCell *cell = [newMeetingTableView cellForRowAtIndexPath:indexPath];
         [cell contentText:[NSString stringWithFormat:@"%@(%@)",self.meetingInfoObj.address,self.meetingInfoObj.roomTimeTips]];
+        
+        MSNewMeetingONOffCell *switchCell = [newMeetingTableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
+        if ([self.meetingInfoObj.roomTheme isEqualToString:@"Legend"]) {
+            [switchCell setSwitchEnble:YES];
+        } else {
+            [switchCell setSwitchEnble:NO];
+        }
+        [self.headView theme:self.meetingInfoObj.roomTheme hideImage:NO];
+        
     }
     [self checkInfoComplete];
 }
@@ -436,8 +445,8 @@
         @weakify(self)
         cell.actionBlock = ^(BOOL isON) {
             @strongify(self)
-            self.meetingInfoObj.hideThemeHead = !isON;
-            [self.headView theme:self.meetingInfoObj.roomTheme hideImage:!isON];
+            self.meetingInfoObj.hideThemeHead = isON;
+            [self.headView theme:self.meetingInfoObj.roomTheme hideImage:isON];
         };
         return cell;
     }
