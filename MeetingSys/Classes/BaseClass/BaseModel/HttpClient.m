@@ -38,7 +38,7 @@ static NSString *kAppUrl;
         self.responseSerializer = [AFXMLParserResponseSerializer serializer];
     }else if(responseType == ResponseJSON){
         self.responseSerializer = [AFJSONResponseSerializer serializer];
-        self.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"application/json", @"text/json", @"text/javascript",@"text/html", nil];
+        self.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"multipart/form-data,application/json", @"text/json", @"text/javascript",@"text/html", nil];
     }else{
         self.responseSerializer = [AFHTTPResponseSerializer serializer];
     }

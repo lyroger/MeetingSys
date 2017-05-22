@@ -22,6 +22,10 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    if ([self respondsToSelector:@selector(edgesForExtendedLayout)])
+    {
+        self.edgesForExtendedLayout = UIRectEdgeNone;
+    }
     self.title = @"更換頭像";
     self.view.backgroundColor = UIColorHex(0x000000);
     [self leftBarButtonWithName:@"" image:[UIImage imageNamed:@"return"] target:self action:@selector(closeView)];
@@ -48,7 +52,7 @@
     self.imageView.center = self.scrollView.center;
     self.imageView.userInteractionEnabled = YES;
     [self.imageView setContentMode:UIViewContentModeScaleAspectFit];
-    [self.imageView sd_setImageWithURL:[NSURL URLWithString:[MSUserInfo shareUserInfo].headerImg] placeholderImage:[UIImage imageNamed:@"portrait_big"]];
+    [self.imageView sd_setImageWithURL:kImageURLWithLastString([MSUserInfo shareUserInfo].headerImg) placeholderImage:[UIImage imageNamed:@"portrait_big"]];
     [self.scrollView addSubview:self.imageView];
 
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(doubleClick:)];
@@ -159,7 +163,7 @@
         if (0 == data.code) {
             [HUDManager alertWithTitle:@"头像设置成功!"];
             self.imageView.image = photo;
-            [MSUserInfo shareUserInfo].headerImg = [data.data string];
+            [MSUserInfo shareUserInfo].headerImg = data.originalData;
         }
     }];
 }

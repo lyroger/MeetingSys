@@ -549,7 +549,7 @@
         if (0 == data.code) {
             [HUDManager alertWithTitle:@"头像设置成功!"];
             [self.headView reloadHeadImage:photo];
-            [MSUserInfo shareUserInfo].headerImg = [data.data string];
+            [MSUserInfo shareUserInfo].headerImg = data.originalData;
         } else {
             [HUDManager alertWithTitle:data.msg];
         }

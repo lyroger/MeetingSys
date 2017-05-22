@@ -22,7 +22,8 @@
     if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
         self.imageIcon = [UIImageView new];
         self.imageIcon.contentMode = UIViewContentModeScaleAspectFill;
-        self.layer.cornerRadius = 30;
+        self.imageIcon.layer.cornerRadius = 30;
+        self.imageIcon.layer.masksToBounds = YES;
         [self.contentView addSubview:self.imageIcon];
         
         [self.imageIcon mas_makeConstraints:^(MASConstraintMaker *make) {

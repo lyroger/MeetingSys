@@ -1,6 +1,7 @@
 //  功能描述：常用宏定义
 
 /***common**/
+#import "Common_nofication.h"
 #import "AppDelegate.h"
 #import "Common_font.h"
 #import "Common_color.h"

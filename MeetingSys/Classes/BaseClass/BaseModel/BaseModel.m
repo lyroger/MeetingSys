@@ -391,7 +391,7 @@ static dispatch_once_t userOnceToken;
         [files enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
             NSDictionary *uploadInfo = obj;
             [formData appendPartWithFileData:uploadInfo.data
-                                        name:uploadInfo.name
+                                        name:@"picFile"
                                     fileName:uploadInfo.fileName
                                     mimeType:uploadInfo.mimeType];
         }];

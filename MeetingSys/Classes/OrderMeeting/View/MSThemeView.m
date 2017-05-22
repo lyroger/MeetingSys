@@ -29,9 +29,12 @@
         menuImage.image = [UIImage imageNamed:@"display_menu"];
         [self addSubview:menuImage];
         
-        self.portraitView = [UIButton buttonWithType:UIButtonTypeCustom];
-        [self.portraitView setBackgroundImage:[UIImage imageNamed:@"display_portrait"] forState:UIControlStateNormal];
-        [self.portraitView addTarget:self action:@selector(tapHeadAction) forControlEvents:UIControlEventTouchUpInside];
+        self.portraitView = [UIImageView new];
+        self.portraitView.contentMode = UIViewContentModeScaleAspectFill;
+        self.portraitView.clipsToBounds = YES;
+        self.portraitView.userInteractionEnabled = YES;
+        UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapHeadAction)];
+        [self.portraitView addGestureRecognizer:tap];
         [self addSubview:self.portraitView];
 
         

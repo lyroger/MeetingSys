@@ -16,9 +16,6 @@
 #import <UIKit/UIKit.h>
 #import <Foundation/Foundation.h>
 
-#define kUserTokenExpireNotification            @"tech.agate.meetingsys.usertokenexpire"         //token失效通知
-#define kLoginOutNotification                   @"tech.agate.meetingsys.loginout"                //退出通知
-
 #import "Common_define.h"
 #endif
 #endif /* MeetingSysPrefixHeader_pch */

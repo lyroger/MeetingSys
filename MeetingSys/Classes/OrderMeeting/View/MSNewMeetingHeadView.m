@@ -62,7 +62,7 @@
         }];
         
         themeNoPictures = [MSThemeView new];
-        [themeNoPictures.portraitView setBackgroundImage:[UIImage imageNamed:@"display_portrait_off"] forState:UIControlStateNormal];
+        themeNoPictures.portraitView.image = [UIImage imageNamed:@"display_portrait_off"];
         [borderBgView addSubview:themeNoPictures];
         
         [themeNoPictures mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -73,6 +73,7 @@
         }];
         
         themeLegend = [MSThemeView new];
+        [themeLegend.portraitView sd_setImageWithURL:kImageURLWithLastString([MSUserInfo shareUserInfo].headerImg) placeholderImage:[UIImage imageNamed:@"display_portrait"]];
         @weakify(self)
         themeLegend.clickHeadBlock = ^{
             @strongify(self)
@@ -95,7 +96,7 @@
 
 - (void)reloadHeadImage:(UIImage*)image
 {
-    [themeLegend.portraitView setBackgroundImage:image forState:UIControlStateNormal];
+    themeLegend.portraitView.image = image;
 }
 
 - (void)theme:(NSString*)theme hideImage:(BOOL)hide
@@ -105,7 +106,7 @@
         themeClassics.hidden = NO;
         themeNoPictures.hidden = YES;
         themeLegend.hidden = YES;
-    } else if ([theme isEqualToString:@"Legend"]) {
+    } else if ([theme isEqualToString:@"Legend"] || theme.length==0) {
         //legend主题
         themeClassics.hidden = YES;
         themeNoPictures.hidden = !hide;

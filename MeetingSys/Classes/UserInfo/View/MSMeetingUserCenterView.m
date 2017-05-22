@@ -49,7 +49,7 @@
         userInfoTableView.frame = CGRectMake(0, 0, kScreenWidth*2/3, kScreenHeight);
         
     } completion:^(BOOL finished) {
-        
+        [userInfoTableView reloadData];
     }];
 }
 
@@ -115,7 +115,7 @@
         if (indexPath.row == 0) {
             cell.labelTitle.hidden = YES;
             cell.imageIcon.hidden = NO;
-            [cell.imageIcon sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@,%@,%@",kServerHost,kServerCurrentPath,[MSUserInfo shareUserInfo].headerImg]] placeholderImage:[UIImage imageNamed:@"portrait_xiao"]];
+            [cell.imageIcon sd_setImageWithURL:kImageURLWithLastString([MSUserInfo shareUserInfo].headerImg) placeholderImage:[UIImage imageNamed:@"portrait_xiao"]];
         } else if (indexPath.row>0 && indexPath.row <= 4){
             cell.imageIcon.hidden = YES;
             cell.labelTitle.hidden = NO;
