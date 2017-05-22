@@ -10,5 +10,6 @@
 
 @interface MSRootViewController : MSBaseViewController
 
+- (void)checkAppUpdateOnBackgroud:(BOOL)back;
 - (void)handleNotification:(NSDictionary *)info isActive:(BOOL)isActive;
 @end

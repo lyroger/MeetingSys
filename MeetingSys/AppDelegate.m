@@ -28,6 +28,7 @@
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     self.window.backgroundColor = [UIColor whiteColor];
     [self authorizeOperation];
+    [self.rootViewController checkAppUpdateOnBackgroud:YES];
     [self.window makeKeyAndVisible];
     return YES;
 }
@@ -60,26 +61,18 @@
     }
 }
 
+- (MSRootViewController *)rootViewController
+{
+    if (!_rootViewController) {
+        _rootViewController = [[MSRootViewController alloc] init];
+    }
+    return _rootViewController;
+}
+
 - (void)enterRootView
 {
-    self.rootViewController = [[MSRootViewController alloc] init];
     MSNavigationController *rootNav = [[MSNavigationController alloc] initWithRootViewController:self.rootViewController];
     self.window.rootViewController = rootNav;
-    
-//    //如果登录页面存在，则做一个登录页面退场效果。
-//    if (self.loginVC) {
-//        [self.rootViewController.view addSubview:self.loginVC.view];
-//        self.loginVC.view.alpha = 1;
-//        self.loginVC.view.transform = CGAffineTransformMakeScale(1, 1);
-//        [UIView animateWithDuration:0.3 delay:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
-//            self.loginVC.view.alpha = 0;
-//            self.loginVC.view.transform = CGAffineTransformMakeScale(2.5, 2.5);
-//        } completion:^(BOOL finished) {
-//            [self.loginVC.view removeFromSuperview];
-//            self.loginVC = nil;
-//            NSLog(@"登录页面释放-动画结束");
-//        }];
-//    }
 }
 
 - (void)setupConfig {

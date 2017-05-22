@@ -608,26 +608,7 @@
         [self.navigationController pushViewController:updatePwdVC animated:YES];
     } else if (itemIndex == 2) {
         //檢查更新
-        [HUDManager showHUDWithMessage:@"版本檢測中..."];
-        [MSUserInfo checkVersionNetworkHUD:NetworkHUDError target:self success:^(StatusModel *data) {
-            [HUDManager hiddenHUD];
-            if (0 == data.code) {
-                BOOL isLatest = [[data.originalData objectForKey:@"isLatest"] boolValue];
-                BOOL force = [[data.originalData objectForKey:@"force"] boolValue];
-                NSString *url = [data.originalData objectForKey:@"url"];
-                if (!isLatest) {
-                    //提示跟新
-                    [UIAlertView alertWithCallBackBlock:^(NSInteger buttonIndex) {
-                        if (buttonIndex == 1) {
-                            [self openURL:url];
-                        }
-                    } title:@"提示" message:@"發現有新版本！" cancelButtonName:@"取消" otherButtonTitles:@"立即更新", nil];
-                    
-                } else {
-                    [HUDManager alertWithTitle:@"当前为最新版本"];
-                }
-            }
-        }];
+        [self checkAppUpdateOnBackgroud:NO];
     } else if (itemIndex == 3) {
         //註銷
         [UIAlertView alertWithCallBackBlock:^(NSInteger buttonIndex) {
@@ -640,7 +621,7 @@
 
 - (void)openURL:(NSString *)urlString
 {
-    urlString = [NSString stringWithFormat:@"itms-apps://itunes.apple.com/cn/app/jie-zou-da-shi/id493901993?mt=8"];
+//    urlString = [NSString stringWithFormat:@"itms-apps://itunes.apple.com/cn/app/jie-zou-da-shi/id493901993?mt=8"];
     NSURL * url = [NSURL URLWithString:urlString];
     
     if ([[UIApplication sharedApplication] canOpenURL:url])
@@ -651,6 +632,39 @@
     {
         NSLog(@"can not open");
     }
+}
+
+- (void)checkAppUpdateOnBackgroud:(BOOL)back
+{
+    //檢查更新
+    if (!back) {
+        [HUDManager showHUDWithMessage:@"版本檢測中..."];
+    }
+    [MSUserInfo checkVersionNetworkHUD:NetworkHUDBackground target:self success:^(StatusModel *data) {
+        [HUDManager hiddenHUD];
+        if (0 == data.code) {
+            BOOL isLatest = [[data.originalData objectForKey:@"isLatest"] boolValue];
+            BOOL force = [[data.originalData objectForKey:@"force"] boolValue];
+            NSString *url = [data.originalData objectForKey:@"url"];
+            if (!isLatest) {
+                //提示跟新
+                [UIAlertView alertWithCallBackBlock:^(NSInteger buttonIndex) {
+                    if (buttonIndex == 1) {
+                        [self openURL:url];
+                    }
+                } title:@"提示" message:@"發現有新版本！" cancelButtonName:@"取消" otherButtonTitles:@"立即更新", nil];
+                
+            } else {
+                if (!back) {
+                    [HUDManager alertWithTitle:@"当前为最新版本"];
+                }
+            }
+        } else {
+            if (!back) {
+                [HUDManager alertWithTitle:data.msg];
+            }
+        }
+    }];
 }
 
 - (void)userLoginOut

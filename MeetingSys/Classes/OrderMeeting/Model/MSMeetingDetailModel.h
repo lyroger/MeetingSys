@@ -47,6 +47,7 @@
 @property (nonatomic, copy) NSString *mtStatus;// 會議狀態  0-初始  1-正常結束  2- No show 3-已確認
 
 @property (nonatomic, copy) NSString *remindConent;//提醒內容
+@property (nonatomic, assign) NSInteger remindType;//提醒类型
 @property (nonatomic,strong) NSDate  *sendDate;//發送時間
 @property (nonatomic, copy) NSString *remindId;//提醒ID；
 

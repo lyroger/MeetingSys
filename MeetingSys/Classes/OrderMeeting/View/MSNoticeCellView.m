@@ -7,6 +7,7 @@
 //
 
 #import "MSNoticeCellView.h"
+#import "NSDate+Extension.h"
 
 @interface MSNoticeCellView()
 {
@@ -102,11 +103,30 @@
 
 - (void)data:(MSMeetingDetailModel*)dataModel
 {
-    imageIcon.image = [UIImage imageNamed:@"notice_icon_1"];
-    titleLabel.text = @"會議提醒";
+    imageIcon.image = [UIImage imageNamed:[NSString stringWithFormat:@"notice_icon_%zd",dataModel.remindType]];
+    titleLabel.text = [self remindTypeString:dataModel.remindType];
     contentLabel.text = dataModel.remindConent;
     timeLabel.text = [dataModel.beginTime dateWithFormat:@"yyyy-MM-dd HH:mm"];
-    noticeTimeLabel.text = [dataModel.sendDate dateWithFormat:@"yyyy-MM-dd HH:mm"];
+    noticeTimeLabel.text = [NSDate timeInfoWithDateString:[dataModel.sendDate dateWithFormat:@"yyyy-MM-dd HH:mm:ss"]];
+}
+
+- (NSString *)remindTypeString:(NSInteger)type
+{
+    switch (type) {
+        case 1:
+            return @"會議通知";
+            break;
+        case 2:
+            return @"會議提醒";
+            break;
+        case 3:
+            return @"會議終止通知";
+            break;
+            
+        default:
+            return @"會議提醒";
+            break;
+    }
 }
 
 + (CGFloat)noticeCellHeight

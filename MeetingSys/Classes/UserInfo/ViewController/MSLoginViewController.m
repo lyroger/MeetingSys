@@ -243,9 +243,6 @@
         make.left.mas_equalTo(labelAgree.mas_right).mas_offset(0);
         make.centerY.mas_equalTo(agreeButton.mas_centerY);
     }];
-    
-    userTextField.text = @"legend";
-    pwdTextField.text = @"123456";
 }
 
 - (void)agreeAction:(UIButton*)button
