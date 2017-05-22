@@ -218,20 +218,6 @@
             NSLog(@"result = %zd",result);
         }];
     }];
-    
-//    [HybridFrameModel registerAppAccountDevices:deviceTokenString registerId:registerId accountInfo:account success:^(StatusModel *data) {
-//        if (data.code == 0) {
-//            //注册成功
-//            [SHMUserInfo shareUserInfo].isRegisterPushInfo = YES;
-//        } else {
-//            [SHMUserInfo shareUserInfo].isRegisterPushInfo = NO;
-//        }
-//        
-//        SHMUserInfo *userInfo = [SHMUserInfo shareUserInfo];
-//        [[SHMUserInfo getUsingLKDBHelper] insertToDB:userInfo callback:^(BOOL result) {
-//            NSLog(@"result = %zd",result);
-//        }];
-//    }];
 }
 
 //实现注册APNs失败接口

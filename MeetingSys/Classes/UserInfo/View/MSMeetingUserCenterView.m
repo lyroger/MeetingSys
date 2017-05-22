@@ -122,7 +122,7 @@
             if (indexPath.row == 1) {
                 cell.labelTitle.font = kFontPingFangRegularSize(18);
                 cell.labelTitle.textColor = UIColorHex(0x333333);
-                cell.labelTitle.text = [MSUserInfo shareUserInfo].username;
+                cell.labelTitle.text = [MSUserInfo shareUserInfo].nickName;
             } else {
                 cell.labelTitle.font = kFontPingFangRegularSize(14);
                 cell.labelTitle.textColor = UIColorHex(0x888888);

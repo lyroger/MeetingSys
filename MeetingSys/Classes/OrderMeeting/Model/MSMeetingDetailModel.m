@@ -92,7 +92,7 @@
     DicValueSet(model.title, @"title");
     DicValueSet(@(model.meetingType), @"meetingType");
     DicValueSet([model.beginTime dateWithFormat:@"yyyy-MM-dd HH:mm"], @"stTime");
-    DicValueSet([model.endTime dateWithFormat:@"yyyy-MM-dd HH:mm"], @"endtime");
+    DicValueSet([model.endTime dateWithFormat:@"yyyy-MM-dd HH:mm"], @"endTime");
     DicValueSet(model.roomId, @"roomId");
     DicValueSet(model.organizeId, @"organizer");
     DicValueSet(model.organizeName, @"organizerName");

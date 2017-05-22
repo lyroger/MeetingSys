@@ -16,6 +16,19 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.title = @"協議";
+    self.view.backgroundColor = UIColorHex_Alpha(0x000000, 0.1);
+    
+    UIWebView *webView = [[UIWebView alloc] init];
+    webView.frame = CGRectMake(0, 0, self.view.frame.size.width, kScreenHeight-64);
+    webView.backgroundColor = UIColorHex(0xffffff);
+    
+    NSString *path = [[NSBundle mainBundle]pathForResource:@"agreement" ofType:@"html"];
+    NSURL* url = [NSURL fileURLWithPath:path];
+    NSURLRequest* request = [NSURLRequest requestWithURL:url] ;
+    [webView loadRequest:request];
+    
+    [self.view addSubview:webView];
     // Do any additional setup after loading the view.
 }
 

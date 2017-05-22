@@ -49,12 +49,13 @@
 {
     _userId = userInfo.userId;
     _username = userInfo.username;
+    _nickName = userInfo.nickName;
     _token = userInfo.token;
     _mobile = userInfo.mobile;
     _dpName = userInfo.dpName;
     _cpName = userInfo.cpName;
     _headerImg = userInfo.headerImg;
-    
+    _title = userInfo.title;
     _isRememberPwd = userInfo.isRememberPwd;
     _userAcount = userInfo.userAcount;
     _isRegisterPushInfo = userInfo.isRegisterPushInfo;

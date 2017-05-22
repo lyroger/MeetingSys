@@ -147,6 +147,7 @@
 		A71EC7441EC6F43500E22577 /* MSNewMeetingSelectCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A71EC7431EC6F43500E22577 /* MSNewMeetingSelectCell.m */; };
 		A71EC7471EC6F44700E22577 /* MSNewMeetingInputCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A71EC7461EC6F44700E22577 /* MSNewMeetingInputCell.m */; };
 		A71EC74A1EC6F47D00E22577 /* MSNewMeetingTimeCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A71EC7491EC6F47D00E22577 /* MSNewMeetingTimeCell.m */; };
+		A736CFF71ED2827600C9E762 /* agreement.html in Resources */ = {isa = PBXBuildFile; fileRef = A736CFF61ED2827600C9E762 /* agreement.html */; };
 		A7416AE51EC064F300E42EB0 /* MSNavTabbarView.m in Sources */ = {isa = PBXBuildFile; fileRef = A7416AE41EC064F300E42EB0 /* MSNavTabbarView.m */; };
 		A7416AE81EC0797C00E42EB0 /* MSOrderMeetingButtonView.m in Sources */ = {isa = PBXBuildFile; fileRef = A7416AE71EC0797C00E42EB0 /* MSOrderMeetingButtonView.m */; };
 		A7416AEB1EC0867300E42EB0 /* MSNoticeCellView.m in Sources */ = {isa = PBXBuildFile; fileRef = A7416AEA1EC0867300E42EB0 /* MSNoticeCellView.m */; };
@@ -473,6 +474,7 @@
 		A71EC7461EC6F44700E22577 /* MSNewMeetingInputCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSNewMeetingInputCell.m; sourceTree = "<group>"; };
 		A71EC7481EC6F47D00E22577 /* MSNewMeetingTimeCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSNewMeetingTimeCell.h; sourceTree = "<group>"; };
 		A71EC7491EC6F47D00E22577 /* MSNewMeetingTimeCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSNewMeetingTimeCell.m; sourceTree = "<group>"; };
+		A736CFF61ED2827600C9E762 /* agreement.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = agreement.html; sourceTree = "<group>"; };
 		A7416AE21EC05C7D00E42EB0 /* MeetingSys.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MeetingSys.entitlements; sourceTree = "<group>"; };
 		A7416AE31EC064F300E42EB0 /* MSNavTabbarView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSNavTabbarView.h; sourceTree = "<group>"; };
 		A7416AE41EC064F300E42EB0 /* MSNavTabbarView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSNavTabbarView.m; sourceTree = "<group>"; };
@@ -1366,6 +1368,7 @@
 		A789FCBB1EBC101B004CA763 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				A736CFF61ED2827600C9E762 /* agreement.html */,
 				A7416AE21EC05C7D00E42EB0 /* MeetingSys.entitlements */,
 				A789FCC71EBC101B004CA763 /* Assets.xcassets */,
 				A789FCCC1EBC101B004CA763 /* Info.plist */,
@@ -1504,6 +1507,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A789FCC81EBC101B004CA763 /* Assets.xcassets in Resources */,
+				A736CFF71ED2827600C9E762 /* agreement.html in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

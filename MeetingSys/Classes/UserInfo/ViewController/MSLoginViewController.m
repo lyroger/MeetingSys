@@ -294,6 +294,7 @@
                 //登录成功
                 MSUserInfo *userInfo = data.data;
                 userInfo.token = data.token;
+                userInfo.username = username;
                 userInfo.userAcount = username;
                 [[MSUserInfo shareUserInfo] setUserInfo:userInfo];
                 [[MSUserInfo getUsingLKDBHelper] insertToDB:userInfo callback:^(BOOL result) {

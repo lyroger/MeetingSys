@@ -12,6 +12,7 @@
 
 @property (nonatomic, copy) NSString *userId;           //用户ID
 @property (nonatomic, copy) NSString *username;         //用户姓名
+@property (nonatomic, copy) NSString *nickName;         //昵称
 @property (nonatomic, copy) NSString *mobile;            //手机号码
 @property (nonatomic, copy) NSString *token;            //用户token
 @property (nonatomic, copy) NSString *headerImg;           //用户头像

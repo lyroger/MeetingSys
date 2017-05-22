@@ -67,6 +67,12 @@
     [tableNoticeView registerClass:[MSMeetingDetailCell class] forCellReuseIdentifier:@"MSMeetingDetailCell"];
     [tableNoticeView registerClass:[MSNoticeCellView class] forCellReuseIdentifier:@"MSNoticeCellView"];
     [mainScrollView addSubview:tableNoticeView];
+    @weakify(self)
+    tableNoticeView.mj_header = [MJDIYHeader headerWithRefreshingBlock:^{
+        @strongify(self);
+        [self refreshNoticeData];
+    }];
+    
     
     tableAllMeetingView = [[UITableView alloc] initWithFrame:CGRectMake(kScreenWidth, 0, kScreenWidth, mainScrollView.height) style:UITableViewStylePlain];
     tableAllMeetingView.backgroundColor = UIColorHex(0xf6f6f6);
@@ -76,7 +82,7 @@
     [tableAllMeetingView registerClass:[MSMeetingListCell class] forCellReuseIdentifier:@"MSMeetingListCell"];
     [tableAllMeetingView registerClass:[MSAllMeetingDetailCell class] forCellReuseIdentifier:@"MSAllMeetingDetailCell"];
     tableAllMeetingView.tableHeaderView = self.todayMeetingView;
-    @weakify(self)
+    
     tableAllMeetingView.mj_header = [MJDIYHeader headerWithRefreshingBlock:^{
         @strongify(self);
         [self refreshAllMeetingData];
@@ -103,6 +109,11 @@
         make.left.right.bottom.equalTo(@0);
         make.height.equalTo(@50);
     }];
+}
+
+- (void)refreshNoticeData
+{
+    
 }
 
 - (void)refreshAllMeetingData
@@ -594,10 +605,6 @@
 
 - (void)userLoginOut
 {
-    [MSUserInfo loginOutNetworkHUD:NetworkHUDLockScreen target:self success:^(StatusModel *data) {
-        
-    }];
-    
     //注销推送信息
     NSString *deviceTokenString = [[[[[[MSUserInfo shareUserInfo] getDeviceToken] description]
                                      stringByReplacingOccurrencesOfString:@"<"withString:@""]
@@ -608,6 +615,10 @@
     NSString *registerId = jPushRegistrationID.length?jPushRegistrationID:@"";
     deviceTokenString = deviceTokenString.length?deviceTokenString:@"";
     [MSUserInfo unRegisterPush:registerId deviceToken:deviceTokenString target:self success:^(StatusModel *data) {
+        
+    }];
+    
+    [MSUserInfo loginOutNetworkHUD:NetworkHUDLockScreen target:self success:^(StatusModel *data) {
         
     }];
     
