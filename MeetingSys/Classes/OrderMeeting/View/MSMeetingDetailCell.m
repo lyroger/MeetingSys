@@ -50,7 +50,7 @@
         [bgContentView addSubview:meetingDemandView];
         
         topShadowImageView = [UIImageView new];
-        topShadowImageView.hidden = YES;
+//        topShadowImageView.hidden = YES;
         topShadowImageView.image = [UIImage imageNamed:@"shadow_top"];
         [bgContentView addSubview:topShadowImageView];
         

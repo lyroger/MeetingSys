@@ -122,6 +122,9 @@
 {
     placeholderLabel.hidden = textV.text.length;
     NSString *text = [textV.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+    if (text.length > 1000) {
+        text = [text substringWithRange:NSMakeRange(0, 1000)];
+    }
     if (self.inputBlock) {
         self.inputBlock(text);
     }
@@ -130,6 +133,9 @@
 - (void)textFieldTextDidChange:(NSNotificationCenter*)note
 {
     NSString *text = [textField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+    if (text.length > 50) {
+        text = [text substringWithRange:NSMakeRange(0, 50)];
+    }
     if (self.inputBlock) {
         self.inputBlock(text);
     }

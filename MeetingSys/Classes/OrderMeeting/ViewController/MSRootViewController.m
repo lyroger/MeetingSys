@@ -315,7 +315,11 @@
         lastViewToDayDetailIndex = -1;
         [tableAllMeetingView reloadData];
     } else {
-        MSDayGroupList *dayGroupList = [self.allMeetingModel.dayGroupList objectAtIndex:indexPath.section];
+        NSInteger section = indexPath.section;
+        if (isViewToDayDetail) {
+            section = section - 1;
+        }
+        MSDayGroupList *dayGroupList = [self.allMeetingModel.dayGroupList objectAtIndex:section];
         MSMeetingDetailModel *dayDetailModel = [dayGroupList.list objectAtIndex:indexPath.row-1];
         dayDetailModel.isUnfold = NO;
         
@@ -389,7 +393,7 @@
                 MSMeetingDetailModel *copyDetail = [dayDetailModel copy];
                 copyDetail.isDetail = YES;
                 [dayGroupList.list insertObject:copyDetail atIndex:row+1];
-                NSIndexPath *indexP = [NSIndexPath indexPathForRow:row+1 inSection:section];
+                NSIndexPath *indexP = [NSIndexPath indexPathForRow:row+1 inSection:indexPath.section];
                 [tableView insertRowsAtIndexPaths:@[indexP] withRowAnimation:UITableViewRowAnimationFade];
                 
                 [self loadMemberHeadImageWithMeetingDetailModel:dayDetailModel copyDetailModel:copyDetail];
