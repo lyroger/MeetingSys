@@ -14,6 +14,8 @@
 {
     UIView *bgContentView;
     
+    MSTitleAndDetailView *contentDetailView;
+    
     MSTitleAndDetailView *beginTimeView;
     MSTitleAndDetailView *endTimeView;
     

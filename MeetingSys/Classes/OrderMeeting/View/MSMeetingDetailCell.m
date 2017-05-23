@@ -28,6 +28,9 @@
         bgContentView.backgroundColor = UIColorHex(0xffffff);
         [self.contentView addSubview:bgContentView];
         
+        contentDetailView = [MSTitleAndDetailView new];
+        [bgContentView addSubview:bgContentView];
+        
         beginTimeView = [MSTitleAndDetailView new];
         [bgContentView addSubview:beginTimeView];
         
@@ -57,13 +60,19 @@
             make.top.bottom.equalTo(@0);
         }];
         
+        [contentDetailView mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.left.right.equalTo(@0);
+            make.top.equalTo(@0);
+            make.bottom.equalTo(beginTimeView.mas_top);
+        }];
+        
         [topShadowImageView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.top.left.right.equalTo(@0);
             make.height.equalTo(@6);
         }];
         
         [beginTimeView mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.left.top.equalTo(@0);
+            make.left.top.equalTo(contentDetailView.mas_bottom);
             make.height.equalTo(@70);
             make.width.mas_equalTo(self.contentView.mas_width).multipliedBy(0.5);
         }];
@@ -79,7 +88,7 @@
         }];
         
         [endTimeView mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.right.top.equalTo(@0);
+            make.right.top.equalTo(contentDetailView.mas_bottom);
             make.height.equalTo(@70);
             make.width.mas_equalTo(self.contentView.mas_width).multipliedBy(0.5);
         }];

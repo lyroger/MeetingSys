@@ -15,7 +15,7 @@
 }
 
 @property (nonatomic, weak) id<MSNoticeDetailCellDelegate> delegate;
-
+- (void)data:(MSMeetingDetailModel*)model;
 @end
 
 @protocol MSNoticeDetailCellDelegate <NSObject>

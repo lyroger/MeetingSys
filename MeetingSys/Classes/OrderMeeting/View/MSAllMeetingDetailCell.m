@@ -54,6 +54,9 @@
 
 - (void)data:(MSMeetingDetailModel*)model
 {
+    contentDetailView.titleLabel.text = @"會議主題";
+    contentDetailView.detailLabel.text = model.title;
+    
     beginTimeView.titleLabel.text = @"會議開始時間";
     beginTimeView.detailLabel.text = [model.beginTime dateWithFormat:@"HH:mm"];
     
@@ -75,7 +78,9 @@
 + (CGFloat)meetingDetailHeight:(MSMeetingDetailModel*)model
 {
     CGFloat agendaHeight = [MSTitleAndDetailView titleAndDetailViewHeight:model.agenda width:kScreenWidth-10*2];
-    CGFloat tottalHeight = 70+70+127+agendaHeight+[MSTitleAndDetailView titleAndDetailViewHeight:model.demand width:kScreenWidth-10*2] + 114;
+    CGFloat contentHeight = [MSTitleAndDetailView titleAndDetailViewHeight:model.title width:kScreenWidth-10*2];
+    contentHeight = contentHeight>70?contentHeight:70;
+    CGFloat tottalHeight = 70+70+127+agendaHeight+[MSTitleAndDetailView titleAndDetailViewHeight:model.demand width:kScreenWidth-10*2] + 114 + contentHeight;
     return tottalHeight;
 }
 

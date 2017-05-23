@@ -45,10 +45,18 @@
     return self;
 }
 
+- (void)data:(MSMeetingDetailModel*)model
+{
+    [super data:model];
+    contentDetailView.titleLabel.text = @"提醒內容";
+    contentDetailView.detailLabel.text = model.remindConent;
+}
+
 + (CGFloat)meetingDetailHeight:(MSMeetingDetailModel*)model
 {
     CGFloat agendaHeight = [MSTitleAndDetailView titleAndDetailViewHeight:model.agenda width:kScreenWidth-10*2];
-    CGFloat tottalHeight = 70+70+127+agendaHeight+[MSTitleAndDetailView titleAndDetailViewHeight:model.demand width:kScreenWidth-10*2] + 114;
+    CGFloat remindContentHeight = [MSTitleAndDetailView titleAndDetailViewHeight:model.remindConent width:kScreenWidth-10*2];
+    CGFloat tottalHeight = 70+70+127+agendaHeight+[MSTitleAndDetailView titleAndDetailViewHeight:model.demand width:kScreenWidth-10*2] + 114 + remindContentHeight;
     return tottalHeight;
 }
 

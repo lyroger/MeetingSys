@@ -2,20 +2,6 @@
 # platform :ios, '9.0'
 
 target ‘MeetingSys’ do
-    
-#    target 'MeNoteTests' do
-#        inherit! :search_paths
-#        # Pods for testing
-#    end
-#
-#    target 'MeNoteUITests' do
-#        inherit! :search_paths
-#        # Pods for testing
-#    end
-  # Uncomment the next line if you're using Swift or would like to use dynamic frameworks
-  # use_frameworks!
-
-  # Pods for MeNote
   pod 'Masonry'
   pod 'AFNetworking'
   pod 'FMDB/SQLCipher'
