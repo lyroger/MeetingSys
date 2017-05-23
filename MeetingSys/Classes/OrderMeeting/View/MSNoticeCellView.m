@@ -11,6 +11,8 @@
 
 @interface MSNoticeCellView()
 {
+    UIImageView *bgImageView;
+    
     UIView      *bgContentView;
     UIImageView *imageIcon;
     UILabel     *titleLabel;
@@ -27,12 +29,14 @@
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {
     if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
+        
         bgContentView = [UIView new];
-        bgContentView.layer.shadowColor = UIColorHex(0xf6f6f6).CGColor;
-        bgContentView.layer.shadowOffset = CGSizeMake(1, 5);// 阴影的范围
-        bgContentView.layer.shadowOpacity = 0.8;// 阴影透明度
         bgContentView.backgroundColor = UIColorHex(0xffffff);
         [self.contentView addSubview:bgContentView];
+        
+        bgImageView = [UIImageView new];
+        bgImageView.image = [UIImage imageNamed:@"shadow"];
+        [bgContentView addSubview:bgImageView];
         
         imageIcon = [UIImageView new];
         [bgContentView addSubview:imageIcon];
@@ -64,6 +68,10 @@
             make.left.equalTo(@10);
             make.right.equalTo(@(-10));
             make.top.bottom.equalTo(@0);
+        }];
+        
+        [bgImageView mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.edges.mas_equalTo(UIEdgeInsetsMake(-8, -8, -8, -8));
         }];
         
         [imageIcon mas_makeConstraints:^(MASConstraintMaker *make) {

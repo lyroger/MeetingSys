@@ -98,7 +98,7 @@
     
     NSString *password = [[MSUserInfo shareUserInfo] getPassword];
     pwdTextField = [UITextField new];
-    pwdTextField.placeholder = @"請輸入密碼（8﹣12位）";
+    pwdTextField.placeholder = @"請輸入密碼";
     pwdTextField.clearButtonMode = UITextFieldViewModeWhileEditing;
     pwdTextField.secureTextEntry = YES;
     pwdTextField.returnKeyType = UIReturnKeyDone;
@@ -141,6 +141,7 @@
     agreeButton = [UIButton buttonWithType:UIButtonTypeCustom];
     agreeButton.tag = 100;
     [agreeButton setImage:[UIImage imageNamed:@"login_agreement_off"] forState:UIControlStateNormal];
+    agreeButton.imageEdgeInsets = UIEdgeInsetsMake(5, 6, 7, 6);
     [agreeButton addTarget:self action:@selector(agreeAction:) forControlEvents:UIControlEventTouchUpInside];
     [loginActionContentView addSubview:agreeButton];
     
@@ -155,6 +156,7 @@
     agreeDetailButton.titleLabel.font = kFontSize(12);
     [agreeDetailButton setTitleColor:UIColorHex(0xFFA200) forState:UIControlStateNormal];
     [agreeDetailButton setTitle:@"《協議》" forState:UIControlStateNormal];
+    agreeDetailButton.titleEdgeInsets = UIEdgeInsetsMake(6, 6, 6, 6);
     [agreeDetailButton addTarget:self action:@selector(agreeAction:) forControlEvents:UIControlEventTouchUpInside];
     [loginActionContentView addSubview:agreeDetailButton];
     /**
@@ -228,20 +230,21 @@
     
     //同意協議
     [agreeButton mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(loginButton);
+        make.left.equalTo(loginButton).mas_offset(-6);
         make.top.mas_equalTo(loginButton.mas_bottom).mas_offset(10);
-        make.size.mas_equalTo(CGSizeMake(18, 18));
+        make.size.mas_equalTo(CGSizeMake(30, 30));
     }];
     
     [labelAgree mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.mas_equalTo(agreeButton.mas_right).mas_offset(5);
-        make.centerY.mas_equalTo(agreeButton.mas_centerY);
+        make.left.mas_equalTo(agreeButton.mas_right).mas_offset(0);
+        make.centerY.mas_equalTo(agreeButton.mas_centerY).mas_offset(-1);
         make.size.mas_equalTo(CGSizeMake(25, 22));
     }];
     
     [agreeDetailButton mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.mas_equalTo(labelAgree.mas_right).mas_offset(0);
+        make.left.mas_equalTo(labelAgree.mas_right).mas_offset(-10);
         make.centerY.mas_equalTo(agreeButton.mas_centerY);
+        make.width.mas_equalTo(70);
     }];
 }
 
@@ -255,7 +258,7 @@
         } else {
             [agreeButton setImage:[UIImage imageNamed:@"login_agreement_off"] forState:UIControlStateNormal];
         }
-        [self textFieldTextDidChange:nil];
+        loginButton.enabled = [self verifyEnableLogin];
     } else if (button.tag == 101) {
         //進入協議詳情
         MSAgreementViewController *agreeVC = [[MSAgreementViewController alloc] init];
@@ -284,7 +287,7 @@
     NSString *username = [userTextField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
     NSString *password = [pwdTextField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
     
-    if (username.length > 0 && password.length > 0) {
+    if (username.length > 0 && password.length > 0 && password.length <= 20) {
         DLog(@"账号密码格式正确");
         [MSUserInfo loginWithLoginId:username password:password networkHUD:NetworkHUDLockScreenAndError target:self success:^(StatusModel *data) {
             if (data.code == 0) {
@@ -303,11 +306,8 @@
                 if (self.loginCompleteBlock) {
                     self.loginCompleteBlock(YES);
                 }
-                
             }
         }];
-    } else {
-        DLog(@"请输入8位长度的密码");
     }
 }
 
@@ -331,7 +331,7 @@
 {
     NSString *username = [userTextField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
     NSString *password = [pwdTextField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
-    if (username.length > 0 && password.length > 0 && isAgreement) {
+    if (username.length > 0 && password.length > 0 && isAgreement && password.length <=20) {
         return YES;
     } else {
         return NO;

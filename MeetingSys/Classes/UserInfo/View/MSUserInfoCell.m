@@ -39,6 +39,7 @@
         
         [self.labelTitle mas_makeConstraints:^(MASConstraintMaker *make) {
             make.center.equalTo(self);
+            make.height.equalTo(@22);
         }];
         
     }

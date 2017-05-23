@@ -10,7 +10,7 @@
 
 @interface MSMeetingDetailCell()
 {
-    
+    UIImageView *topShadowImageView;
 }
 
 @end
@@ -20,6 +20,7 @@
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {
     if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
+
         bgContentView = [UIView new];
         bgContentView.layer.shadowColor = UIColorHex(0xf6f6f6).CGColor;
         bgContentView.layer.shadowOffset = CGSizeMake(1, 5);// 阴影的范围
@@ -45,10 +46,20 @@
         meetingDemandView = [MSTitleAndDetailView new];
         [bgContentView addSubview:meetingDemandView];
         
+        topShadowImageView = [UIImageView new];
+        topShadowImageView.hidden = YES;
+        topShadowImageView.image = [UIImage imageNamed:@"shadow_top"];
+        [bgContentView addSubview:topShadowImageView];
+        
         [bgContentView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.left.equalTo(@10);
             make.right.equalTo(@(-10));
             make.top.bottom.equalTo(@0);
+        }];
+        
+        [topShadowImageView mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.top.left.right.equalTo(@0);
+            make.height.equalTo(@6);
         }];
         
         [beginTimeView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -99,6 +110,11 @@
         
     }
     return self;
+}
+
+- (void)showTopShadow:(BOOL)show
+{
+    topShadowImageView.hidden = !show;
 }
 
 - (void)data:(MSMeetingDetailModel*)model

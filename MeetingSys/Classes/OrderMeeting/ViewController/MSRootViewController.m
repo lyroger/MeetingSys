@@ -290,6 +290,7 @@
     return otherUnfoldSection;
 }
 
+//通知-详情中-点击我知道了
 - (void)didClickNoticeDetailSureActionCell:(MSNoticeDetailCell *)cell
 {
     NSIndexPath *indexPath = [tableNoticeView indexPathForCell:cell];
@@ -299,10 +300,12 @@
             NSLog(@"設置已讀成功");
         }
     }];
-    model.isUnfold = !model.isUnfold;
-    [tableNoticeView reloadSections:[NSIndexSet indexSetWithIndex:indexPath.section] withRowAnimation:UITableViewRowAnimationFade];
+    //直接删除
+    [self.noticeArray removeObject:model];
+    [tableNoticeView deleteSections:[NSIndexSet indexSetWithIndex:indexPath.section] withRowAnimation:UITableViewRowAnimationFade];
 }
 
+//所有会议-详情中-点击确定
 - (void)didClickSureActionCell:(MSAllMeetingDetailCell*)cell
 {
     NSIndexPath *indexPath = [tableAllMeetingView indexPathForCell:cell];
@@ -318,9 +321,9 @@
         [dayGroupList.list removeObjectAtIndex:indexPath.row];
         [tableAllMeetingView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
     }
-    
 }
 
+//所有会议-当天会议
 - (void)didClickToDayMeetingView:(MSTodayMeetingView *)view itemIndex:(NSInteger)index
 {
     if (index == lastViewToDayDetailIndex) {
@@ -333,6 +336,7 @@
     [tableAllMeetingView reloadData];
 }
 
+//所有会议-当天滚动时触发
 - (void)scrollEndToDayMeetingView:(MSTodayMeetingView*)view itemIndex:(NSInteger)index
 {
     if (isViewToDayDetail) {
@@ -511,6 +515,7 @@
     if (tableView == tableNoticeView) {
         MSNoticeCellView *cell = [tableView dequeueReusableCellWithIdentifier:@"MSNoticeCellView"];
         cell.backgroundColor = tableNoticeView.backgroundColor;
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
         MSMeetingDetailModel *model = [self.noticeArray objectAtIndex:indexPath.section];
         if (model.isUnfold) {
             //考慮一個列表和一個詳情
@@ -518,6 +523,7 @@
                 [cell data:model];
             } else {
                 MSNoticeDetailCell *detailCell = [tableView dequeueReusableCellWithIdentifier:@"MSNoticeDetailCell"];
+                [detailCell showTopShadow:YES];
                 detailCell.delegate = self;
                 detailCell.selectionStyle = UITableViewCellSeparatorStyleNone;
                 detailCell.backgroundColor = tableNoticeView.backgroundColor;
@@ -767,6 +773,7 @@
         } title:@"您有新的會議提醒" message:apsMsg.aps.alert cancelButtonName:@"我知道了" otherButtonTitles:nil];
     }
     
+    [self refreshNoticeData];
 }
 
 - (void)didReceiveMemoryWarning {

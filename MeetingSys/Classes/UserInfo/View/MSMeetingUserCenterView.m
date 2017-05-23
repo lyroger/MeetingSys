@@ -132,7 +132,7 @@
                 cell.labelTitle.text = [MSUserInfo shareUserInfo].title;
             } else if (indexPath.row == 3) {
                 cell.labelTitle.text = [MSUserInfo shareUserInfo].cpName;
-            } else {
+            } else if (indexPath.row == 4){
                 cell.labelTitle.text = [MSUserInfo shareUserInfo].dpName;
             }
             

@@ -41,7 +41,7 @@
     [repeatPwdView title:@"確認密碼" placeholder:@"請確認密碼"];
     
     UILabel *tipsLabel = [[UILabel alloc] initWithFrame:CGRectMake(15, repeatPwdView.origin.y+repeatPwdView.height+30, kScreenWidth-15*2, 25)];
-    tipsLabel.text = @"注意事項：密碼長度為6到16位長度";
+    tipsLabel.text = @"注意事項：密碼長度為1到20位長度";
     tipsLabel.font = kFontPingFangRegularSize(12);
     tipsLabel.textColor = UIColorHex(0xbbbbbb);
     [self.view addSubview:tipsLabel];
@@ -73,12 +73,12 @@
                                                             NSString *repeatPwd
                                                             ){
 
-                                                       if (   oldPwd.length >= 6
-                                                           && oldPwd.length <= 16
-                                                           && newPwd.length >= 6
-                                                           && newPwd.length <= 16
-                                                           && repeatPwd.length >=6
-                                                           && repeatPwd.length <= 16
+                                                       if (   oldPwd.length >= 1
+                                                           && oldPwd.length <= 20
+                                                           && newPwd.length >= 1
+                                                           && newPwd.length <= 20
+                                                           && repeatPwd.length >=1
+                                                           && repeatPwd.length <= 20
                                                            && [newPwd isEqualToString:repeatPwd]) {
                                                            return @(YES);
                                                        } else {
