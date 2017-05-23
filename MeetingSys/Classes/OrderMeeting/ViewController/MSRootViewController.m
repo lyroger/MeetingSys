@@ -134,6 +134,7 @@
             [self.noticeArray addObjectsFromArray:notices];
             
             if (self.noticeArray.count) {
+                [self loadMember:self.noticeArray];
                 [self hideTipsView];
             } else {
                 [self showLoadTips:@"您暫時還沒有提醒！" type:ErrorTipsType_NoData superView:tableNoticeView frame:CGRectMake(0, 0, kScreenWidth, mainScrollView.height)];
@@ -358,6 +359,7 @@
         if (indexPath.row == 0) {
             model.isUnfold = !model.isUnfold;
             [tableNoticeView reloadSections:[NSIndexSet indexSetWithIndex:indexPath.section] withRowAnimation:UITableViewRowAnimationFade];
+            [self loadMemberHeadImageWithMeetingDetailModel:model copyDetailModel:nil];
         }
         //收起其他展开项目
         NSInteger otherUnfoldSecion = [self fetchOtherUnfoldCell:indexPath.section];

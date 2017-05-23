@@ -36,8 +36,8 @@
         [self.detailLabel mas_makeConstraints:^(MASConstraintMaker *make) {
             make.centerX.equalTo(self);
             make.left.right.equalTo(@0);
-            make.top.mas_equalTo(self.titleLabel.mas_bottom).mas_offset(10);
-            make.bottom.equalTo(@(-14));
+            make.top.mas_equalTo(self.titleLabel.mas_bottom).mas_offset(8);
+            make.bottom.equalTo(@(-12));
         }];
         
         self.bottomLine = [UILabel new];
@@ -55,7 +55,7 @@
 + (CGFloat)titleAndDetailViewHeight:(NSString*)detail width:(CGFloat)width
 {
     CGFloat detailHeight = [detail heightWithFont:kFontPingFangRegularSize(14) constrainedToWidth:width];
-    CGFloat totalHeight = 16 + 14 + 10 + detailHeight + 16;
+    CGFloat totalHeight = 16 + 14 + 8 + detailHeight + 12;
     return totalHeight;
 }
 

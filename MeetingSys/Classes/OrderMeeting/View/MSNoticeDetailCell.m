@@ -55,8 +55,10 @@
 + (CGFloat)meetingDetailHeight:(MSMeetingDetailModel*)model
 {
     CGFloat agendaHeight = [MSTitleAndDetailView titleAndDetailViewHeight:model.agenda width:kScreenWidth-10*2];
+    CGFloat demandHeight = [MSTitleAndDetailView titleAndDetailViewHeight:model.demand width:kScreenWidth-10*2];
     CGFloat remindContentHeight = [MSTitleAndDetailView titleAndDetailViewHeight:model.remindConent width:kScreenWidth-10*2];
-    CGFloat tottalHeight = 70+70+127+agendaHeight+[MSTitleAndDetailView titleAndDetailViewHeight:model.demand width:kScreenWidth-10*2] + 114 + remindContentHeight;
+       
+    CGFloat tottalHeight = 70+70+127+agendaHeight+demandHeight + 114 + remindContentHeight;
     return tottalHeight;
 }
 

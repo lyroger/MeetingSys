@@ -22,14 +22,14 @@
     if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
 
         bgContentView = [UIView new];
-        bgContentView.layer.shadowColor = UIColorHex(0xf6f6f6).CGColor;
-        bgContentView.layer.shadowOffset = CGSizeMake(1, 5);// 阴影的范围
-        bgContentView.layer.shadowOpacity = 0.8;// 阴影透明度
+//        bgContentView.layer.shadowColor = UIColorHex(0xf6f6f6).CGColor;
+//        bgContentView.layer.shadowOffset = CGSizeMake(1, 5);// 阴影的范围
+//        bgContentView.layer.shadowOpacity = 0.8;// 阴影透明度
         bgContentView.backgroundColor = UIColorHex(0xffffff);
         [self.contentView addSubview:bgContentView];
         
         contentDetailView = [MSTitleAndDetailView new];
-        [bgContentView addSubview:bgContentView];
+        [bgContentView addSubview:contentDetailView];
         
         beginTimeView = [MSTitleAndDetailView new];
         [bgContentView addSubview:beginTimeView];
@@ -72,7 +72,8 @@
         }];
         
         [beginTimeView mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.left.top.equalTo(contentDetailView.mas_bottom);
+            make.left.equalTo(contentDetailView);
+            make.top.equalTo(contentDetailView.mas_bottom);
             make.height.equalTo(@70);
             make.width.mas_equalTo(self.contentView.mas_width).multipliedBy(0.5);
         }];
@@ -82,13 +83,14 @@
         [bgContentView addSubview:midLine];
         [midLine mas_makeConstraints:^(MASConstraintMaker *make) {
             make.centerX.equalTo(self);
-            make.top.mas_equalTo(16);
+            make.top.equalTo(contentDetailView.mas_bottom).mas_offset(16);
             make.height.mas_equalTo(70-16*2);
             make.width.mas_equalTo(0.6);
         }];
         
         [endTimeView mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.right.top.equalTo(contentDetailView.mas_bottom);
+            make.right.equalTo(contentDetailView);
+            make.top.equalTo(contentDetailView.mas_bottom);
             make.height.equalTo(@70);
             make.width.mas_equalTo(self.contentView.mas_width).multipliedBy(0.5);
         }];
