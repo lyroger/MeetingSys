@@ -165,6 +165,7 @@
 		A789FCC81EBC101B004CA763 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A789FCC71EBC101B004CA763 /* Assets.xcassets */; };
 		A7949C341ED6B718005B8BE8 /* MSSearchHeadMemberView.m in Sources */ = {isa = PBXBuildFile; fileRef = A7949C331ED6B718005B8BE8 /* MSSearchHeadMemberView.m */; };
 		A7949C371ED6B932005B8BE8 /* MSMemberCollectionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A7949C361ED6B932005B8BE8 /* MSMemberCollectionCell.m */; };
+		A7949C3A1ED6CFBF005B8BE8 /* MSSearchBottomView.m in Sources */ = {isa = PBXBuildFile; fileRef = A7949C391ED6CFBF005B8BE8 /* MSSearchBottomView.m */; };
 		A7CF8E871ED31276000DE508 /* APSModel.m in Sources */ = {isa = PBXBuildFile; fileRef = A7CF8E861ED31276000DE508 /* APSModel.m */; };
 		A7D79CA41ECD370D00549F67 /* SHMSelectActionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A7D79CA11ECD370D00549F67 /* SHMSelectActionCell.m */; };
 		A7D79CA51ECD370D00549F67 /* SHMSelectActionView.m in Sources */ = {isa = PBXBuildFile; fileRef = A7D79CA31ECD370D00549F67 /* SHMSelectActionView.m */; };
@@ -514,6 +515,8 @@
 		A7949C331ED6B718005B8BE8 /* MSSearchHeadMemberView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSSearchHeadMemberView.m; sourceTree = "<group>"; };
 		A7949C351ED6B932005B8BE8 /* MSMemberCollectionCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSMemberCollectionCell.h; sourceTree = "<group>"; };
 		A7949C361ED6B932005B8BE8 /* MSMemberCollectionCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSMemberCollectionCell.m; sourceTree = "<group>"; };
+		A7949C381ED6CFBF005B8BE8 /* MSSearchBottomView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSSearchBottomView.h; sourceTree = "<group>"; };
+		A7949C391ED6CFBF005B8BE8 /* MSSearchBottomView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSSearchBottomView.m; sourceTree = "<group>"; };
 		A7CF8E851ED31276000DE508 /* APSModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APSModel.h; sourceTree = "<group>"; };
 		A7CF8E861ED31276000DE508 /* APSModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APSModel.m; sourceTree = "<group>"; };
 		A7D79CA01ECD370D00549F67 /* SHMSelectActionCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SHMSelectActionCell.h; sourceTree = "<group>"; };
@@ -1316,6 +1319,8 @@
 				A7949C361ED6B932005B8BE8 /* MSMemberCollectionCell.m */,
 				A7949C321ED6B718005B8BE8 /* MSSearchHeadMemberView.h */,
 				A7949C331ED6B718005B8BE8 /* MSSearchHeadMemberView.m */,
+				A7949C381ED6CFBF005B8BE8 /* MSSearchBottomView.h */,
+				A7949C391ED6CFBF005B8BE8 /* MSSearchBottomView.m */,
 			);
 			name = NewMeeting;
 			sourceTree = "<group>";
@@ -1701,6 +1706,7 @@
 				A7186FA21EBC219F00DE4B67 /* UIDevice+Hardware.m in Sources */,
 				A7186F791EBC219F00DE4B67 /* NSString+Base64.m in Sources */,
 				A7186FBD1EBC219F00DE4B67 /* UIView+Frame.m in Sources */,
+				A7949C3A1ED6CFBF005B8BE8 /* MSSearchBottomView.m in Sources */,
 				A7186F8A1EBC219F00DE4B67 /* NSTimer+Addition.m in Sources */,
 				A789FCC01EBC101B004CA763 /* AppDelegate.m in Sources */,
 				A71EC7441EC6F43500E22577 /* MSNewMeetingSelectCell.m in Sources */,

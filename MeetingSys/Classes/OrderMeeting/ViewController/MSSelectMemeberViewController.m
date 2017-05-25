@@ -11,8 +11,9 @@
 #import "MSSelMemberCell.h"
 #import "MSMeetingDetailModel.h"
 #import "MSSearchHeadMemberView.h"
+#import "MSSearchBottomView.h"
 
-@interface MSSelectMemeberViewController ()<UISearchBarDelegate,UITableViewDelegate,UITableViewDataSource,MSMemberCollectionCellViewDelegate>
+@interface MSSelectMemeberViewController ()<UISearchBarDelegate,UITableViewDelegate,UITableViewDataSource,MSMemberCollectionCellViewDelegate,MSSearchBottomViewDelegate>
 {
     UISearchBar *_searchBar;
     NSInteger page;
@@ -22,6 +23,7 @@
 @property (nonatomic, strong) NSMutableArray *members;
 @property (nonatomic, strong) MSSearchHeadMemberView   *headMemberView;
 @property (nonatomic, assign) NSInteger      selectedItemCount;
+@property (nonatomic, strong) MSSearchBottomView *bottomView;
 
 @end
 
@@ -87,6 +89,21 @@
             self.headMemberView.dataSources = self.selectedMemebers;
             [self.headMemberView reloadView];
         }
+        
+        //加载底部预约按钮
+        self.bottomView = [MSSearchBottomView new];
+        self.bottomView.backgroundColor = UIColorHex(0xffffff);
+        self.bottomView.delegate = self;
+        self.bottomView.layer.shadowColor = UIColorHex_Alpha(0x000000, 0.05).CGColor;
+        self.bottomView.layer.shadowOpacity = 1;
+        self.bottomView.layer.shadowOffset = CGSizeMake(0, -5);
+        [self.view addSubview:self.bottomView];
+        
+        [self.bottomView mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.left.right.bottom.equalTo(@0);
+            make.height.equalTo(@50);
+        }];
+        
     } else {
         self.title = @"選擇組織者";
     }
@@ -94,9 +111,15 @@
 
 - (CGRect)getTableViewFrame
 {
-    CGRect tableFrame = CGRectMake(0, 46, kScreenWidth,kScreenHeight-64-50);
-    if (self.selectedMemebers.count && self.memberType == MSSelectMemeber_Others) {
-        tableFrame = CGRectMake(0, 46+127, kScreenWidth,kScreenHeight-64-50);
+    CGRect tableFrame = CGRectZero;
+    if (self.memberType == MSSelectMemeber_Others) {
+        if (self.selectedMemebers.count) {
+            tableFrame = CGRectMake(0, 46+127, kScreenWidth,kScreenHeight-64-50-127);
+        } else {
+            tableFrame = CGRectMake(0, 46, kScreenWidth,kScreenHeight-64-46-50);
+        }
+    } else {
+        tableFrame = CGRectMake(0, 46, kScreenWidth,kScreenHeight-64-46);
     }
     return tableFrame;
 }
@@ -121,6 +144,7 @@
 {
     NSString *keyInfo = [_searchBar.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
     if (keyInfo.length) {
+        [self.bottomView setSelectedAllStatus:NO];
         [self.memberTableView.mj_header beginRefreshing];
     } else {
         [HUDManager alertWithTitle:@"請輸入姓名或職位"];
@@ -165,6 +189,11 @@
     }];
 }
 
+- (void)didClickAllSelected:(MSSearchBottomView *)view
+{
+    
+}
+
 - (void)refreshMemberData
 {
     page = 1;
@@ -183,6 +212,14 @@
             BOOL firstPage = [[data.originalData objectForKey:@"firstPage"] boolValue];
             BOOL hasNextPage = [[data.originalData objectForKey:@"hasNextPage"] boolValue];
             NSArray *members = [MSMemberModel mj_objectArrayWithKeyValuesArray:[data.originalData objectForKey:@"list"]];
+            
+            if (self.bottomView.isSelectedAll) {
+                [members enumerateObjectsUsingBlock:^(MSMemberModel *model, NSUInteger idx, BOOL * _Nonnull stop) {
+                    model.isSelected = YES;
+                    [self.selectedMemebers addObject:model];
+                }];
+                [self memberChangedEvent];
+            }
             
             if (firstPage) {
                 [self.members removeAllObjects];
@@ -226,6 +263,7 @@
     self.memberTableView.frame = [self getTableViewFrame];
     self.headMemberView.dataSources = self.selectedMemebers;
     [self.headMemberView reloadView];
+    [self.bottomView setSelectedAllStatus:self.selectedMemebers.count == self.members.count?YES:NO];
 }
 
 #pragma mark UITableViewDelegate & UITableViewDataSource
@@ -252,7 +290,6 @@
             [self.navigationController popViewControllerAnimated:YES];
         }
     }
-    
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
