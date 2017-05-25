@@ -163,6 +163,8 @@
 		A789FCBD1EBC101B004CA763 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = A789FCBC1EBC101B004CA763 /* main.m */; };
 		A789FCC01EBC101B004CA763 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = A789FCBF1EBC101B004CA763 /* AppDelegate.m */; };
 		A789FCC81EBC101B004CA763 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A789FCC71EBC101B004CA763 /* Assets.xcassets */; };
+		A7949C341ED6B718005B8BE8 /* MSSearchHeadMemberView.m in Sources */ = {isa = PBXBuildFile; fileRef = A7949C331ED6B718005B8BE8 /* MSSearchHeadMemberView.m */; };
+		A7949C371ED6B932005B8BE8 /* MSMemberCollectionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A7949C361ED6B932005B8BE8 /* MSMemberCollectionCell.m */; };
 		A7CF8E871ED31276000DE508 /* APSModel.m in Sources */ = {isa = PBXBuildFile; fileRef = A7CF8E861ED31276000DE508 /* APSModel.m */; };
 		A7D79CA41ECD370D00549F67 /* SHMSelectActionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A7D79CA11ECD370D00549F67 /* SHMSelectActionCell.m */; };
 		A7D79CA51ECD370D00549F67 /* SHMSelectActionView.m in Sources */ = {isa = PBXBuildFile; fileRef = A7D79CA31ECD370D00549F67 /* SHMSelectActionView.m */; };
@@ -508,6 +510,10 @@
 		A789FCBF1EBC101B004CA763 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		A789FCC71EBC101B004CA763 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A789FCCC1EBC101B004CA763 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		A7949C321ED6B718005B8BE8 /* MSSearchHeadMemberView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSSearchHeadMemberView.h; sourceTree = "<group>"; };
+		A7949C331ED6B718005B8BE8 /* MSSearchHeadMemberView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSSearchHeadMemberView.m; sourceTree = "<group>"; };
+		A7949C351ED6B932005B8BE8 /* MSMemberCollectionCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSMemberCollectionCell.h; sourceTree = "<group>"; };
+		A7949C361ED6B932005B8BE8 /* MSMemberCollectionCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSMemberCollectionCell.m; sourceTree = "<group>"; };
 		A7CF8E851ED31276000DE508 /* APSModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APSModel.h; sourceTree = "<group>"; };
 		A7CF8E861ED31276000DE508 /* APSModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APSModel.m; sourceTree = "<group>"; };
 		A7D79CA01ECD370D00549F67 /* SHMSelectActionCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SHMSelectActionCell.h; sourceTree = "<group>"; };
@@ -1306,6 +1312,10 @@
 				A71EC7491EC6F47D00E22577 /* MSNewMeetingTimeCell.m */,
 				A70F16C51ECA93D90093B56B /* MSNewMeetingONOffCell.h */,
 				A70F16C61ECA93D90093B56B /* MSNewMeetingONOffCell.m */,
+				A7949C351ED6B932005B8BE8 /* MSMemberCollectionCell.h */,
+				A7949C361ED6B932005B8BE8 /* MSMemberCollectionCell.m */,
+				A7949C321ED6B718005B8BE8 /* MSSearchHeadMemberView.h */,
+				A7949C331ED6B718005B8BE8 /* MSSearchHeadMemberView.m */,
 			);
 			name = NewMeeting;
 			sourceTree = "<group>";
@@ -1587,6 +1597,7 @@
 				A7186F501EBC219F00DE4B67 /* NSString+BaseModel.m in Sources */,
 				A7186F7A1EBC219F00DE4B67 /* NSString+Contains.m in Sources */,
 				A7186F861EBC219F00DE4B67 /* NSString+Size.m in Sources */,
+				A7949C341ED6B718005B8BE8 /* MSSearchHeadMemberView.m in Sources */,
 				A7416AE51EC064F300E42EB0 /* MSNavTabbarView.m in Sources */,
 				A7FF092C1ECBE38B00D9CD38 /* MSUserHeadViewController.m in Sources */,
 				A7186F921EBC219F00DE4B67 /* UIButton+BackgroundColor.m in Sources */,
@@ -1660,6 +1671,7 @@
 				A736CFFD1ED2E19C00C9E762 /* MSThemeView.m in Sources */,
 				A7186FA91EBC219F00DE4B67 /* UIImage+RemoteSize.m in Sources */,
 				A7186F8E1EBC219F00DE4B67 /* NSUserDefaults+iCloudSync.m in Sources */,
+				A7949C371ED6B932005B8BE8 /* MSMemberCollectionCell.m in Sources */,
 				A7D9C8AD1EC46B9B000FB05C /* MSMeetingDetailModel.m in Sources */,
 				A7186FC11EBC219F00DE4B67 /* UIView+SplitLine.m in Sources */,
 				A7186F811EBC219F00DE4B67 /* NSString+Pinyin.m in Sources */,

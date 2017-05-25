@@ -10,8 +10,9 @@
 #import "MSMemberView.h"
 #import "MSSelMemberCell.h"
 #import "MSMeetingDetailModel.h"
+#import "MSSearchHeadMemberView.h"
 
-@interface MSSelectMemeberViewController ()<MSMemberCellViewDelegate,UISearchBarDelegate,UITableViewDelegate,UITableViewDataSource>
+@interface MSSelectMemeberViewController ()<UISearchBarDelegate,UITableViewDelegate,UITableViewDataSource,MSMemberCollectionCellViewDelegate>
 {
     UISearchBar *_searchBar;
     NSInteger page;
@@ -19,7 +20,7 @@
 
 @property (nonatomic, strong) UITableView    *memberTableView;
 @property (nonatomic, strong) NSMutableArray *members;
-@property (nonatomic, strong) MSMemberView   *headMemberView;
+@property (nonatomic, strong) MSSearchHeadMemberView   *headMemberView;
 @property (nonatomic, assign) NSInteger      selectedItemCount;
 
 @end
@@ -32,10 +33,10 @@
     // Do any additional setup after loading the view.
 }
 
-- (MSMemberView*)headMemberView
+- (MSSearchHeadMemberView*)headMemberView
 {
     if (!_headMemberView) {
-        _headMemberView = [MSMemberView new];
+        _headMemberView = [[MSSearchHeadMemberView alloc] initWithFrame:CGRectMake(0, 46, kScreenWidth, 127)];
         _headMemberView.delegate = self;
         _headMemberView.backgroundColor = UIColorHex(0xffffff);
     }
@@ -58,7 +59,11 @@
     [self.view addSubview:_searchBar];
     [_searchBar becomeFirstResponder];
     
-    self.memberTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 46, kScreenWidth,kScreenHeight-64-50) style:UITableViewStylePlain];
+    if (self.memberType == MSSelectMemeber_Others) {
+        [self.view addSubview:self.headMemberView];
+    }
+    
+    self.memberTableView = [[UITableView alloc] initWithFrame:[self getTableViewFrame] style:UITableViewStylePlain];
     self.memberTableView.backgroundColor = UIColorHex(0xf6f6f6);
     self.memberTableView.delegate = self;
     self.memberTableView.dataSource = self;
@@ -79,11 +84,21 @@
         self.selectedItemCount = self.selectedMemebers.count;
         if (self.selectedMemebers.count) {
             [self.memberTableView reloadData];
-            [self.headMemberView membersData:self.selectedMemebers];
+            self.headMemberView.dataSources = self.selectedMemebers;
+            [self.headMemberView reloadView];
         }
     } else {
         self.title = @"選擇組織者";
     }
+}
+
+- (CGRect)getTableViewFrame
+{
+    CGRect tableFrame = CGRectMake(0, 46, kScreenWidth,kScreenHeight-64-50);
+    if (self.selectedMemebers.count && self.memberType == MSSelectMemeber_Others) {
+        tableFrame = CGRectMake(0, 46+127, kScreenWidth,kScreenHeight-64-50);
+    }
+    return tableFrame;
 }
 
 - (void)racForNavRightBt
@@ -112,13 +127,14 @@
     }
 }
 
-- (void)didClickMemberCell:(MSMemberCellView*)view
+- (void)didClickMemberCollectionCell:(MSMemberCollectionCell*)view
 {
     //删除成员
     NSInteger index = [self fetchMemberOfSelectedIndex:view.memberModel];
     if (index>=0) {
         [self.selectedMemebers removeObjectAtIndex:index];
-        [self.headMemberView membersData:self.selectedMemebers];
+        self.headMemberView.dataSources = self.selectedMemebers;
+        [self.headMemberView reloadView];
     }
     //更新tableview列表的状态，
     [self.members enumerateObjectsUsingBlock:^(MSMemberModel *model, NSUInteger idx, BOOL * _Nonnull stop) {
@@ -131,9 +147,7 @@
         };
     }];
     //隐藏
-    if (self.selectedMemebers.count==0) {
-        [self.memberTableView reloadData];
-    }
+    [self memberChangedEvent];
     
     self.selectedItemCount = self.selectedMemebers.count;
 }
@@ -202,6 +216,18 @@
     return -1;
 }
 
+- (void)memberChangedEvent
+{
+    if (self.selectedMemebers.count) {
+        self.headMemberView.hidden = NO;
+    } else {
+        self.headMemberView.hidden = YES;
+    }
+    self.memberTableView.frame = [self getTableViewFrame];
+    self.headMemberView.dataSources = self.selectedMemebers;
+    [self.headMemberView reloadView];
+}
+
 #pragma mark UITableViewDelegate & UITableViewDataSource
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -218,8 +244,7 @@
             model.isSelected = YES;
             [self.selectedMemebers addObject:model];
         }
-        [self.headMemberView membersData:self.selectedMemebers];
-        [self.memberTableView reloadData];
+        [self memberChangedEvent];
         self.selectedItemCount = self.selectedMemebers.count;
     } else if (self.memberType == MSSelectMemeber_Organizer) {
         if (self.selectBlock) {
@@ -237,7 +262,7 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    return self.selectedMemebers.count?127:0.001;
+    return 0.001;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
@@ -253,21 +278,6 @@
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     return 1;
-}
-
-- (UIView*)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
-{
-    UITableViewHeaderFooterView *headerView = [tableView dequeueReusableHeaderFooterViewWithIdentifier:@"UITableViewHeaderFooterView"];
-    if (!headerView) {
-        headerView = [[UITableViewHeaderFooterView alloc] initWithReuseIdentifier:@"UITableViewHeaderFooterView"];
-        headerView.frame = CGRectMake(0 , 0, kScreenWidth, 127);
-        [headerView addSubview:self.headMemberView];
-        
-        [self.headMemberView mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.left.top.right.bottom.equalTo(@0);
-        }];
-    }
-    return self.selectedMemebers.count?headerView:nil;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
