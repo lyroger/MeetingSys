@@ -130,7 +130,9 @@
         case 3:
             return @"會議終止通知";
             break;
-            
+        case 4:
+            return @"取消會議通知";
+            break;
         default:
             return @"會議提醒";
             break;

@@ -307,25 +307,60 @@
 }
 
 //所有会议-详情中-点击确定
-- (void)didClickSureActionCell:(MSAllMeetingDetailCell*)cell
+- (void)didClickMeetingDetailActionCell:(MSAllMeetingDetailCell *)cell action:(NSInteger)action
 {
-    NSIndexPath *indexPath = [tableAllMeetingView indexPathForCell:cell];
-    if (isViewToDayDetail && indexPath.section == 0) {
-        isViewToDayDetail = NO;
-        lastViewToDayDetailIndex = -1;
-        [tableAllMeetingView reloadData];
-    } else {
-        NSInteger section = indexPath.section;
-        if (isViewToDayDetail) {
-            section = section - 1;
+    if (action == 0) {
+        //確定
+        NSIndexPath *indexPath = [tableAllMeetingView indexPathForCell:cell];
+        if (isViewToDayDetail && indexPath.section == 0) {
+            isViewToDayDetail = NO;
+            lastViewToDayDetailIndex = -1;
+            [tableAllMeetingView reloadData];
+        } else {
+            NSInteger section = indexPath.section;
+            if (isViewToDayDetail) {
+                section = section - 1;
+            }
+            MSDayGroupList *dayGroupList = [self.allMeetingModel.dayGroupList objectAtIndex:section];
+            MSMeetingDetailModel *dayDetailModel = [dayGroupList.list objectAtIndex:indexPath.row-1];
+            dayDetailModel.isUnfold = NO;
+            
+            [dayGroupList.list removeObjectAtIndex:indexPath.row];
+            [tableAllMeetingView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
         }
-        MSDayGroupList *dayGroupList = [self.allMeetingModel.dayGroupList objectAtIndex:section];
-        MSMeetingDetailModel *dayDetailModel = [dayGroupList.list objectAtIndex:indexPath.row-1];
-        dayDetailModel.isUnfold = NO;
-        
-        [dayGroupList.list removeObjectAtIndex:indexPath.row];
-        [tableAllMeetingView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+    } else {
+        //取消會議
+        [MSMeetingDetailModel cancelMeetingInfo:nil networkHUD:NetworkHUDLockScreenAndError target:self success:^(StatusModel *data) {
+            if (data.code == 0) {
+                NSIndexPath *indexPath = [tableAllMeetingView indexPathForCell:cell];
+                NSInteger section = indexPath.section;
+                if (isViewToDayDetail) {
+                    if (indexPath.section == 0) {
+                        [self.allMeetingModel.todayList removeObjectAtIndex:lastViewToDayDetailIndex];
+                        [self.todayMeetingView reloadWithDatas:self.allMeetingModel.todayList];
+                        lastViewToDayDetailIndex = -1;
+                        isViewToDayDetail = NO;
+                        [tableAllMeetingView reloadData];
+                        return;
+                    } else {
+                        section = section - 1;
+                    }
+                }
+                MSDayGroupList *dayGroupList = [self.allMeetingModel.dayGroupList objectAtIndex:section];
+                if (dayGroupList.list.count == 2) {
+                    //移除整个section
+                    [self.allMeetingModel.dayGroupList removeObject:dayGroupList];
+                    [tableAllMeetingView deleteSections:[NSIndexSet indexSetWithIndex:indexPath.section] withRowAnimation:UITableViewRowAnimationFade];
+                } else {
+                    //移除其中一个数据，包含详情
+                    NSIndexPath *listIndexPath = [NSIndexPath indexPathForRow:indexPath.row-1 inSection:indexPath.section];
+                    [dayGroupList.list removeObjectsInRange:NSMakeRange(indexPath.row-1, 2)];
+                    [tableAllMeetingView deleteRowsAtIndexPaths:@[listIndexPath,indexPath] withRowAnimation:UITableViewRowAnimationFade];
+                }
+            }
+        }];
     }
+    
 }
 
 //所有会议-当天会议

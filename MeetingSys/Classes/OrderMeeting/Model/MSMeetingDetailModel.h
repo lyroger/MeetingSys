@@ -75,4 +75,9 @@
                                      target:(id)target
                                     success:(NetResponseBlock)success;
 
++ (NSURLSessionDataTask *)cancelMeetingInfo:(NSString*)meetingId
+                                 networkHUD:(NetworkHUD)hud
+                                     target:(id)target
+                                    success:(NetResponseBlock)success;
+
 @end

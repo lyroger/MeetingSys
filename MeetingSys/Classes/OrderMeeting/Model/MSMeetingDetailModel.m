@@ -121,4 +121,14 @@
     return [self dataTaskMethod:HTTPMethodPOST path:@"api/remind/setread" params:ParamsDic networkHUD:hud target:target success:success];
 }
 
++ (NSURLSessionDataTask *)cancelMeetingInfo:(NSString*)meetingId
+                                 networkHUD:(NetworkHUD)hud
+                                     target:(id)target
+                                    success:(NetResponseBlock)success
+{
+    CreateParamsDic;
+    DicValueSet(meetingId, @"id");
+    return [self dataTaskMethod:HTTPMethodPOST path:@"" params:ParamsDic networkHUD:hud target:target success:success];
+}
+
 @end

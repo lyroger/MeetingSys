@@ -15,17 +15,27 @@
     if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
         sureButton = [UIButton buttonWithType:UIButtonTypeCustom];
         [sureButton setBackgroundImage:[UIImage imageWithColor:UIColorHex(0xFFB072)] forState:UIControlStateNormal];
-        
         sureButton.layer.cornerRadius = 4;
         sureButton.layer.borderColor = [UIColor clearColor].CGColor;
         sureButton.layer.borderWidth = 1;
         sureButton.layer.masksToBounds = YES;
-        
+        sureButton.tag = 100;
         [sureButton addTarget:self action:@selector(buttonClickAction:) forControlEvents:UIControlEventTouchUpInside];
         [sureButton setTitle:@"確認" forState:UIControlStateNormal];
         sureButton.titleLabel.font = kFontPingFangMediumSize(18);
-        
         [bgContentView addSubview:sureButton];
+        
+        cancelButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        [cancelButton setBackgroundImage:[UIImage imageWithColor:UIColorHex(0xFFB072)] forState:UIControlStateNormal];
+        cancelButton.layer.cornerRadius = 4;
+        cancelButton.layer.borderColor = [UIColor clearColor].CGColor;
+        cancelButton.layer.borderWidth = 1;
+        cancelButton.layer.masksToBounds = YES;
+        cancelButton.tag = 101;
+        [cancelButton addTarget:self action:@selector(buttonClickAction:) forControlEvents:UIControlEventTouchUpInside];
+        [cancelButton setTitle:@"取消會議" forState:UIControlStateNormal];
+        cancelButton.titleLabel.font = kFontPingFangMediumSize(18);
+        [bgContentView addSubview:cancelButton];
         
         
         [meetingDemandView mas_remakeConstraints:^(MASConstraintMaker *make) {
@@ -41,14 +51,21 @@
             make.height.mas_equalTo(44);
         }];
         
+        [cancelButton mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.top.mas_equalTo(sureButton.mas_bottom).mas_offset(35);
+            make.left.mas_equalTo(30);
+            make.right.mas_equalTo(-30);
+            make.height.mas_equalTo(44);
+        }];
+        
     }
     return self;
 }
 
 - (void)buttonClickAction:(UIButton*)button
 {
-    if (self.delegate && [self.delegate respondsToSelector:@selector(didClickSureActionCell:)]) {
-        [self.delegate didClickSureActionCell:self];
+    if (self.delegate && [self.delegate respondsToSelector:@selector(didClickMeetingDetailActionCell:action:)]) {
+        [self.delegate didClickMeetingDetailActionCell:self action:button.tag-100];
     }
 }
 
@@ -84,7 +101,7 @@
 //    agendaHeight = agendaHeight<70?70:agendaHeight;
 //    demandHeight = demandHeight<70?70:demandHeight;
 //    contentHeight = contentHeight<70?70:contentHeight;
-    CGFloat tottalHeight = contentHeight+70+70+127+agendaHeight+demandHeight + 114;
+    CGFloat tottalHeight = contentHeight+70+70+120+agendaHeight+demandHeight + 114*2;
     return tottalHeight;
 }
 

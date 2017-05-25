@@ -30,7 +30,8 @@
     self.view.backgroundColor = UIColorHex(0x000000);
     [self leftBarButtonWithName:@"" image:[UIImage imageNamed:@"return"] target:self action:@selector(closeView)];
     
-    [self rightBarButtonWithName:@"" normalImgName:@"more" highlightImgName:@"more" target:self action:@selector(selectPic)];
+    //去除更新头像功能
+//    [self rightBarButtonWithName:@"" normalImgName:@"more" highlightImgName:@"more" target:self action:@selector(selectPic)];
     
     self.scrollView = [[UIScrollView alloc] initWithFrame:self.view.bounds];
     self.scrollView.zoomScale = 1;

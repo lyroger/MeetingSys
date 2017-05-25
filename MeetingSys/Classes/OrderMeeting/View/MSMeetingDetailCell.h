@@ -26,6 +26,8 @@
     MSTitleAndDetailView *meetingDemandView;//會議要求
 }
 
+@property (nonatomic, assign) NSInteger index;
+
 - (void)data:(MSMeetingDetailModel*)model;
 - (void)showTopShadow:(BOOL)show;
 + (CGFloat)meetingDetailHeight:(MSMeetingDetailModel*)model;

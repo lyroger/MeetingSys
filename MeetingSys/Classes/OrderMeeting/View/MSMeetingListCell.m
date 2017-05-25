@@ -90,6 +90,7 @@
             make.bottom.equalTo(self.contentView);
         }];
         
+        organizerLabel.hidden = YES;
     }
     
     return self;
@@ -100,7 +101,7 @@
     [imageIcon sd_setImageWithURL:kImageURLWithLastString(model.organizerHeadURL) placeholderImage:[UIImage imageNamed:@"portrait_xiao"]];
     titleLabel.text = model.title;
     timeLabel.text = [NSString stringWithFormat:@"%@-%@",[model.beginTime dateWithFormat:@"HH:mm"],[model.endTime dateWithFormat:@"HH:mm"]];
-    organizerLabel.text = model.organizeName;
+//    organizerLabel.text = model.organizeName;
 }
 
 + (CGFloat)meetingListCellHeight

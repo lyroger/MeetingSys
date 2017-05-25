@@ -485,6 +485,8 @@
 
 - (void)selectPic
 {
+    //去除更新头像功能
+    return;
     // 上传头像
     @weakify(self);
     HAlertController *alertController = [HAlertController alertControllerWithTitle:nil message:nil cannelButton:@"取消" otherButtons:@[@"從手機相冊選取",@"拍照"] type:HAlertControllerTypeCustomValue1 complete:^(NSUInteger buttonIndex, HAlertController *actionController) {

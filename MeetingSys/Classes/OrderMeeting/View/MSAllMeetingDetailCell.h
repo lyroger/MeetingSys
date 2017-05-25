@@ -14,6 +14,7 @@
 @interface MSAllMeetingDetailCell : MSMeetingDetailCell
 {
     UIButton *sureButton;
+    UIButton *cancelButton;
 }
 
 @property (nonatomic,weak) id<MSAllMeetingDetailCellDelegate> delegate;
@@ -24,6 +25,6 @@
 
 @protocol MSAllMeetingDetailCellDelegate <NSObject>
 
-- (void)didClickSureActionCell:(MSAllMeetingDetailCell*)cell;
+- (void)didClickMeetingDetailActionCell:(MSAllMeetingDetailCell*)cell action:(NSInteger)action;
 
 @end
