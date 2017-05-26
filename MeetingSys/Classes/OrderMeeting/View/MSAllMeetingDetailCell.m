@@ -90,6 +90,13 @@
     
     meetingDemandView.titleLabel.text = @"會議要求";
     meetingDemandView.detailLabel.text = model.demand;
+    
+    //如果是组织者，可以取消
+    if ([model.organizeId isEqualToString:[MSUserInfo shareUserInfo].userId]) {
+        cancelButton.hidden = NO;
+    } else {
+        cancelButton.hidden = YES;
+    }
 }
 
 + (CGFloat)meetingDetailHeight:(MSMeetingDetailModel*)model
@@ -101,7 +108,11 @@
 //    agendaHeight = agendaHeight<70?70:agendaHeight;
 //    demandHeight = demandHeight<70?70:demandHeight;
 //    contentHeight = contentHeight<70?70:contentHeight;
-    CGFloat tottalHeight = contentHeight+70+70+120+agendaHeight+demandHeight + 114*2;
+    CGFloat tottalHeight = contentHeight+70+70+120+agendaHeight+demandHeight + 114;
+    //如果是组织者，可以取消
+    if ([model.organizeId isEqualToString:[MSUserInfo shareUserInfo].userId]) {
+        tottalHeight = contentHeight+70+70+120+agendaHeight+demandHeight + 105*2;
+    }
     return tottalHeight;
 }
 

@@ -206,8 +206,26 @@
         NSString *meetingTypeString = [self.meetingTypeData objectAtIndex:indexItem];
         NSIndexPath *indexPath = [NSIndexPath indexPathForRow:3 inSection:0];
         MSNewMeetingSelectCell *cell = [newMeetingTableView cellForRowAtIndexPath:indexPath];
-        self.meetingInfoObj.meetingType = indexItem+1;
+        
+        NSInteger meetingType = indexItem+1;
+        if (meetingType != self.meetingInfoObj.meetingType) {
+            //值改变了
+            self.meetingInfoObj.meetingType = indexItem+1;
+            //清空选择会议地址信息
+            self.meetingInfoObj.roomId = nil;
+            self.meetingInfoObj.address = nil;
+            self.meetingInfoObj.roomTheme = nil;
+            self.meetingInfoObj.roomTheme = nil;
+            self.meetingInfoObj.roomTimeTips = nil;
+            NSIndexPath *indexPath = [NSIndexPath indexPathForRow:4 inSection:0];
+            MSNewMeetingSelectCell *cell = [newMeetingTableView cellForRowAtIndexPath:indexPath];
+            [cell contentText:nil];
+        }
+        
+        
         [cell contentText:meetingTypeString];
+        
+        
     } else if (view == selectRoomsView) {
         NSInteger indexItem = [[indexs objectAtIndex:0] integerValue];
         MSMeetingRoomModel *room = [self.roomsData objectAtIndex:indexItem];

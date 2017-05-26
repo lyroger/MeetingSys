@@ -53,6 +53,7 @@
     return @{@"beginTime":@"stTime",
              @"demand" : @"requirement",
              @"organizeName":@"organizerName",
+             @"organizeId":@"organizer",
              @"address":@"mName",
              @"organizerHeadURL":@"orgAvater",
              @"sendDate":@"createDate",
@@ -80,7 +81,9 @@
     detail.organizerHeadURL = self.organizerHeadURL;
     detail.title = self.title;
     detail.organizeName = self.organizeName;
+    detail.organizeId = self.organizeId;
     detail.isDetail = self.isDetail;
+    detail.remindId = self.remindId;
     
     return detail;
 }

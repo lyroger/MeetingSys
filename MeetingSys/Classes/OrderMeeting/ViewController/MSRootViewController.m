@@ -49,6 +49,7 @@
     [super viewDidLoad];
     self.title = @"會議室管理";
     AddNotification(self, @selector(userLoginOut), kLoginOutNotification, nil);
+    AddNotification(self, @selector(userTokenExpire), kUserTokenExpireNotification, nil);
     [self leftBarButtonWithName:nil image:[UIImage imageNamed:@"user_center_icon"] target:self action:@selector(userInfoClick:)];
     
     [self loadSubView];
@@ -329,36 +330,60 @@
             [tableAllMeetingView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
         }
     } else {
-        //取消會議
-        [MSMeetingDetailModel cancelMeetingInfo:nil networkHUD:NetworkHUDLockScreenAndError target:self success:^(StatusModel *data) {
-            if (data.code == 0) {
+        [UIAlertView alertWithCallBackBlock:^(NSInteger buttonIndex) {
+            if (buttonIndex == 1) {
+                //取消會議
                 NSIndexPath *indexPath = [tableAllMeetingView indexPathForCell:cell];
-                NSInteger section = indexPath.section;
+                
+                NSString *meetingID;
+                
                 if (isViewToDayDetail) {
                     if (indexPath.section == 0) {
-                        [self.allMeetingModel.todayList removeObjectAtIndex:lastViewToDayDetailIndex];
-                        [self.todayMeetingView reloadWithDatas:self.allMeetingModel.todayList];
-                        lastViewToDayDetailIndex = -1;
-                        isViewToDayDetail = NO;
-                        [tableAllMeetingView reloadData];
-                        return;
+                        MSMeetingDetailModel *detailModel = [self.allMeetingModel.todayList objectAtIndex:lastViewToDayDetailIndex];
+                        meetingID = detailModel.remindId;
                     } else {
-                        section = section - 1;
+                        MSDayGroupList *dayGroupList = [self.allMeetingModel.dayGroupList objectAtIndex:indexPath.section-1];
+                        MSMeetingDetailModel *detailModel = [dayGroupList.list objectAtIndex:indexPath.row];
+                        meetingID = detailModel.remindId;
                     }
-                }
-                MSDayGroupList *dayGroupList = [self.allMeetingModel.dayGroupList objectAtIndex:section];
-                if (dayGroupList.list.count == 2) {
-                    //移除整个section
-                    [self.allMeetingModel.dayGroupList removeObject:dayGroupList];
-                    [tableAllMeetingView deleteSections:[NSIndexSet indexSetWithIndex:indexPath.section] withRowAnimation:UITableViewRowAnimationFade];
                 } else {
-                    //移除其中一个数据，包含详情
-                    NSIndexPath *listIndexPath = [NSIndexPath indexPathForRow:indexPath.row-1 inSection:indexPath.section];
-                    [dayGroupList.list removeObjectsInRange:NSMakeRange(indexPath.row-1, 2)];
-                    [tableAllMeetingView deleteRowsAtIndexPaths:@[listIndexPath,indexPath] withRowAnimation:UITableViewRowAnimationFade];
+                    MSDayGroupList *dayGroupList = [self.allMeetingModel.dayGroupList objectAtIndex:indexPath.section];
+                    MSMeetingDetailModel *detailModel = [dayGroupList.list objectAtIndex:indexPath.row];
+                    meetingID = detailModel.remindId;
                 }
+                
+                [MSMeetingDetailModel cancelMeetingInfo:meetingID networkHUD:NetworkHUDLockScreenAndError target:self success:^(StatusModel *data) {
+                    if (data.code == 0) {
+                        NSIndexPath *indexPath = [tableAllMeetingView indexPathForCell:cell];
+                        NSInteger section = indexPath.section;
+                        if (isViewToDayDetail) {
+                            if (indexPath.section == 0) {
+                                [self.allMeetingModel.todayList removeObjectAtIndex:lastViewToDayDetailIndex];
+                                [self.todayMeetingView reloadWithDatas:self.allMeetingModel.todayList];
+                                lastViewToDayDetailIndex = -1;
+                                isViewToDayDetail = NO;
+                                [tableAllMeetingView reloadData];
+                                return;
+                            } else {
+                                section = section - 1;
+                            }
+                        }
+                        MSDayGroupList *dayGroupList = [self.allMeetingModel.dayGroupList objectAtIndex:section];
+                        if (dayGroupList.list.count == 2) {
+                            //移除整个section
+                            [self.allMeetingModel.dayGroupList removeObject:dayGroupList];
+                            [tableAllMeetingView deleteSections:[NSIndexSet indexSetWithIndex:indexPath.section] withRowAnimation:UITableViewRowAnimationFade];
+                        } else {
+                            //移除其中一个数据，包含详情
+                            NSIndexPath *listIndexPath = [NSIndexPath indexPathForRow:indexPath.row-1 inSection:indexPath.section];
+                            [dayGroupList.list removeObjectsInRange:NSMakeRange(indexPath.row-1, 2)];
+                            [tableAllMeetingView deleteRowsAtIndexPaths:@[listIndexPath,indexPath] withRowAnimation:UITableViewRowAnimationFade];
+                        }
+                    }
+                }];
             }
-        }];
+        } title:@"提示" message:@"確定要取消該會議嗎？" cancelButtonName:@"取消" otherButtonTitles:@"確定", nil];
+        
     }
     
 }
@@ -733,6 +758,11 @@
         
     }];
     
+    [self setLogoutInfo];
+}
+
+- (void)setLogoutInfo
+{
     //注销token 发送退出登录通知
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         [MSUserInfo shareUserInfo].token = nil;
@@ -742,6 +772,11 @@
             [kAppDelegate authorizeOperation];
         }
     });
+}
+
+- (void)userTokenExpire
+{
+    [self setLogoutInfo];
 }
 
 //切換tabbar

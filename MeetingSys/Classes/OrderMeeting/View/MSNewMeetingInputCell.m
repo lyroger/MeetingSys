@@ -124,6 +124,7 @@
     NSString *text = [textV.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
     if (text.length > 1000) {
         text = [text substringWithRange:NSMakeRange(0, 1000)];
+        textV.text = text;
     }
     if (self.inputBlock) {
         self.inputBlock(text);
@@ -135,6 +136,7 @@
     NSString *text = [textField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
     if (text.length > 50) {
         text = [text substringWithRange:NSMakeRange(0, 50)];
+        textField.text = text;
     }
     if (self.inputBlock) {
         self.inputBlock(text);
