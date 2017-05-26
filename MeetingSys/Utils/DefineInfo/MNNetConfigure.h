@@ -23,7 +23,7 @@
 
 #if isTestEnvironment
 // 测试环境
-#define kServerHost                 @"http://119.23.243.229:8080"//@"http://192.168.2.196:8888"//
+#define kServerHost                 @"http://119.23.243.229:8080"////@"http://192.168.1.110:8888" //
 #define kServerCurrentPath          @"/agate-web/"
 #define kServerPushNotificationHost @"http://119.23.243.229:8080/agate-web"
 #define kJPushAPPKey                @"1f775a82abf23e099c5f658c"

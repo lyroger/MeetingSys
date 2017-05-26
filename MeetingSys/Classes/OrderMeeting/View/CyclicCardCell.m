@@ -111,6 +111,12 @@
         case 3:
             return @"已确认";
             break;
+        case 4:
+            return @"已取消";
+            break;
+        case 5:
+            return @"正在进行";
+            break;
         default:
             return @"未开始";
             break;

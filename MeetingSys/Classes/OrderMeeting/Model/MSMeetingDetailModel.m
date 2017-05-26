@@ -30,15 +30,17 @@
 
 
 + (NSURLSessionDataTask *)getuserlistKeywords:(NSString *)keywords
+                                       dpName:(NSString *)dpName
                                          page:(NSInteger)page
                                    networkHUD:(NetworkHUD)hud
                                        target:(id)target
                                       success:(NetResponseBlock)success
 {
     CreateParamsDic;
-    DicObjectSet(keywords, @"keywords");
-    DicObjectSet(@(page), @"page");
-    DicObjectSet(@(15), @"rows");
+    DicValueSet(keywords, @"keywords");
+    DicValueSet(dpName, @"dpName");
+    DicValueSet(@(page), @"page");
+    DicValueSet(@(15), @"rows");
     return [self dataTaskMethod:HTTPMethodPOST path:@"api/user/getuserlist" params:ParamsDic networkHUD:hud target:target success:success];
 }
 
@@ -128,7 +130,7 @@
 {
     CreateParamsDic;
     DicValueSet(meetingId, @"id");
-    return [self dataTaskMethod:HTTPMethodPOST path:@"" params:ParamsDic networkHUD:hud target:target success:success];
+    return [self dataTaskMethod:HTTPMethodPOST path:@"api/meeting/cancel" params:ParamsDic networkHUD:hud target:target success:success];
 }
 
 @end

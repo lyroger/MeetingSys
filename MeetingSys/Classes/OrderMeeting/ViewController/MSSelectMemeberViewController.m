@@ -16,6 +16,7 @@
 @interface MSSelectMemeberViewController ()<UISearchBarDelegate,UITableViewDelegate,UITableViewDataSource,MSMemberCollectionCellViewDelegate,MSSearchBottomViewDelegate>
 {
     UISearchBar *_searchBar;
+    UISearchBar *_searchBar2;
     NSInteger page;
 }
 
@@ -45,21 +46,44 @@
     return _headMemberView;
 }
 
+- (UISearchBar*)creatSearchBarPlaceHolder:(NSString*)placeholder
+{
+    UISearchBar *searchBar = [[UISearchBar alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, 46)];
+    searchBar.placeholder = placeholder;
+    searchBar.barTintColor = UIColorHex(0xffffff);
+    //去掉上下两条黑线
+    searchBar.layer.borderWidth = 1;
+    searchBar.layer.borderColor = [searchBar.barTintColor CGColor];
+    searchBar.delegate = self;
+    searchBar.tintColor = UIColorHex(0xFF7B54);
+    UIView *searchTextField = [[[searchBar.subviews firstObject] subviews] lastObject];
+    searchTextField.backgroundColor = UIColorHex(0xeeeeee);
+    
+    return searchBar;
+}
+
 - (void)loadSubView
 {
-    /* searchbar */
-    _searchBar = [[UISearchBar alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, 46)];
-    _searchBar.placeholder = @"請輸入姓名或職位";
-    _searchBar.barTintColor = UIColorHex(0xffffff);
-    //去掉上下两条黑线
-    _searchBar.layer.borderWidth = 1;
-    _searchBar.layer.borderColor = [_searchBar.barTintColor CGColor];
-    _searchBar.delegate = self;
-    _searchBar.tintColor = UIColorHex(0xFF7B54);
-    UIView *searchTextField = [[[_searchBar.subviews firstObject] subviews] lastObject];
-    searchTextField.backgroundColor = UIColorHex(0xeeeeee);
-    [self.view addSubview:_searchBar];
-    [_searchBar becomeFirstResponder];
+    UIView *searchBarContentView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, 46)];
+    [self.view addSubview:searchBarContentView];
+    
+    if (self.memberType == MSSelectMemeber_Others) {
+        /* searchbar */
+        _searchBar = [self creatSearchBarPlaceHolder:@"營業處/分區D"];
+        _searchBar.frame = CGRectMake(0, 0, kScreenWidth/2, 46);
+        [searchBarContentView addSubview:_searchBar];
+        [_searchBar becomeFirstResponder];
+        
+        _searchBar2 = [self creatSearchBarPlaceHolder:@"名稱/職位"];
+        _searchBar2.frame = CGRectMake(kScreenWidth/2, 0, kScreenWidth/2, 46);
+        [searchBarContentView addSubview:_searchBar2];
+        
+    } else {
+        _searchBar = [self creatSearchBarPlaceHolder:@"請輸入姓名或職位"];
+        [searchBarContentView addSubview:_searchBar];
+        [_searchBar becomeFirstResponder];
+    }
+    
     
     if (self.memberType == MSSelectMemeber_Others) {
         [self.view addSubview:self.headMemberView];
@@ -142,12 +166,22 @@
 
 - (void)doSearch
 {
-    NSString *keyInfo = [_searchBar.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
-    if (keyInfo.length) {
-        [self.bottomView setSelectedAllStatus:NO];
-        [self.memberTableView.mj_header beginRefreshing];
+    if (self.memberType == MSSelectMemeber_Others) {
+        NSString *keyInfo = [_searchBar2.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+        NSString *dpName = [_searchBar.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+        if (keyInfo.length || dpName.length) {
+            [self.bottomView setSelectedAllStatus:NO];
+            [self.memberTableView.mj_header beginRefreshing];
+        } else {
+            [HUDManager alertWithTitle:@"請輸入搜索條件"];
+        }
     } else {
-        [HUDManager alertWithTitle:@"請輸入姓名或職位"];
+        NSString *keyInfo = [_searchBar.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+        if (keyInfo.length) {
+            [self.memberTableView.mj_header beginRefreshing];
+        } else {
+            [HUDManager alertWithTitle:@"請輸入姓名或職位"];
+        }
     }
 }
 
@@ -191,7 +225,27 @@
 
 - (void)didClickAllSelected:(MSSearchBottomView *)view
 {
-    
+    if (view.isSelectedAll) {
+        //将self.members里不在self.selectedMembers中的成员加入
+        [self.members enumerateObjectsUsingBlock:^(MSMemberModel *member, NSUInteger idx, BOOL * _Nonnull stop) {
+            if ([self fetchMemberOfSelectedIndex:member]<0) {
+                member.isSelected = YES;
+                [self.selectedMemebers addObject:member];
+            }
+        }];
+    } else {
+        //将self.members在self.selectedMembers中的成员移除
+        [self.members enumerateObjectsUsingBlock:^(MSMemberModel *member, NSUInteger idx, BOOL * _Nonnull stop) {
+            NSInteger index = [self fetchMemberOfSelectedIndex:member];
+            if (index >= 0) {
+                member.isSelected = NO;
+                [self.selectedMemebers removeObjectAtIndex:index];
+            }
+        }];
+    }
+    self.selectedItemCount = self.selectedMemebers.count;
+    [self memberChangedEvent];
+    [self.memberTableView reloadData];
 }
 
 - (void)refreshMemberData
@@ -202,8 +256,26 @@
 
 - (void)loadMoreMemberData
 {
-    NSString *keyInfo = [_searchBar.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
-    [MSMemberModel getuserlistKeywords:keyInfo page:page networkHUD:NetworkHUDError target:self success:^(StatusModel *data) {
+    NSString *keyInfo;
+    NSString *dpName;
+    if (self.memberType == MSSelectMemeber_Others) {
+        keyInfo = [_searchBar2.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+        dpName = [_searchBar.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+        if (!keyInfo.length && !dpName.length) {
+            [self.memberTableView.mj_header endRefreshing];
+            [self.memberTableView.mj_footer endRefreshing];
+            return;
+        }
+    } else {
+        keyInfo = [_searchBar.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+        if (!keyInfo.length) {
+            [self.memberTableView.mj_header endRefreshing];
+            [self.memberTableView.mj_footer endRefreshing];
+            return;
+        }
+    }
+    
+    [MSMemberModel getuserlistKeywords:keyInfo dpName:dpName page:page networkHUD:NetworkHUDError target:self success:^(StatusModel *data) {
         
         [self.memberTableView.mj_header endRefreshing];
         [self.memberTableView.mj_footer endRefreshing];
@@ -235,6 +307,7 @@
                 [self refreshSelectedItems:members];
                 [self.members addObjectsFromArray:members];
             }
+            
             [self.memberTableView reloadData];
         } else {
             [HUDManager alertWithTitle:data.msg];
@@ -263,7 +336,24 @@
     self.memberTableView.frame = [self getTableViewFrame];
     self.headMemberView.dataSources = self.selectedMemebers;
     [self.headMemberView reloadView];
-    [self.bottomView setSelectedAllStatus:self.selectedMemebers.count == self.members.count?YES:NO];
+    [self.bottomView setSelectedAllStatus:[self isAllSelected]];
+}
+
+- (BOOL)isAllSelected
+{
+    //判断  selectedMemebers 是否全部包含 members 数组的数据  是的表示当前要全选
+    if (self.members.count) {
+        __block BOOL allSelected = YES;
+        [self.members enumerateObjectsUsingBlock:^(MSMemberModel *member, NSUInteger idx, BOOL * _Nonnull stop) {
+            if ([self fetchMemberOfSelectedIndex:member]<0) {
+                allSelected = NO;
+                *stop = YES;
+            }
+        }];
+        return allSelected;
+    } else {
+        return NO;
+    }
 }
 
 #pragma mark UITableViewDelegate & UITableViewDataSource
@@ -273,10 +363,12 @@
     MSMemberModel *model = [self.members objectAtIndex:indexPath.row];
     if (self.memberType == MSSelectMemeber_Others) {
         MSSelMemberCell *cell = [tableView cellForRowAtIndexPath:indexPath];
-        if ([self fetchMemberOfSelectedIndex:model]>=0) {
+        NSInteger index = [self fetchMemberOfSelectedIndex:model];
+        if (index>=0) {
             [cell showSelected:NO];
             model.isSelected = NO;
-            [self.selectedMemebers removeObject:model];
+            //备注 由于刷新或退出搜索页面再进入带入的旧成员，其中的model跟selectedMemebers对象已经不是同一个了，只是id相同，所以必须使用removeObjectAtIndex方法移除，而不能使用removeObject方法移除（会发现找不到对象）；
+            [self.selectedMemebers removeObjectAtIndex:index];
         } else {
             [cell showSelected:YES];
             model.isSelected = YES;
@@ -346,7 +438,7 @@
 
 - (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar
 {
-    [_searchBar endEditing:YES];
+    [searchBar endEditing:YES];
     
     [self doSearch];
 }
