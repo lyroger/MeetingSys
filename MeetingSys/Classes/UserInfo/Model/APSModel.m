@@ -15,3 +15,7 @@
 @implementation APSInfo
 
 @end
+
+@implementation APSAlertInfo
+
+@end

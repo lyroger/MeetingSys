@@ -864,7 +864,7 @@
     if (isActive) {
         [UIAlertView alertWithCallBackBlock:^(NSInteger buttonIndex) {
 
-        } title:@"您有新的會議提醒" message:apsMsg.aps.alert cancelButtonName:@"我知道了" otherButtonTitles:nil];
+        } title:@"您有新的會議提醒" message:apsMsg.aps.alert.title cancelButtonName:@"我知道了" otherButtonTitles:nil];
     }
     
     [self refreshNoticeData];

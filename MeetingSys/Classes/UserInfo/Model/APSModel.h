@@ -9,6 +9,7 @@
 #import "BaseModel.h"
 
 @class APSInfo;
+@class APSAlertInfo;
 @interface APSModel : BaseModel
 
 @property (nonatomic, copy) NSString *_j_msgid;
@@ -25,8 +26,16 @@
 
 @interface APSInfo : BaseModel
 
-@property (nonatomic, copy) NSString *alert;
-@property (nonatomic, assign) NSInteger badge;
-@property (nonatomic, copy) NSString *sound;
+@property (nonatomic, strong) APSAlertInfo *alert;
+@property (nonatomic, assign) NSInteger  badge;
+@property (nonatomic, copy) NSString     *sound;
+
+@end
+
+@interface APSAlertInfo : BaseModel
+
+@property (nonatomic, copy) NSString *body;
+@property (nonatomic, copy) NSString *title;
+@property (nonatomic, copy) NSString *subtitle;
 
 @end

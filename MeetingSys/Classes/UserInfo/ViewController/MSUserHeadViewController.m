@@ -26,7 +26,7 @@
     {
         self.edgesForExtendedLayout = UIRectEdgeNone;
     }
-    self.title = @"更換頭像";
+    self.title = @"個人形象";
     self.view.backgroundColor = UIColorHex(0x000000);
     [self leftBarButtonWithName:@"" image:[UIImage imageNamed:@"return"] target:self action:@selector(closeView)];
     
