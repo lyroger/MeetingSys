@@ -45,7 +45,7 @@
 @property (nonatomic, copy) NSString *roomTimeTips;//最大时长提示
 @property (nonatomic, copy) NSString *others; // 參會人員 id 列表
 @property (nonatomic, copy) NSString *othersName; // 參會人員名稱列表
-@property (nonatomic, copy) NSString *mtStatus;// 會議狀態  0-初始  1-正常結束  2- No show 3-已確認
+@property (nonatomic, copy) NSString *mtStatus;// 會議狀態  0-初始  1-正常結束  2- No show 3-已確認 4-取消 5-正在进行
 
 @property (nonatomic, copy) NSString *remindConent;//提醒內容
 @property (nonatomic, assign) NSInteger remindType;//提醒类型

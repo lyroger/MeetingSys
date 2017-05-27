@@ -92,10 +92,12 @@
     meetingDemandView.detailLabel.text = model.demand;
     
     //如果是组织者，可以取消
+    cancelButton.hidden = YES;
     if ([model.organizeId isEqualToString:[MSUserInfo shareUserInfo].userId]) {
-        cancelButton.hidden = NO;
-    } else {
-        cancelButton.hidden = YES;
+        NSInteger status = [model.mtStatus integerValue];
+        if (status == 0 || status == 3 || status == 5) {
+            cancelButton.hidden = NO;
+        }
     }
 }
 
@@ -111,7 +113,10 @@
     CGFloat tottalHeight = contentHeight+70+70+120+agendaHeight+demandHeight + 114;
     //如果是组织者，可以取消
     if ([model.organizeId isEqualToString:[MSUserInfo shareUserInfo].userId]) {
-        tottalHeight = contentHeight+70+70+120+agendaHeight+demandHeight + 105*2;
+        NSInteger status = [model.mtStatus integerValue];
+        if (status == 0 || status == 3 || status ==5) {
+            tottalHeight = contentHeight+70+70+120+agendaHeight+demandHeight + 105*2;
+        }
     }
     return tottalHeight;
 }
