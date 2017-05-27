@@ -221,10 +221,7 @@
             MSNewMeetingSelectCell *cell = [newMeetingTableView cellForRowAtIndexPath:indexPath];
             [cell contentText:nil];
         }
-        
-        
         [cell contentText:meetingTypeString];
-        
         
     } else if (view == selectRoomsView) {
         NSInteger indexItem = [[indexs objectAtIndex:0] integerValue];

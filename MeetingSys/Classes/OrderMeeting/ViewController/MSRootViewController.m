@@ -122,7 +122,7 @@
     [self refreshNoticeData];
 }
 
-//加載提醒列表數據
+#pragma mark  加载提醒列表数据
 - (void)refreshNoticeData
 {
     [MSMeetingDetailModel getNoticesNetworkHUD:NetworkHUDBackground target:self success:^(StatusModel *data) {
@@ -147,7 +147,7 @@
     }];
 }
 
-//加載所有會議數據
+#pragma mark 加载所有会议数据
 - (void)refreshAllMeetingData
 {
     self.allMeetingModel.page = 1;
@@ -292,7 +292,7 @@
     return otherUnfoldSection;
 }
 
-//通知-详情中-点击我知道了
+#pragma mark  通知-详情中-点击我知道了
 - (void)didClickNoticeDetailSureActionCell:(MSNoticeDetailCell *)cell
 {
     NSIndexPath *indexPath = [tableNoticeView indexPathForCell:cell];
@@ -300,6 +300,15 @@
     [MSMeetingDetailModel didReadNoticeInfo:model.remindId networkHUD:NetworkHUDBackground target:self success:^(StatusModel *data) {
         if (data.code == 0) {
             NSLog(@"設置已讀成功");
+            if ([MSUserInfo shareUserInfo].badge > 0) {
+                [MSUserInfo shareUserInfo].badge--;
+            } else {
+                [MSUserInfo shareUserInfo].badge = 0;
+            }
+            [UIApplication sharedApplication].applicationIconBadgeNumber = [MSUserInfo shareUserInfo].badge;
+            [JPUSHService setBadge:[MSUserInfo shareUserInfo].badge];
+            MSUserInfo *user = [MSUserInfo shareUserInfo];
+            [user saveToDB];
         }
     }];
     //直接删除
@@ -307,7 +316,7 @@
     [tableNoticeView deleteSections:[NSIndexSet indexSetWithIndex:indexPath.section] withRowAnimation:UITableViewRowAnimationFade];
 }
 
-//所有会议-详情中-点击确定
+#pragma mark 所有会议-详情中-点击确定/取消
 - (void)didClickMeetingDetailActionCell:(MSAllMeetingDetailCell *)cell action:(NSInteger)action
 {
     if (action == 0) {
@@ -388,6 +397,7 @@
     
 }
 
+#pragma mark 横向滚动视图代理
 //所有会议-当天会议
 - (void)didClickToDayMeetingView:(MSTodayMeetingView *)view itemIndex:(NSInteger)index
 {
@@ -645,7 +655,7 @@
     }
 }
 
-//個人中心
+#pragma mark 個人中心
 - (void)userInfoClick:(UIButton*)button
 {
     NSLog(@"個人中心");
@@ -656,7 +666,7 @@
     [userCenterView showUserCenterView];
 }
 
-//新增預約
+#pragma mark  新增預約
 - (void)didClickOrder:(MSOrderMeetingButtonView*)view
 {
     NSLog(@"新增會與預約");
@@ -693,7 +703,8 @@
 
 - (void)openURL:(NSString *)urlString
 {
-//    urlString = [NSString stringWithFormat:@"itms-apps://itunes.apple.com/cn/app/jie-zou-da-shi/id493901993?mt=8"];
+//    urlString = @"itms-apps://itunes.apple.com/us/app/aio-會議雲管理/id1238981833?l=zh&ls=1&mt=8";
+    urlString = [urlString stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
     NSURL * url = [NSURL URLWithString:urlString];
     
     if ([[UIApplication sharedApplication] canOpenURL:url])
@@ -706,6 +717,7 @@
     }
 }
 
+#pragma mark 检查更新
 - (void)checkAppUpdateOnBackgroud:(BOOL)back
 {
     //檢查更新
@@ -739,6 +751,7 @@
     }];
 }
 
+#pragma mark 用户退出
 - (void)userLoginOut
 {
     //注销推送信息
@@ -779,7 +792,7 @@
     [self setLogoutInfo];
 }
 
-//切換tabbar
+#pragma mark  切換tabbar
 - (void)didClickNavTabbarView:(NSInteger)itemIndex
 {
     if (itemIndex == 0) {
@@ -792,7 +805,7 @@
     }
 }
 
-//滾動視圖時觸發
+#pragma mark  滾動視圖時觸發
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
 {
     if (scrollView == mainScrollView) {
@@ -804,6 +817,7 @@
     }
 }
 
+#pragma mark 懒加载
 - (NSMutableArray *)noticeArray;
 {
     if (!_noticeArray) {
@@ -839,10 +853,14 @@
     return _noMeetingDataTipsView;
 }
 
+#pragma mark 通知处理
 - (void)handleNotification:(NSDictionary *)userInfo isActive:(BOOL)isActive
 {
     APSModel *apsMsg = [APSModel mj_objectWithKeyValues:userInfo];
-    
+    [MSUserInfo shareUserInfo].badge = apsMsg.aps.badge;
+    [UIApplication sharedApplication].applicationIconBadgeNumber = [MSUserInfo shareUserInfo].badge;
+    MSUserInfo *user = [MSUserInfo shareUserInfo];
+    [user saveToDB];
     if (isActive) {
         [UIAlertView alertWithCallBackBlock:^(NSInteger buttonIndex) {
 

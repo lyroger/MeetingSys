@@ -59,6 +59,7 @@
     _isRememberPwd = userInfo.isRememberPwd;
     _userAcount = userInfo.userAcount;
     _isRegisterPushInfo = userInfo.isRegisterPushInfo;
+    _badge = userInfo.badge;
 }
 
 - (void)getUserInfoFromLocal

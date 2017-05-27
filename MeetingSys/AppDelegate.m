@@ -9,7 +9,6 @@
 #import "AppDelegate.h"
 #import "MSNavigationController.h"
 #import "MSLoginViewController.h"
-#import "JPUSHService.h"
 #ifdef NSFoundationVersionNumber_iOS_9_x_Max
 #import <UserNotifications/UserNotifications.h>
 #endif
@@ -96,7 +95,11 @@
 
 
 - (void)applicationWillEnterForeground:(UIApplication *)application {
-    [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
+    if ([MSUserInfo shareUserInfo].token.length) {
+        [UIApplication sharedApplication].applicationIconBadgeNumber = [MSUserInfo shareUserInfo].badge;
+    } else {
+        [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
+    }
     // Called as part of the transition from the background to the active state; here you can undo many of the changes made on entering the background.
 }
 

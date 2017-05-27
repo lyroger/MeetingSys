@@ -24,6 +24,7 @@
 @property (nonatomic, copy) NSString *userAcount;   //账号
 @property (nonatomic, assign) BOOL isRememberPwd;
 @property (nonatomic, assign) BOOL isRegisterPushInfo; //该用户是否注册推送通知信息成功
+@property (nonatomic, assign) NSInteger badge;  //消息显示个数
 
 + (instancetype)shareUserInfo;
 

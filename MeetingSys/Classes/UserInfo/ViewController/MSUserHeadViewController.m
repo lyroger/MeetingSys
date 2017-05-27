@@ -33,7 +33,7 @@
     //去除更新头像功能
 //    [self rightBarButtonWithName:@"" normalImgName:@"more" highlightImgName:@"more" target:self action:@selector(selectPic)];
     
-    self.scrollView = [[UIScrollView alloc] initWithFrame:self.view.bounds];
+    self.scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, kScreenHeight-64)];
     self.scrollView.zoomScale = 1;
     self.scrollView.backgroundColor = UIColorHex_Alpha(0x000000, 0);
     self.scrollView.contentSize = CGSizeMake(kScreenWidth, kScreenWidth);

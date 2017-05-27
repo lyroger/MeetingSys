@@ -8,6 +8,7 @@
 #import "Common_limit.h"
 #import "Common_image.h"
 #import "Common_GlobalKey.h"
+#import "JPUSHService.h"
 
 /***类别***/
 #import "Common_categories.h"
