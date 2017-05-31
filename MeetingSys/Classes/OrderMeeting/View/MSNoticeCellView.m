@@ -128,7 +128,7 @@
             return @"會議提醒";
             break;
         case 3:
-            return @"會議終止通知";
+            return @"No show 通知";
             break;
         case 4:
             return @"取消會議通知";

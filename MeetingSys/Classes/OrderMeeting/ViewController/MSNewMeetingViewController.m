@@ -57,6 +57,8 @@
 {
     if (!_meetingInfoObj) {
         _meetingInfoObj = [[MSMeetingDetailModel alloc] init];
+        _meetingInfoObj.organizeName = [MSUserInfo shareUserInfo].nickName;
+        _meetingInfoObj.organizeId = [MSUserInfo shareUserInfo].userId;
     }
     return _meetingInfoObj;
 }

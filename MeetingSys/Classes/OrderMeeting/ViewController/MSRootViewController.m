@@ -300,15 +300,6 @@
     [MSMeetingDetailModel didReadNoticeInfo:model.remindId networkHUD:NetworkHUDBackground target:self success:^(StatusModel *data) {
         if (data.code == 0) {
             NSLog(@"設置已讀成功");
-            if ([MSUserInfo shareUserInfo].badge > 0) {
-                [MSUserInfo shareUserInfo].badge--;
-            } else {
-                [MSUserInfo shareUserInfo].badge = 0;
-            }
-            [UIApplication sharedApplication].applicationIconBadgeNumber = [MSUserInfo shareUserInfo].badge;
-            [JPUSHService setBadge:[MSUserInfo shareUserInfo].badge];
-            MSUserInfo *user = [MSUserInfo shareUserInfo];
-            [user saveToDB];
         }
     }];
     //直接删除
@@ -857,10 +848,6 @@
 - (void)handleNotification:(NSDictionary *)userInfo isActive:(BOOL)isActive
 {
     APSModel *apsMsg = [APSModel mj_objectWithKeyValues:userInfo];
-    [MSUserInfo shareUserInfo].badge = apsMsg.aps.badge;
-    [UIApplication sharedApplication].applicationIconBadgeNumber = [MSUserInfo shareUserInfo].badge;
-    MSUserInfo *user = [MSUserInfo shareUserInfo];
-    [user saveToDB];
     if (isActive) {
         [UIAlertView alertWithCallBackBlock:^(NSInteger buttonIndex) {
 

@@ -1891,7 +1891,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = tech.agate.meetingsys;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "2430501e-f400-479c-92a2-ec23d7c03d73";
+				PROVISIONING_PROFILE = "ae51e2af-a4c6-46ce-9d03-60fd40f04fa8";
 				PROVISIONING_PROFILE_SPECIFIER = meetingsys_distribution_profile;
 			};
 			name = Release;

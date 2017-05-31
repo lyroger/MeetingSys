@@ -29,6 +29,7 @@
     [self authorizeOperation];
     [self.rootViewController checkAppUpdateOnBackgroud:YES];
     [self.window makeKeyAndVisible];
+    [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
     return YES;
 }
 
@@ -95,16 +96,12 @@
 
 
 - (void)applicationWillEnterForeground:(UIApplication *)application {
-    if ([MSUserInfo shareUserInfo].token.length) {
-        [UIApplication sharedApplication].applicationIconBadgeNumber = [MSUserInfo shareUserInfo].badge;
-    } else {
-        [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
-    }
     // Called as part of the transition from the background to the active state; here you can undo many of the changes made on entering the background.
 }
 
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {
+    [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
     // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
 }
 
