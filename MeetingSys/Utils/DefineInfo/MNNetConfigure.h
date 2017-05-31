@@ -15,9 +15,9 @@
 
 #if isTrueEnvironment
 //正式环境的环境类型
-#define kServerHost                 @"http://47.91.133.198:8080"
-#define kServerCurrentPath          @"/agate-web/"
-#define kServerPushNotificationHost @"http://47.91.133.198:8080/agate-web"
+#define kServerHost                 @"http://47.91.133.198"
+#define kServerCurrentPath          @"/"
+#define kServerPushNotificationHost @"http://47.91.133.198"
 #define kJPushAPPKey                @"1f775a82abf23e099c5f658c"
 #else
 
