@@ -680,9 +680,6 @@
         MSUpdatePwdViewController *updatePwdVC = [[MSUpdatePwdViewController alloc] init];
         [self.navigationController pushViewController:updatePwdVC animated:YES];
     } else if (itemIndex == 2) {
-        //檢查更新
-        [self checkAppUpdateOnBackgroud:NO];
-    } else if (itemIndex == 3) {
         //註銷
         [UIAlertView alertWithCallBackBlock:^(NSInteger buttonIndex) {
             if (buttonIndex == 1) {
