@@ -10,11 +10,7 @@
 
 #import <UIKit/UIKit.h>
 
-@protocol CSDatePickViewDelegate<NSObject>
-
-- (void)didPickerDate:(NSDate *)date;
-
-@end
+@protocol CSDatePickViewDelegate;
 
 @interface CSDatePickView : UIView
 
@@ -25,5 +21,11 @@
 @property (nonatomic, copy) NSString *title;
 
 - (void)showDatePickerView;
+
+@end
+
+@protocol CSDatePickViewDelegate<NSObject>
+
+- (void)didPickerView:(CSDatePickView*)view date:(NSDate *)date;
 
 @end

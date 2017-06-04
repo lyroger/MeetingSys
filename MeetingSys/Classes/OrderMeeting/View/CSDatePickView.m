@@ -143,8 +143,8 @@
 - (void)buttonClickAction:(UIButton*)button
 {
     if (button.tag == 1) {
-        if (self.delegate && [self.delegate respondsToSelector:@selector(didPickerDate:)]) {
-            [self.delegate didPickerDate:_datePicker.date];
+        if (self.delegate && [self.delegate respondsToSelector:@selector(didPickerView:date:)]) {
+            [self.delegate didPickerView:self date:_datePicker.date];
         }
 
         [self hideSelectActionView];

@@ -113,7 +113,10 @@
         }
     } else {
         if (multiple) {
+            textView.text = nil;
             textView.textColor = UIColorHex(0x333333);
+        } else {
+            textField.text = nil;
         }
     }
 }

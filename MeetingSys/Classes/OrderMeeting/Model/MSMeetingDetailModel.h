@@ -8,6 +8,13 @@
 
 #import "BaseModel.h"
 
+typedef NS_ENUM(NSInteger, MeetingOrder_Type)
+{
+    MeetingType_Train       = 1,      //理财培训学院
+    MeetingType_Money       = 2,      //理财中心
+    MeetingType_Validate    = 3,      //验证中心
+};
+
 @interface MSMemberModel : BaseModel
 
 @property (nonatomic,copy) NSString *memberId;
@@ -39,7 +46,7 @@
 @property (nonatomic, copy) NSString *agenda;
 @property (nonatomic, copy) NSString *demand;
 @property (nonatomic, strong) NSMutableArray *members;
-@property (nonatomic, assign) NSInteger meetingType;//會議類型；
+@property (nonatomic, assign) MeetingOrder_Type meetingType;//會議類型；
 @property (nonatomic, copy) NSString *roomId;//會議室ID
 @property (nonatomic, copy) NSString *roomTheme;//主题
 @property (nonatomic, copy) NSString *roomTimeTips;//最大时长提示
@@ -51,6 +58,15 @@
 @property (nonatomic, assign) NSInteger remindType;//提醒类型
 @property (nonatomic,strong) NSDate  *sendDate;//發送時間
 @property (nonatomic, copy) NSString *remindId;//提醒ID；
+
+@property (nonatomic, copy) NSString *meetingDay;       //验证类型预约日期
+@property (nonatomic, copy) NSString *meetingTime;      //验证类型预约时间段
+@property (nonatomic, copy) NSString *customerName;     //客戶姓名
+@property (nonatomic, assign) NSInteger customerNum;    //客人數
+@property (nonatomic, assign) NSInteger insuranceNum;   //保单数
+@property (nonatomic, copy) NSString *productType;      //产品类别
+@property (nonatomic, assign) NSInteger customePay;     //是否及时缴费 1是，0否
+@property (nonatomic, copy) NSString *contactNum;       //联系电话；
 
 @property (nonatomic, copy) NSString *organizerHeadURL;
 @property (nonatomic, copy) NSString *title;
@@ -80,5 +96,10 @@
                                  networkHUD:(NetworkHUD)hud
                                      target:(id)target
                                     success:(NetResponseBlock)success;
+
++ (NSURLSessionDataTask *)getHolidayInfoNetworkHUD:(NetworkHUD)hud
+                                            target:(id)target
+                                           success:(NetResponseBlock)success;
+
 
 @end

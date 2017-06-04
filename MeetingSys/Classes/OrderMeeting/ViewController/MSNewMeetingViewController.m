@@ -26,7 +26,9 @@
     UIButton    *newMeetingButton;
     SHMSelectActionView *selectThemeView;
     SHMSelectActionView *selectRoomsView;
+    SHMSelectActionView *selectTimeView;  //验证类型选择时间段
     CSDatePickView *_datePickerView;
+    CSDatePickView *_dateDayPickerView;
     BOOL isSelectBeginTimeing;
 }
 
@@ -37,6 +39,8 @@
 @property (nonatomic, strong) NSMutableArray *meetingTypeData;//會議類型
 
 @property (nonatomic, strong) NSMutableArray *roomsData;//會議地點
+
+@property (nonatomic, strong) NSMutableArray *holidays;//公休假
 
 @property (nonatomic, strong) NSMutableArray *meetingOthers;//參與人員
 
@@ -59,6 +63,8 @@
         _meetingInfoObj = [[MSMeetingDetailModel alloc] init];
         _meetingInfoObj.organizeName = [MSUserInfo shareUserInfo].nickName;
         _meetingInfoObj.organizeId = [MSUserInfo shareUserInfo].userId;
+        _meetingInfoObj.customePay = -1;
+//        _meetingInfoObj.meetingType = MeetingType_Validate;
     }
     return _meetingInfoObj;
 }
@@ -76,8 +82,9 @@
 {
     if (!_meetingTypeData) {
         _meetingTypeData = [[NSMutableArray alloc] init];
-        [_meetingTypeData addObject:@"會議使用"];
-        [_meetingTypeData addObject:@"洽談使用"];
+        [_meetingTypeData addObject:@"理财培训学院"];
+        [_meetingTypeData addObject:@"理财中心"];
+        [_meetingTypeData addObject:@"验证中心"];
     }
     return _meetingTypeData;
 }
@@ -100,6 +107,8 @@
 
 - (void)loadSubView
 {
+    [self loadHolidays:0];
+    
     [self leftBarButtonWithName:@"" image:[UIImage imageNamed:@"guanbi"] target:self action:@selector(closeView:)];
     
     [self rightBarButtonWithName:@"確認" normalImgName:@"" highlightImgName:@"" target:self action:@selector(submitMeetingAction:)];
@@ -134,7 +143,7 @@
         selectThemeView = [[SHMSelectActionView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, kScreenHeight)];
         selectThemeView.delegate = self;
     }
-    selectThemeView.title = @"會議類型";
+    selectThemeView.title = @"預約類型";
     selectThemeView.isMutibleSelect = NO;
     
     selectThemeView.dataArray = self.meetingTypeData;
@@ -151,6 +160,38 @@
     selectRoomsView.isMutibleSelect = NO;
     selectRoomsView.dataArray = rooms;
     [selectRoomsView showSelectActionView];
+}
+
+- (void)selectTimeWithDay:(NSString *)day
+{
+    if (!selectTimeView) {
+        selectTimeView = [[SHMSelectActionView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, kScreenHeight)];
+        selectTimeView.delegate = self;
+    }
+    selectTimeView.title = day;
+    selectTimeView.isMutibleSelect = NO;
+    selectTimeView.dataArray = [self getTimesWithDay:day];
+    [selectTimeView showSelectActionView];
+}
+
+- (NSMutableArray*)getTimesWithDay:(NSString *)day
+{
+    //判断是否是週六，週六時間段 9:00-14:30
+    NSDate *date = [NSDate dateWithString:self.meetingInfoObj.meetingDay format:@"yyyy-MM-dd"];
+    NSCalendar*calendar = [NSCalendar currentCalendar];
+    NSDateComponents *comps = [calendar components:(NSWeekCalendarUnit | NSWeekdayCalendarUnit |NSWeekdayOrdinalCalendarUnit) fromDate:date];
+    if (comps.weekday == 7) {
+        //周六
+        NSArray *times = @[@"9:00",@"9:30",@"10:00",@"10:30",@"11:00",@"11:30",@"12:00",@"12:30",@"13:00",@"13:30",@"14:00"];
+        NSMutableArray *mutTimes = [[NSMutableArray alloc] initWithArray:times];
+        return mutTimes;
+    } else {
+        //周一到周五 9:00-17:30
+        NSArray *times = @[@"9:00",@"9:30",@"10:00",@"10:30",@"11:00",@"11:30",@"12:00",@"12:30",@"13:00",@"13:30",@"14:00",@"14:30",@"15:00",@"15:30",@"16:00",@"16:30",@"17:00"];
+        NSMutableArray *mutTimes = [[NSMutableArray alloc] initWithArray:times];
+        return mutTimes;
+    }
+    return nil;
 }
 
 - (void)loadMeetingRooms
@@ -180,6 +221,18 @@
     return names;
 }
 
+- (void)loadHolidays:(NSInteger)operate
+{
+    [MSMeetingDetailModel getHolidayInfoNetworkHUD:NetworkHUDLockScreenButNavWithError
+                                            target:self
+                                           success:^(StatusModel *data) {
+                                               self.holidays = [data.originalData mj_JSONObject];
+                                               if (operate == 1) {
+                                                   [self pickerDateDayView];
+                                               }
+    }];
+}
+
 - (void)checkInfoComplete
 {
     if (self.meetingInfoObj.title.length
@@ -206,7 +259,7 @@
     if (view == selectThemeView) {
         NSInteger indexItem = [[indexs objectAtIndex:0] integerValue];
         NSString *meetingTypeString = [self.meetingTypeData objectAtIndex:indexItem];
-        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:3 inSection:0];
+        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:1 inSection:0];
         MSNewMeetingSelectCell *cell = [newMeetingTableView cellForRowAtIndexPath:indexPath];
         
         NSInteger meetingType = indexItem+1;
@@ -219,9 +272,7 @@
             self.meetingInfoObj.roomTheme = nil;
             self.meetingInfoObj.roomTheme = nil;
             self.meetingInfoObj.roomTimeTips = nil;
-            NSIndexPath *indexPath = [NSIndexPath indexPathForRow:4 inSection:0];
-            MSNewMeetingSelectCell *cell = [newMeetingTableView cellForRowAtIndexPath:indexPath];
-            [cell contentText:nil];
+            [newMeetingTableView reloadData];
         }
         [cell contentText:meetingTypeString];
         
@@ -244,148 +295,231 @@
         }
         [self.headView theme:self.meetingInfoObj.roomTheme hideImage:NO];
         
+    } else if (view == selectTimeView) {
+        NSInteger indexItem = [[indexs objectAtIndex:0] integerValue];
+        self.meetingInfoObj.meetingTime = [[self getTimesWithDay:self.meetingInfoObj.meetingDay] objectAtIndex:indexItem];
+        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:2 inSection:0];
+        [newMeetingTableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
     }
     [self checkInfoComplete];
 }
 
-- (void)didClickSelectDateTimeView:(MSNewMeetingTimeCell*)cell itemIndex:(NSInteger)index
+- (void)pickerDateDayView
 {
+    if (!_dateDayPickerView) {
+        _dateDayPickerView = [[CSDatePickView alloc] initWithFrame:[UIScreen mainScreen].bounds];
+        _dateDayPickerView.delegate = self;
+    }
     //日期
-    NSDate *date;
-    if (!_datePickerView) {
-        _datePickerView = [[CSDatePickView alloc] initWithFrame:[UIScreen mainScreen].bounds];
-        _datePickerView.delegate = self;
+    NSDate *date = [NSDate date];
+    if (self.meetingInfoObj.meetingDay.length) {
+        date = [NSDate dateWithString:self.meetingInfoObj.meetingDay format:@"yyyy-MM-dd"];
     }
-    isSelectBeginTimeing = index==0?YES:NO;
-    if (index == 0) {
-        //開始時間
-        if (self.meetingInfoObj.beginTime) {
-            date = self.meetingInfoObj.beginTime;
-        }else{
-            date = [NSDate date];
-        }
-        _datePickerView.title = @"開始時間";
-    } else {
-        //結束時間
-        if (self.meetingInfoObj.endTime) {
-            date = self.meetingInfoObj.endTime;
-        }else{
-            date = [NSDate date];
-        }
-        _datePickerView.title = @"結束時間";
-    }
-    _datePickerView.datePicker.maximumDate = nil;
-    _datePickerView.datePicker.minimumDate = [NSDate date];
-    [_datePickerView.datePicker setDate:date];
-    [_datePickerView showDatePickerView];
+    _dateDayPickerView.title = @"選擇日期";
+    _dateDayPickerView.datePicker.maximumDate = [[NSDate date] dateByAddingYears:1];
+    _dateDayPickerView.datePicker.minimumDate = [NSDate date];
+    [_dateDayPickerView.datePicker setDate:date];
+    [_dateDayPickerView.datePicker setDatePickerMode:UIDatePickerModeDate];
+    [_dateDayPickerView showDatePickerView];
+
 }
 
+- (void)didClickSelectDateTimeView:(MSNewMeetingTimeCell*)cell itemIndex:(NSInteger)index
+{
+    if (self.meetingInfoObj.meetingType == MeetingType_Validate) {
+        if (index == 0) {
+            
+            if (!self.holidays.count) {
+                [self loadHolidays:1];
+            } else {
+                [self pickerDateDayView];
+            }
+            
+        } else {
+            if (!self.meetingInfoObj.meetingDay.length) {
+                [HUDManager alertWithTitle:@"請先選擇日期"];
+            } else {
+                [self selectTimeWithDay:self.meetingInfoObj.meetingDay];
+            }
+        }
+        
+    } else {
+        //日期
+        NSDate *date;
+        if (!_datePickerView) {
+            _datePickerView = [[CSDatePickView alloc] initWithFrame:[UIScreen mainScreen].bounds];
+            _datePickerView.delegate = self;
+        }
+        isSelectBeginTimeing = index==0?YES:NO;
+        if (index == 0) {
+            //開始時間
+            if (self.meetingInfoObj.beginTime) {
+                date = self.meetingInfoObj.beginTime;
+            }else{
+                date = [NSDate date];
+            }
+            _datePickerView.title = @"開始時間";
+        } else {
+            //結束時間
+            if (self.meetingInfoObj.endTime) {
+                date = self.meetingInfoObj.endTime;
+            }else{
+                date = [NSDate date];
+            }
+            _datePickerView.title = @"結束時間";
+        }
+        _datePickerView.datePicker.maximumDate = nil;
+        _datePickerView.datePicker.minimumDate = [NSDate date];
+        [_datePickerView.datePicker setDate:date];
+        [_datePickerView showDatePickerView];
+    }
+    
+}
+
+
+
 #pragma mark- CSDatePickViewDelegate
-- (void)didPickerDate:(NSDate *)date
+- (void)didPickerView:(CSDatePickView *)view date:(NSDate *)date
 {
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:2 inSection:0];
-    if (isSelectBeginTimeing) {
-        if (!self.meetingInfoObj.endTime) {
-            //不需要比較
-            self.meetingInfoObj.beginTime = date;
+    if (self.meetingInfoObj.meetingType == MeetingType_Validate) {
+        NSString *selectedDay = [date stringWithFormat:@"yyyy-MM-dd"];
+        NSCalendar*calendar = [NSCalendar currentCalendar];
+        NSDateComponents *comps = [calendar components:(NSWeekCalendarUnit | NSWeekdayCalendarUnit |NSWeekdayOrdinalCalendarUnit)
+                           fromDate:date];
+        
+        //先判断是否是周日，再判断是否是法定假
+        if (comps.weekday == 1 || [self.holidays containsObject:selectedDay]) {
+            [HUDManager alertWithTitle:@"不能選擇公休日期，請重新選擇！"];
+        } else {
+            self.meetingInfoObj.meetingDay = selectedDay;
+            self.meetingInfoObj.meetingTime = nil;
             [newMeetingTableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
             [self checkInfoComplete];
-        } else {
-            if ([date compare:self.meetingInfoObj.endTime] != NSOrderedAscending) {
-                [HUDManager alertWithTitle:@"開始時間不能大於結束時間！"];
-            } else {
+        }
+        NSLog(@"选择日期%@，周%zd", selectedDay,comps.weekday);
+    } else {
+        if (isSelectBeginTimeing) {
+            if (!self.meetingInfoObj.endTime) {
+                //不需要比較
                 self.meetingInfoObj.beginTime = date;
                 [newMeetingTableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
                 [self checkInfoComplete];
-            }
-        }
-    } else {
-        if (!self.meetingInfoObj.beginTime) {
-            //不需要比較
-            self.meetingInfoObj.endTime = date;
-            [newMeetingTableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-            [self checkInfoComplete];
-        } else {
-            if ([self.meetingInfoObj.beginTime compare:date] != NSOrderedAscending) {
-                [HUDManager alertWithTitle:@"結束時間不能小於開始時間！"];
             } else {
+                if ([date compare:self.meetingInfoObj.endTime] != NSOrderedAscending) {
+                    [HUDManager alertWithTitle:@"開始時間不能大於結束時間！"];
+                } else {
+                    self.meetingInfoObj.beginTime = date;
+                    [newMeetingTableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+                    [self checkInfoComplete];
+                }
+            }
+        } else {
+            if (!self.meetingInfoObj.beginTime) {
+                //不需要比較
                 self.meetingInfoObj.endTime = date;
                 [newMeetingTableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
                 [self checkInfoComplete];
+            } else {
+                if ([self.meetingInfoObj.beginTime compare:date] != NSOrderedAscending) {
+                    [HUDManager alertWithTitle:@"結束時間不能小於開始時間！"];
+                } else {
+                    self.meetingInfoObj.endTime = date;
+                    [newMeetingTableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+                    [self checkInfoComplete];
+                }
             }
         }
     }
-}
-
-//换头像
-- (void)didClickHeadView
-{
-    [self selectPic];
+    
 }
 
 #pragma mark UITableViewDelegate & UITableViewDataSource
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    if (indexPath.row == 3) {
+    
+    if (indexPath.row == 1) {
+        
         [self selectMeetingTheme];
-    } else if (indexPath.row == 5 || indexPath.row == 6) {
-        MSNewMeetingSelectCell *cell = [tableView cellForRowAtIndexPath:indexPath];
-        MSSelectMemeberViewController *memberVC = [[MSSelectMemeberViewController alloc] init];
-        memberVC.memberType = indexPath.row == 5 ? MSSelectMemeber_Organizer:MSSelectMemeber_Others;
-        if (indexPath.row == 6) {
-            [memberVC.selectedMemebers addObjectsFromArray:self.meetingOthers];
-        }
-        @weakify(self)
-        memberVC.selectBlock = ^(MSSelectMemeberType selectType, NSArray *members) {
-            @strongify(self)
-            if (selectType == MSSelectMemeber_Organizer) {
-                MSMemberModel *model = [members objectAtIndex:0];
-                self.meetingInfoObj.organizeName = model.name;
-                self.meetingInfoObj.organizeId = model.memberId;
-                [cell contentText:model.name];
-                [self checkInfoComplete];
-            } else {
-                NSMutableString *names = [[NSMutableString alloc] init];
-                NSMutableString *ids = [[NSMutableString alloc] init];
-                for (int i = 0; i< members.count; i++) {
-                    MSMemberModel *model = [members objectAtIndex:i];
-                    if (i == 0) {
-                        [names appendString:model.name];
-                        [ids appendString:model.memberId];
-                    } else {
-                        [names appendFormat:@",%@",model.name];
-                        [ids appendFormat:@",%@",model.memberId];
-                    }
-                }
-                self.meetingInfoObj.others = ids;
-                self.meetingInfoObj.othersName = names;
-                [self.meetingOthers removeAllObjects];
-                [self.meetingOthers addObjectsFromArray:members];
-                [cell contentText:names];
-            }
-        };
-        [self.navigationController pushViewController:memberVC animated:YES];
-    } else if (indexPath.row == 4) {
+        
+    } else if (indexPath.row == 3) {
+        //加载会议地点
         if (!self.meetingInfoObj.beginTime || !self.meetingInfoObj.endTime) {
             [HUDManager alertWithTitle:@"請完善預約時間！"];
             return;
         } else if (!self.meetingInfoObj.meetingType) {
-            [HUDManager alertWithTitle:@"請選擇會議類型！"];
+            [HUDManager alertWithTitle:@"請選擇預約類型！"];
             return;
         } else {
             [self loadMeetingRooms];
         }
+    } else if (indexPath.row == 4) {
+        //选择组织者
+        MSNewMeetingSelectCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+        MSSelectMemeberViewController *memberVC = [[MSSelectMemeberViewController alloc] init];
+        memberVC.memberType = MSSelectMemeber_Organizer;
+        @weakify(self)
+        memberVC.selectBlock = ^(MSSelectMemeberType selectType, NSArray *members) {
+            @strongify(self)
+            MSMemberModel *model = [members objectAtIndex:0];
+            self.meetingInfoObj.organizeName = model.name;
+            self.meetingInfoObj.organizeId = model.memberId;
+            [cell contentText:model.name];
+            [self checkInfoComplete];
+        };
+        [self.navigationController pushViewController:memberVC animated:YES];
+    } else {
+        if (self.meetingInfoObj.meetingType <= MeetingType_Train) {
+            if (indexPath.row == 5) {
+                //选择参与人员
+                MSNewMeetingSelectCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+                MSSelectMemeberViewController *memberVC = [[MSSelectMemeberViewController alloc] init];
+                memberVC.memberType = MSSelectMemeber_Others;
+                [memberVC.selectedMemebers addObjectsFromArray:self.meetingOthers];
+                @weakify(self)
+                memberVC.selectBlock = ^(MSSelectMemeberType selectType, NSArray *members) {
+                    @strongify(self)
+                    NSMutableString *names = [[NSMutableString alloc] init];
+                    NSMutableString *ids = [[NSMutableString alloc] init];
+                    for (int i = 0; i< members.count; i++) {
+                        MSMemberModel *model = [members objectAtIndex:i];
+                        if (i == 0) {
+                            [names appendString:model.name];
+                            [ids appendString:model.memberId];
+                        } else {
+                            [names appendFormat:@",%@",model.name];
+                            [ids appendFormat:@",%@",model.memberId];
+                        }
+                    }
+                    self.meetingInfoObj.others = ids;
+                    self.meetingInfoObj.othersName = names;
+                    [self.meetingOthers removeAllObjects];
+                    [self.meetingOthers addObjectsFromArray:members];
+                    [cell contentText:names];
+                };
+                [self.navigationController pushViewController:memberVC animated:YES];
+            }
+        } else {
+            //验证类型
+        }
+        
     }
     
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.row == 7 || indexPath.row == 8) {
-        return 110;
-    } else if (indexPath.row == 0){
+    if (indexPath.row == 0) {
         return 50;
+    }
+    
+    if (self.meetingInfoObj.meetingType <= MeetingType_Train) {
+        if (indexPath.row == 7 || indexPath.row == 8) {
+            return 110;
+        } else {
+            return 70;
+        }
     } else {
         return 70;
     }
@@ -403,7 +537,13 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return 9;
+    if (self.meetingInfoObj.meetingType == MeetingType_Money) {
+        return 5;
+    } else if (self.meetingInfoObj.meetingType == MeetingType_Validate) {
+        return 11;
+    } else {
+        return 9;
+    }
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -413,61 +553,7 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.row == 1 || indexPath.row == 7 || indexPath.row == 8) {
-        NSArray *titles = @[@"會議主題",@"會議議程",@"會議要求"];
-        NSArray *placeholders = @[@"請輸入會議主題",@"請輸入會議議程",@"請輸入會議要求"];
-        MSNewMeetingInputCell *cell = [tableView dequeueReusableCellWithIdentifier:@"MSNewMeetingInputCell"];
-        cell.selectionStyle = UITableViewCellSelectionStyleNone;
-        @weakify(self)
-        cell.inputBlock = ^(NSString *inputText) {
-            @strongify(self)
-            if (indexPath.row == 1) {
-                self.meetingInfoObj.title = inputText;
-            } else if (indexPath.row == 7) {
-                self.meetingInfoObj.agenda = inputText;
-            } else if (indexPath.row == 8) {
-                self.meetingInfoObj.demand = inputText;
-            }
-            [self checkInfoComplete];
-        };
-        NSInteger index = indexPath.row==1?0:indexPath.row-6;
-        [cell multipleLineInput:indexPath.row == 1?NO:YES title:titles[index] placeholder:placeholders[index] must:indexPath.row==1?YES:NO];
-        
-        if (indexPath.row == 1) {
-            [cell contentText:self.meetingInfoObj.title multipleLine:NO];
-        } else if (indexPath.row == 7) {
-            [cell contentText:self.meetingInfoObj.agenda multipleLine:YES];
-        } else if (indexPath.row == 8) {
-            [cell contentText:self.meetingInfoObj.demand multipleLine:YES];
-        }
-        
-        return cell;
-    } else if (indexPath.row >= 3 && indexPath.row <= 6) {
-        NSArray *titles = @[@"會議類型",@"會議地點",@"會議組織者",@"參與人員"];
-        MSNewMeetingSelectCell *cell = [tableView dequeueReusableCellWithIdentifier:@"MSNewMeetingSelectCell"];
-        [cell title:titles[indexPath.row-3] placeholder:@"請選擇" mustItem:indexPath.row==6?NO:YES rightView:NO];
-        if (indexPath.row == 3 && self.meetingInfoObj.meetingType) {
-            [cell contentText:[self.meetingTypeData objectAtIndex:self.meetingInfoObj.meetingType-1]];
-        }
-        if (indexPath.row == 4 && self.meetingInfoObj.address.length) {
-            [cell contentText:self.meetingInfoObj.address];
-        }
-        if (indexPath.row == 5 && self.meetingInfoObj.organizeName.length) {
-            [cell contentText:self.meetingInfoObj.organizeName];
-        }
-        if (indexPath.row == 6 && self.meetingInfoObj.othersName.length) {
-            [cell contentText:self.meetingInfoObj.othersName];
-        }
-        return cell;
-    } else if (indexPath.row == 2){
-        MSNewMeetingTimeCell *cell = [tableView dequeueReusableCellWithIdentifier:@"MSNewMeetingTimeCell"];
-        cell.delegate = self;
-        NSString *begin = self.meetingInfoObj.beginTime?[self.meetingInfoObj.beginTime dateWithFormat:@"yyyy-MM-dd HH:mm"]:@"請選擇開始時間";
-        NSString *end = self.meetingInfoObj.endTime?[self.meetingInfoObj.endTime dateWithFormat:@"yyyy-MM-dd HH:mm"]:@"請選擇結束時間";
-        [cell title:@"會議時間" mustItem:YES begin:begin end:end];
-        cell.selectionStyle = UITableViewCellSelectionStyleNone;
-        return cell;
-    } else {
+    if (indexPath.row == 0) {
         MSNewMeetingONOffCell *cell = [tableView dequeueReusableCellWithIdentifier:@"MSNewMeetingONOffCell"];
         [cell title:@"隱藏個人半身照" mustItem:NO on:self.meetingInfoObj.hideThemeHead];
         @weakify(self)
@@ -477,6 +563,141 @@
             [self.headView theme:self.meetingInfoObj.roomTheme hideImage:isON];
         };
         return cell;
+    } else if (indexPath.row <= 4) {
+        if (indexPath.row == 2) {
+            MSNewMeetingTimeCell *cell = [tableView dequeueReusableCellWithIdentifier:@"MSNewMeetingTimeCell"];
+            cell.delegate = self;
+            if (self.meetingInfoObj.meetingType == MeetingType_Validate) {
+                NSString *begin = self.meetingInfoObj.meetingDay?self.meetingInfoObj.meetingDay:@"請選擇日期";
+                NSString *end = self.meetingInfoObj.meetingTime?self.meetingInfoObj.meetingTime:@"請選擇時間段";
+                [cell title:@"會議時間" mustItem:YES begin:begin end:end];
+            } else {
+                NSString *begin = self.meetingInfoObj.beginTime?[self.meetingInfoObj.beginTime dateWithFormat:@"yyyy-MM-dd HH:mm"]:@"請選擇開始時間";
+                NSString *end = self.meetingInfoObj.endTime?[self.meetingInfoObj.endTime dateWithFormat:@"yyyy-MM-dd HH:mm"]:@"請選擇結束時間";
+                [cell title:@"會議時間" mustItem:YES begin:begin end:end];
+            }
+            
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            return cell;
+        } else {
+            if (indexPath.row == 1) {
+                MSNewMeetingSelectCell *cell = [tableView dequeueReusableCellWithIdentifier:@"MSNewMeetingSelectCell"];
+                [cell title:@"預約類型" placeholder:@"請選擇" mustItem:YES rightView:NO];
+                if (self.meetingInfoObj.meetingType) {
+                    [cell contentText:[self.meetingTypeData objectAtIndex:self.meetingInfoObj.meetingType-1]];
+                }
+                return cell;
+            } else {
+                NSArray *titles = @[@"會議地點",@"會議組織者"];
+                MSNewMeetingSelectCell *cell = [tableView dequeueReusableCellWithIdentifier:@"MSNewMeetingSelectCell"];
+                [cell title:titles[indexPath.row-3] placeholder:@"請選擇" mustItem:YES rightView:NO];
+                if (indexPath.row == 3 && self.meetingInfoObj.address.length) {
+                    [cell contentText:self.meetingInfoObj.address];
+                }
+                if (indexPath.row == 4 && self.meetingInfoObj.organizeName.length) {
+                    [cell contentText:self.meetingInfoObj.organizeName];
+                }
+                return cell;
+            }
+        }
+    } else {
+        //验证类型和理财中心不需要 主题，参与人员，议程，要求四个选项
+        if (self.meetingInfoObj.meetingType <= MeetingType_Train) {
+            if (indexPath.row == 5) {
+                //参与人员
+                MSNewMeetingSelectCell *cell = [tableView dequeueReusableCellWithIdentifier:@"MSNewMeetingSelectCell"];
+                [cell title:@"參與人員" placeholder:@"請選擇" mustItem:NO rightView:NO];
+                if (self.meetingInfoObj.othersName.length) {
+                    [cell contentText:self.meetingInfoObj.othersName];
+                }
+                return cell;
+            } else {
+                NSArray *titles = @[@"會議主題",@"會議議程",@"會議要求"];
+                NSArray *placeholders = @[@"請輸入會議主題",@"請輸入會議議程",@"請輸入會議要求"];
+                MSNewMeetingInputCell *cell = [tableView dequeueReusableCellWithIdentifier:@"MSNewMeetingInputCell"];
+                cell.selectionStyle = UITableViewCellSelectionStyleNone;
+                @weakify(self)
+                cell.inputBlock = ^(NSString *inputText) {
+                    @strongify(self)
+                    if (indexPath.row == 6) {
+                        self.meetingInfoObj.title = inputText;
+                    } else if (indexPath.row == 7) {
+                        self.meetingInfoObj.agenda = inputText;
+                    } else if (indexPath.row == 8) {
+                        self.meetingInfoObj.demand = inputText;
+                    }
+                    [self checkInfoComplete];
+                };
+                NSInteger index = indexPath.row-6;
+                [cell multipleLineInput:indexPath.row == 6?NO:YES title:titles[index] placeholder:placeholders[index] must:indexPath.row==1?YES:NO];
+                
+                if (indexPath.row == 6) {
+                    [cell contentText:self.meetingInfoObj.title multipleLine:NO];
+                } else if (indexPath.row == 7) {
+                    [cell contentText:self.meetingInfoObj.agenda multipleLine:YES];
+                } else if (indexPath.row == 8) {
+                    [cell contentText:self.meetingInfoObj.demand multipleLine:YES];
+                }
+                
+                return cell;
+            }
+            
+        } else {
+            //验证类型
+            if (indexPath.row >=6 && indexPath.row <=8) {
+                NSArray *titles = @[@"客人數量",@"保單數量",@"是否及時繳費"];
+                MSNewMeetingSelectCell *cell = [tableView dequeueReusableCellWithIdentifier:@"MSNewMeetingSelectCell"];
+                [cell title:titles[indexPath.row-6] placeholder:@"請選擇" mustItem:YES rightView:NO];
+                if (indexPath.row == 6 && self.meetingInfoObj.customerNum) {
+                    [cell contentText:[NSString stringWithFormat:@"%zd個",self.meetingInfoObj.customerNum]];
+                } else if (indexPath.row == 7 && self.meetingInfoObj.insuranceNum) {
+                    [cell contentText:[NSString stringWithFormat:@"%zd個",self.meetingInfoObj.insuranceNum]];
+                } else if (indexPath.row == 8 && self.meetingInfoObj.customePay!=-1) {
+                    [cell contentText:self.meetingInfoObj.customePay==1?@"是":@"否"];
+                }
+                return cell;
+            } else {
+                if (indexPath.row == 5) {
+                    //客戶姓名
+                    MSNewMeetingInputCell *cell = [tableView dequeueReusableCellWithIdentifier:@"MSNewMeetingInputCell"];
+                    cell.selectionStyle = UITableViewCellSelectionStyleNone;
+                    @weakify(self)
+                    cell.inputBlock = ^(NSString *inputText) {
+                        @strongify(self)
+                        self.meetingInfoObj.customerName = inputText;
+                        [self checkInfoComplete];
+                    };
+                    [cell multipleLineInput:NO title:@"客戶姓名" placeholder:@"請輸入" must:YES];
+                    [cell contentText:self.meetingInfoObj.customerName multipleLine:NO];
+                    return cell;
+                } else {
+                    NSArray *titles = @[@"投保產品類別",@"理財顧問聯絡電話"];
+                    NSArray *placeholders = @[@"請輸入",@"請輸入"];
+                    MSNewMeetingInputCell *cell = [tableView dequeueReusableCellWithIdentifier:@"MSNewMeetingInputCell"];
+                    cell.selectionStyle = UITableViewCellSelectionStyleNone;
+                    @weakify(self)
+                    cell.inputBlock = ^(NSString *inputText) {
+                        @strongify(self)
+                        if (indexPath.row == 9) {
+                            self.meetingInfoObj.productType = inputText;
+                        } else if (indexPath.row == 10) {
+                            self.meetingInfoObj.contactNum = inputText;
+                        }
+                        [self checkInfoComplete];
+                    };
+                    NSInteger index = indexPath.row-9;
+                    [cell multipleLineInput:NO title:titles[index] placeholder:placeholders[index] must:YES];
+                    
+                    if (indexPath.row == 9) {
+                        [cell contentText:self.meetingInfoObj.productType multipleLine:NO];
+                    } else if (indexPath.row == 10) {
+                        [cell contentText:self.meetingInfoObj.contactNum multipleLine:NO];
+                    }
+                    
+                    return cell;
+                }
+            }
+        }
     }
 }
 
@@ -498,6 +719,12 @@
     [self.navigationController.navigationBar setTintColor:UIColorHex(0xFF845F)];
     [self.navigationController.navigationBar setTitleTextAttributes:@{NSForegroundColorAttributeName:UIColorHex(0xffffff), NSFontAttributeName:kNavTitleFont}];
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
+}
+
+//换头像
+- (void)didClickHeadView
+{
+    [self selectPic];
 }
 
 - (void)selectPic
@@ -658,14 +885,5 @@
     // Dispose of any resources that can be recreated.
 }
 
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 @end

@@ -136,4 +136,11 @@
     return [self dataTaskMethod:HTTPMethodPOST path:@"api/meeting/cancel" params:ParamsDic networkHUD:hud target:target success:success];
 }
 
++ (NSURLSessionDataTask *)getHolidayInfoNetworkHUD:(NetworkHUD)hud
+                                            target:(id)target
+                                           success:(NetResponseBlock)success
+{
+    return [self dataTaskMethod:HTTPMethodPOST path:@"api/holiday/list" params:nil networkHUD:hud target:target success:success];
+}
+
 @end

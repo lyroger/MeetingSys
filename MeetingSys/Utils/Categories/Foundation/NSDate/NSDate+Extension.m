@@ -383,7 +383,7 @@
     [inputFormatter setDateFormat:format];
     
     //卖房管家：接口返回的时间是基于GTM的，使用UTC会+8小时导致时间显示不正确
-//    [inputFormatter setTimeZone:[NSTimeZone timeZoneWithAbbreviation:@"UTC"]];
+    [inputFormatter setTimeZone:[NSTimeZone timeZoneWithAbbreviation:@"UTC"]];
     
     NSDate *date = [inputFormatter dateFromString:string];
     
