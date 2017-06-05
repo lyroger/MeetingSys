@@ -20,6 +20,10 @@
 - (id)init
 {
     if (self = [super init]) {
+        UIImageView *bgIcon = [UIImageView new];
+        bgIcon.image = [UIImage imageNamed:@"new_bg"];
+        [self addSubview:bgIcon];
+        
         UIImageView *meetingIcon = [UIImageView new];
         meetingIcon.image = [UIImage imageNamed:@"addmeeting_add"];
         [self addSubview:meetingIcon];
@@ -33,6 +37,11 @@
         UIImageView *upIcon = [UIImageView new];
         upIcon.image = [UIImage imageNamed:@"addmeeting_up_icon"];
         [self addSubview:upIcon];
+        
+        [bgIcon mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.left.top.equalTo(@(-5));
+            make.right.bottom.equalTo(@5);
+        }];
         
         [meetingIcon mas_makeConstraints:^(MASConstraintMaker *make) {
             make.left.equalTo(@30);

@@ -23,7 +23,7 @@
 #define UIColorHex_Alpha(rgbValue, al) [UIColor colorWithRed:((float)((rgbValue & 0xFF0000) >> 16))/255.0 green:((float)((rgbValue & 0xFF00) >> 8))/255.0 blue:((float)(rgbValue & 0xFF))/255.0 alpha:al]
 
 //app主色调
-#define kMainColor      UIColorHex(0x02b0f0)
+#define kMainColor      UIColorHex(0xDF1B20)
 #define kRedColor       UIColorHex(0xff6158)
 #define kYellowColor    UIColorHex(0xffc42f)
 #define kGreenColor     UIColorHex(0x29d043)

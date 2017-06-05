@@ -90,7 +90,7 @@
     userTextField.returnKeyType = UIReturnKeyNext;
     userTextField.delegate = self;
     userTextField.text = username;
-    userTextField.tintColor = UIColorHex(0xFF7B54);
+    userTextField.tintColor = kMainColor;
     userTextField.font = kFontPingFangRegularSize(16);
     userTextField.textColor = UIColorHex(0x666666);
     [accountInputContent addSubview:userTextField];
@@ -104,7 +104,7 @@
     pwdTextField.returnKeyType = UIReturnKeyDone;
     pwdTextField.delegate = self;
     pwdTextField.text = password;
-    pwdTextField.tintColor = UIColorHex(0xFF7B54);
+    pwdTextField.tintColor = kMainColor;
     pwdTextField.font = kFontPingFangRegularSize(16);
     pwdTextField.textColor = UIColorHex(0x666666);
     [accountInputContent addSubview:pwdTextField];
@@ -117,7 +117,7 @@
     
     loginButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [loginButton setBackgroundImage:[UIImage imageWithColor:UIColorHex(0xE3E3E3)] forState:UIControlStateDisabled];
-    [loginButton setBackgroundImage:[UIImage imageWithColor:UIColorHex(0xFF7B54)] forState:UIControlStateNormal];
+    [loginButton setBackgroundImage:[UIImage imageWithColor:kMainColor] forState:UIControlStateNormal];
     
     loginButton.layer.cornerRadius = 4;
     loginButton.layer.borderColor = [UIColor clearColor].CGColor;
@@ -154,7 +154,7 @@
     UIButton *agreeDetailButton = [UIButton buttonWithType:UIButtonTypeCustom];
     agreeDetailButton.tag = 101;
     agreeDetailButton.titleLabel.font = kFontSize(12);
-    [agreeDetailButton setTitleColor:UIColorHex(0xFFA200) forState:UIControlStateNormal];
+    [agreeDetailButton setTitleColor:UIColorHex(0x4990E2) forState:UIControlStateNormal];
     [agreeDetailButton setTitle:@"《協議》" forState:UIControlStateNormal];
     agreeDetailButton.titleEdgeInsets = UIEdgeInsetsMake(6, 6, 6, 6);
     [agreeDetailButton addTarget:self action:@selector(agreeAction:) forControlEvents:UIControlEventTouchUpInside];

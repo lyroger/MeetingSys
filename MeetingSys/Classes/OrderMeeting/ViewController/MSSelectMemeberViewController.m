@@ -105,7 +105,7 @@
     
     if (self.memberType == MSSelectMemeber_Others) {
         self.title = @"選擇參與人員";
-        [self rightBarButtonWithName:@"確定" normalColor:UIColorHex(0xFF7B54) disableColor:UIColorHex_Alpha(0xFF7B54, 0.6) target:self action:@selector(selectMemeberOK)];
+        [self rightBarButtonWithName:@"確定" normalColor:kMainColor disableColor:UIColorHex_Alpha(0xDF1B20, 0.6) target:self action:@selector(selectMemeberOK)];
         [self racForNavRightBt];
         self.selectedItemCount = self.selectedMemebers.count;
         if (self.selectedMemebers.count) {

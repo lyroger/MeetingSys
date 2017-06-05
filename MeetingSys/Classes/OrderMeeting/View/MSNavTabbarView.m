@@ -25,7 +25,7 @@
     if (self = [super initWithFrame:frame]) {
         leftButton = [UIButton buttonWithType:UIButtonTypeCustom];
         [leftButton.titleLabel setFont:kFontPingFangRegularSize(14)];
-        [leftButton setTitleColor:UIColorHex(0xFF7B54) forState:UIControlStateNormal];
+        [leftButton setTitleColor:kMainColor forState:UIControlStateNormal];
         [leftButton setTitle:@"會議提醒" forState:UIControlStateNormal];
         leftButton.tag = 100;
         [leftButton addTarget:self action:@selector(buttonClick:) forControlEvents:UIControlEventTouchUpInside];
@@ -41,7 +41,7 @@
         
         bottomLine = [UILabel new];
         [bottomLine setFont:kFontPingFangRegularSize(14)];
-        bottomLine.backgroundColor = UIColorHex(0xFF7B54);
+        bottomLine.backgroundColor = kMainColor;
         CGSize size = [@"會議提醒" sizeWithAttributes:@{NSFontAttributeName:kFontPingFangRegularSize(14)}];
         lineWidth = size.width;
         bottomLine.frame = CGRectMake((self.width/2-lineWidth)/2, self.height-2, lineWidth, 2);
@@ -85,11 +85,11 @@
 - (void)updateButtonStatusWithIndex:(NSInteger)itemIndex
 {
     if (itemIndex == 0) {
-        [leftButton setTitleColor:UIColorHex(0xFF7B54) forState:UIControlStateNormal];
+        [leftButton setTitleColor:kMainColor forState:UIControlStateNormal];
         [rightButton setTitleColor:UIColorHex(0x999999) forState:UIControlStateNormal];
     } else {
         [leftButton setTitleColor:UIColorHex(0x999999) forState:UIControlStateNormal];
-        [rightButton setTitleColor:UIColorHex(0xFF7B54) forState:UIControlStateNormal];
+        [rightButton setTitleColor:kMainColor forState:UIControlStateNormal];
     }
     
     [UIView animateWithDuration:0.2 animations:^{

@@ -111,7 +111,7 @@
     buttonOK.tag = 1;
     buttonOK.titleLabel.font = [UIFont systemFontOfSize:16];
     [buttonOK setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-    [buttonOK setTitleColor:UIColorHex(0xFFB072) forState:UIControlStateNormal];
+    [buttonOK setTitleColor:kMainColor forState:UIControlStateNormal];
     [buttonOK addTarget:self action:@selector(buttonClickAction:) forControlEvents:UIControlEventTouchUpInside];
     [navContentView addSubview:buttonOK];
     

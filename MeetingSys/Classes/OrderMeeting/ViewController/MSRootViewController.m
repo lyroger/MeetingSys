@@ -104,7 +104,6 @@
     
     //加载底部预约按钮
     MSOrderMeetingButtonView *bottomView = [MSOrderMeetingButtonView new];
-    bottomView.backgroundColor = UIColorHex(0xFF845F);
     bottomView.delegate = self;
     bottomView.layer.shadowColor = UIColorHex_Alpha(0x000000, 0.05).CGColor;
     bottomView.layer.shadowOpacity = 1;
@@ -565,7 +564,7 @@
         UILabel *titleLabel = [UILabel new];
         titleLabel.frame = sectionContentView.bounds;
         titleLabel.font = kFontPingFangRegularSize(14);
-        titleLabel.textColor = UIColorHex(0xFF7B54);
+        titleLabel.textColor = kMainColor;
         titleLabel.textAlignment = NSTextAlignmentCenter;
         titleLabel.backgroundColor = sectionContentView.backgroundColor;
         titleLabel.text = dayGroupList.meetingDate;

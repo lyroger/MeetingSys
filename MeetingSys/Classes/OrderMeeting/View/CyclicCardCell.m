@@ -20,7 +20,7 @@
 - (id)initWithFrame:(CGRect)frame
 {
     if (self = [super initWithFrame:frame]) {
-        self.backgroundColor = UIColorHex(0xFFB072);
+        self.backgroundColor = kMainColor;
         self.layer.masksToBounds = true;
         self.layer.cornerRadius = 2.0;
         
@@ -49,7 +49,7 @@
         self.statusLabel.font = kFontPingFangRegularSize(12);
         self.statusLabel.textColor = UIColorHex(0xffffff);
         self.statusLabel.textAlignment = NSTextAlignmentCenter;
-        self.statusLabel.backgroundColor = UIColorHex(0xFF845F);
+        self.statusLabel.backgroundColor = UIColorHex(0xDF1B20);
         [self.contentView addSubview:self.statusLabel];
         
         [self.imageView mas_makeConstraints:^(MASConstraintMaker *make) {

@@ -29,7 +29,7 @@
         UILabel *tipsLabel = [UILabel new];
         tipsLabel.text = @"全選";
         tipsLabel.font = kFontPingFangRegularSize(16);
-        tipsLabel.textColor = UIColorHex(0xFF7B54);
+        tipsLabel.textColor = kMainColor;
         [self addSubview:tipsLabel];
         
         
