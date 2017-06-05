@@ -19,6 +19,7 @@
 #import "MSMeetingRoomModel.h"
 #import "HAlertController.h"
 #import <TZImagePickerController/TZImagePickerController.h>
+#import "MSNavBarView.h"
 
 @interface MSNewMeetingViewController ()<MSNewMeetingTimeCellDelegate,CSDatePickViewDelegate,SHMSelectActionViewDelegate,UITableViewDelegate,UITableViewDataSource,MSNewMeetingHeadViewDelegate,UIScrollViewDelegate,UINavigationControllerDelegate, UIImagePickerControllerDelegate,TZImagePickerControllerDelegate>
 {
@@ -27,9 +28,15 @@
     SHMSelectActionView *selectThemeView;
     SHMSelectActionView *selectRoomsView;
     SHMSelectActionView *selectTimeView;  //验证类型选择时间段
+    SHMSelectActionView *selectCustomerNumView;  //验证类型选择客户数
+    SHMSelectActionView *selectInsuranceNumView;  //验证类型选择保单数
+    SHMSelectActionView *selectIsPayView;  //验证类型选择是否缴费
     CSDatePickView *_datePickerView;
     CSDatePickView *_dateDayPickerView;
     BOOL isSelectBeginTimeing;
+    
+    MSNavBarView *navBarView;
+    CGFloat offsetY;
 }
 
 @property (nonatomic, strong) UIImagePickerController *imagePickerVc;
@@ -64,7 +71,6 @@
         _meetingInfoObj.organizeName = [MSUserInfo shareUserInfo].nickName;
         _meetingInfoObj.organizeId = [MSUserInfo shareUserInfo].userId;
         _meetingInfoObj.customePay = -1;
-//        _meetingInfoObj.meetingType = MeetingType_Validate;
     }
     return _meetingInfoObj;
 }
@@ -72,7 +78,7 @@
 - (MSNewMeetingHeadView*)headView
 {
     if (!_headView) {
-        _headView = [[MSNewMeetingHeadView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, 240)];
+        _headView = [[MSNewMeetingHeadView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, 304)];
         _headView.delegate = self;
     }
     return _headView;
@@ -109,13 +115,7 @@
 {
     [self loadHolidays:0];
     
-    [self leftBarButtonWithName:@"" image:[UIImage imageNamed:@"guanbi"] target:self action:@selector(closeView:)];
-    
-    [self rightBarButtonWithName:@"確認" normalImgName:@"" highlightImgName:@"" target:self action:@selector(submitMeetingAction:)];
-    
-    self.navigationItem.rightBarButtonItem.enabled = NO;
-    
-    newMeetingTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, kScreenHeight-64) style:UITableViewStyleGrouped];
+    newMeetingTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, kScreenHeight) style:UITableViewStyleGrouped];
     newMeetingTableView.backgroundColor = UIColorHex(0xf6f6f6);
     newMeetingTableView.delegate = self;
     newMeetingTableView.dataSource = self;
@@ -126,6 +126,45 @@
     [newMeetingTableView registerClass:[MSNewMeetingSelectCell class] forCellReuseIdentifier:@"MSNewMeetingSelectCell"];
     [newMeetingTableView registerClass:[MSNewMeetingONOffCell class] forCellReuseIdentifier:@"MSNewMeetingONOffCell"];
     [self.view addSubview:newMeetingTableView];
+    
+    navBarView = [[MSNavBarView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, 64)];
+    navBarView.navRightButton.enabled = NO;
+    navBarView.titleLabel.text = @"新增預約";
+    @weakify(self)
+    navBarView.actionBlock = ^(NSInteger actionType) {
+        @strongify(self)
+        if (actionType == 0) {
+            [self closeView:nil];
+        } else if (actionType == 1) {
+            [self submitMeetingAction:nil];
+        }
+    };
+    [self.view addSubview:navBarView];
+}
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView
+{
+    offsetY = scrollView.contentOffset.y;
+    NSLog(@"offsetY = %.1f",offsetY);
+    if (offsetY<=0) {
+        navBarView.backgroundColor = [[UIColor whiteColor] colorWithAlphaComponent:0.0];
+    } else if (offsetY <= 64 ) {
+        navBarView.backgroundColor = [[UIColor whiteColor] colorWithAlphaComponent:offsetY/64];
+    }
+    
+    if (offsetY > 30) {
+        navBarView.titleLabel.textColor = kColorBlack;
+        [navBarView.navRightButton setTitleColor:UIColorHex_Alpha(0x333333, 0.6) forState:UIControlStateDisabled];
+        [navBarView.navRightButton setTitleColor:UIColorHex_Alpha(0x333333, 1) forState:UIControlStateNormal];
+        [navBarView.closeButton setImage:[UIImage imageNamed:@"guanbi"] forState:UIControlStateNormal];
+        [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault];
+    } else {
+        navBarView.titleLabel.textColor = UIColorHex(0xffffff);
+        [navBarView.navRightButton setTitleColor:UIColorHex_Alpha(0xffffff, 0.6) forState:UIControlStateDisabled];
+        [navBarView.navRightButton setTitleColor:UIColorHex_Alpha(0xffffff, 1) forState:UIControlStateNormal];
+        [navBarView.closeButton setImage:[UIImage imageNamed:@"guanbi"] forState:UIControlStateNormal];
+        [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
+    }
 }
 
 - (void)submitMeetingAction:(UIButton*)button
@@ -174,6 +213,42 @@
     [selectTimeView showSelectActionView];
 }
 
+- (void)selectCustomerNum
+{
+    if (!selectCustomerNumView) {
+        selectCustomerNumView = [[SHMSelectActionView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, kScreenHeight)];
+        selectCustomerNumView.delegate = self;
+    }
+    selectCustomerNumView.title = @"客戶數";
+    selectCustomerNumView.isMutibleSelect = NO;
+    selectCustomerNumView.dataArray = @[@"1",@"2"];
+    [selectCustomerNumView showSelectActionView];
+}
+
+- (void)selectInsuranceNum
+{
+    if (!selectInsuranceNumView) {
+        selectInsuranceNumView = [[SHMSelectActionView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, kScreenHeight)];
+        selectInsuranceNumView.delegate = self;
+    }
+    selectInsuranceNumView.title = @"保單數";
+    selectInsuranceNumView.isMutibleSelect = NO;
+    selectInsuranceNumView.dataArray = @[@"1",@"2",@"3"];
+    [selectInsuranceNumView showSelectActionView];
+}
+
+- (void)selectIsPay
+{
+    if (!selectIsPayView) {
+        selectIsPayView = [[SHMSelectActionView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, kScreenHeight)];
+        selectIsPayView.delegate = self;
+    }
+    selectIsPayView.title = @"是否及時繳費";
+    selectIsPayView.isMutibleSelect = NO;
+    selectIsPayView.dataArray = @[@"是",@"否"];
+    [selectIsPayView showSelectActionView];
+}
+
 - (NSMutableArray*)getTimesWithDay:(NSString *)day
 {
     //判断是否是週六，週六時間段 9:00-14:30
@@ -196,9 +271,19 @@
 
 - (void)loadMeetingRooms
 {
+    NSString *begin;
+    NSString *end;
+    if (self.meetingInfoObj.meetingType == MeetingType_Validate) {
+        begin = [NSString stringWithFormat:@"%@ %@",self.meetingInfoObj.meetingDay,self.meetingInfoObj.meetingTime];
+        end = nil;
+    } else {
+        begin = [self.meetingInfoObj.beginTime stringWithFormat:@"yyyy-MM-dd HH:mm"];
+        end = [self.meetingInfoObj.endTime stringWithFormat:@"yyyy-MM-dd HH:mm"];
+    }
+    
     [MSMeetingRoomModel getRoomsWithMeetingType:self.meetingInfoObj.meetingType
-                                      beginTime:self.meetingInfoObj.beginTime
-                                        endTime:self.meetingInfoObj.endTime
+                                      beginTime:begin
+                                        endTime:end
                                      networkHUD:NetworkHUDLockScreenButNavWithError
                                          target:self
                                         success:^(StatusModel *data) {
@@ -235,19 +320,50 @@
 
 - (void)checkInfoComplete
 {
-    if (self.meetingInfoObj.title.length
-        && self.meetingInfoObj.beginTime
-        && self.meetingInfoObj.endTime
-        && self.meetingInfoObj.meetingType
-        && self.meetingInfoObj.roomId.length
-        && self.meetingInfoObj.organizeId.length) {
-        self.navigationItem.rightBarButtonItem.enabled = YES;
+    if (self.meetingInfoObj.meetingType == MeetingType_Train) {
+        if (self.meetingInfoObj.title.length
+            && self.meetingInfoObj.beginTime
+            && self.meetingInfoObj.endTime
+            && self.meetingInfoObj.meetingType
+            && self.meetingInfoObj.roomId.length
+            && self.meetingInfoObj.organizeId.length) {
+            navBarView.navRightButton.enabled = YES;
+        } else {
+            navBarView.navRightButton.enabled = NO;
+        }
+    } else if (self.meetingInfoObj.meetingType == MeetingType_Money) {
+        if (self.meetingInfoObj.beginTime
+            && self.meetingInfoObj.endTime
+            && self.meetingInfoObj.meetingType
+            && self.meetingInfoObj.roomId.length
+            && self.meetingInfoObj.organizeId.length) {
+            navBarView.navRightButton.enabled = YES;
+        } else {
+            navBarView.navRightButton.enabled = NO;
+        }
+    } else if (self.meetingInfoObj.meetingType == MeetingType_Validate) {
+        if (self.meetingInfoObj.meetingDay.length
+            && self.meetingInfoObj.meetingTime.length
+            && self.meetingInfoObj.meetingType
+            && self.meetingInfoObj.roomId.length
+            && self.meetingInfoObj.organizeId.length
+            && self.meetingInfoObj.customerName.length
+            && self.meetingInfoObj.customerNum
+            && self.meetingInfoObj.insuranceNum
+            && self.meetingInfoObj.customePay>=0
+            && self.meetingInfoObj.productType.length
+            && self.meetingInfoObj.contactNum.length) {
+            navBarView.navRightButton.enabled = YES;
+        } else {
+            navBarView.navRightButton.enabled = NO;
+        }
     } else {
-        self.navigationItem.rightBarButtonItem.enabled = NO;
+        navBarView.navRightButton.enabled = NO;
     }
+    
 }
 
-#pragma mark SHMSelectActionViewDelegate
+#pragma mark 选择完选项代理方法 SHMSelectActionViewDelegate
 /**
  *  选择完选项代理方法
  *
@@ -283,7 +399,7 @@
         self.meetingInfoObj.address = room.mName;
         self.meetingInfoObj.roomTheme = room.roomStyle;
         self.meetingInfoObj.roomTimeTips = [NSString stringWithFormat:@"最長可預訂%zd分鐘",room.maxMinutes];
-        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:4 inSection:0];
+        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:3 inSection:0];
         MSNewMeetingSelectCell *cell = [newMeetingTableView cellForRowAtIndexPath:indexPath];
         [cell contentText:[NSString stringWithFormat:@"%@(%@)",self.meetingInfoObj.address,self.meetingInfoObj.roomTimeTips]];
         
@@ -299,6 +415,22 @@
         NSInteger indexItem = [[indexs objectAtIndex:0] integerValue];
         self.meetingInfoObj.meetingTime = [[self getTimesWithDay:self.meetingInfoObj.meetingDay] objectAtIndex:indexItem];
         NSIndexPath *indexPath = [NSIndexPath indexPathForRow:2 inSection:0];
+        [newMeetingTableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+    } else if (view == selectCustomerNumView) {
+        NSInteger indexItem = [[indexs objectAtIndex:0] integerValue];
+        self.meetingInfoObj.customerNum = indexItem+1;
+        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:6 inSection:0];
+        [newMeetingTableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+        
+    } else if (view == selectInsuranceNumView) {
+        NSInteger indexItem = [[indexs objectAtIndex:0] integerValue];
+        self.meetingInfoObj.insuranceNum = indexItem+1;
+        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:7 inSection:0];
+        [newMeetingTableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+    } else if (view == selectIsPayView) {
+        NSInteger indexItem = [[indexs objectAtIndex:0] integerValue];
+        self.meetingInfoObj.customePay = indexItem==0?1:0;
+        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:8 inSection:0];
         [newMeetingTableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
     }
     [self checkInfoComplete];
@@ -321,7 +453,6 @@
     [_dateDayPickerView.datePicker setDate:date];
     [_dateDayPickerView.datePicker setDatePickerMode:UIDatePickerModeDate];
     [_dateDayPickerView showDatePickerView];
-
 }
 
 - (void)didClickSelectDateTimeView:(MSNewMeetingTimeCell*)cell itemIndex:(NSInteger)index
@@ -375,8 +506,6 @@
     }
     
 }
-
-
 
 #pragma mark- CSDatePickViewDelegate
 - (void)didPickerView:(CSDatePickView *)view date:(NSDate *)date
@@ -444,16 +573,27 @@
         [self selectMeetingTheme];
         
     } else if (indexPath.row == 3) {
-        //加载会议地点
-        if (!self.meetingInfoObj.beginTime || !self.meetingInfoObj.endTime) {
-            [HUDManager alertWithTitle:@"請完善預約時間！"];
-            return;
-        } else if (!self.meetingInfoObj.meetingType) {
-            [HUDManager alertWithTitle:@"請選擇預約類型！"];
-            return;
+        if (self.meetingInfoObj.meetingType == MeetingType_Validate) {
+            if (!self.meetingInfoObj.meetingType) {
+                [HUDManager alertWithTitle:@"請選擇預約類型！"];
+                return;
+            } else if (!self.meetingInfoObj.meetingDay.length || !self.meetingInfoObj.meetingTime.length) {
+                [HUDManager alertWithTitle:@"請完善預約時間！"];
+                return;
+            }
         } else {
-            [self loadMeetingRooms];
+            //加载会议地点
+            if (!self.meetingInfoObj.meetingType) {
+                [HUDManager alertWithTitle:@"請選擇預約類型！"];
+                return;
+            } else if (!self.meetingInfoObj.beginTime || !self.meetingInfoObj.endTime) {
+                [HUDManager alertWithTitle:@"請完善預約時間！"];
+                return;
+            }
         }
+        
+        [self loadMeetingRooms];
+        
     } else if (indexPath.row == 4) {
         //选择组织者
         MSNewMeetingSelectCell *cell = [tableView cellForRowAtIndexPath:indexPath];
@@ -502,8 +642,14 @@
             }
         } else {
             //验证类型
+            if (indexPath.row == 6) {
+                [self selectCustomerNum];
+            } else if (indexPath.row == 7) {
+                [self selectInsuranceNum];
+            } else if (indexPath.row == 8) {
+                [self selectIsPay];
+            }
         }
-        
     }
     
 }
@@ -629,7 +775,7 @@
                     [self checkInfoComplete];
                 };
                 NSInteger index = indexPath.row-6;
-                [cell multipleLineInput:indexPath.row == 6?NO:YES title:titles[index] placeholder:placeholders[index] must:indexPath.row==1?YES:NO];
+                [cell multipleLineInput:indexPath.row == 6?NO:YES title:titles[index] placeholder:placeholders[index] must:indexPath.row==6?YES:NO];
                 
                 if (indexPath.row == 6) {
                     [cell contentText:self.meetingInfoObj.title multipleLine:NO];
@@ -711,15 +857,28 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    UIImage *bgImage = [UIImage imageWithColor:UIColorHex(0xFF845F)];
-    bgImage = [bgImage resizableImageWithCapInsets:UIEdgeInsetsMake(0, 1, 2,1) resizingMode:UIImageResizingModeStretch];
-    [self.navigationController.navigationBar setBackgroundImage:bgImage forBarMetrics:UIBarMetricsDefault];
-    [self.navigationController.navigationBar setShadowImage:[UIImage new]];
-    [self.navigationController.navigationBar setBarTintColor:UIColorHex(0xFF845F)];
-    [self.navigationController.navigationBar setTintColor:UIColorHex(0xFF845F)];
-    [self.navigationController.navigationBar setTitleTextAttributes:@{NSForegroundColorAttributeName:UIColorHex(0xffffff), NSFontAttributeName:kNavTitleFont}];
-    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
+    
+    [self.navigationController setNavigationBarHidden:YES animated:YES];
+    
+//    UIImage *bgImage = [UIImage imageWithColor:UIColorHex(0xFF845F)];
+//    bgImage = [bgImage resizableImageWithCapInsets:UIEdgeInsetsMake(0, 1, 2,1) resizingMode:UIImageResizingModeStretch];
+//    [self.navigationController.navigationBar setBackgroundImage:bgImage forBarMetrics:UIBarMetricsDefault];
+//    [self.navigationController.navigationBar setShadowImage:[UIImage new]];
+//    
+//    [self.navigationController.navigationBar setBarTintColor:UIColorHex(0xFF845F)];
+//    [self.navigationController.navigationBar setTintColor:UIColorHex(0xFF845F)];
+//    [self.navigationController.navigationBar setTitleTextAttributes:@{NSForegroundColorAttributeName:UIColorHex(0xffffff), NSFontAttributeName:kNavTitleFont}];
+    
+    if (offsetY < 30 ) {
+        [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
+    }
 }
+
+//- (void)viewWillDisappear:(BOOL)animated{
+//    [super viewWillDisappear:animated];
+//    [self.navigationController.navigationBar setBackgroundImage:nil forBarMetrics:UIBarMetricsDefault];
+//    [self.navigationController.navigationBar setShadowImage:nil];
+//}
 
 //换头像
 - (void)didClickHeadView

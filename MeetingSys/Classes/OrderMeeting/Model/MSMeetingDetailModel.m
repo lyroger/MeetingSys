@@ -95,17 +95,31 @@
 {
     CreateParamsDic;
     DicValueSet(@(model.hideThemeHead), @"disImg");
-    DicValueSet(model.title, @"title");
     DicValueSet(@(model.meetingType), @"meetingType");
-    DicValueSet([model.beginTime dateWithFormat:@"yyyy-MM-dd HH:mm"], @"stTime");
-    DicValueSet([model.endTime dateWithFormat:@"yyyy-MM-dd HH:mm"], @"endTime");
     DicValueSet(model.roomId, @"roomId");
     DicValueSet(model.organizeId, @"organizer");
     DicValueSet(model.organizeName, @"organizerName");
-    DicValueSet(model.others, @"others");
-    DicValueSet(model.othersName, @"othersName");
+    DicValueSet(model.title, @"title");
     DicValueSet(model.agenda, @"agenda");
     DicValueSet(model.demand, @"requirement");
+    DicValueSet(model.others, @"others");
+    DicValueSet(model.othersName, @"othersName");
+    
+    DicValueSet(model.customerName, @"customeName");
+    DicValueSet(@(model.customerNum), @"customeNum");
+    DicValueSet(@(model.insuranceNum), @"customePolicyNum");
+    DicValueSet(model.productType, @"customePolicy");
+    DicValueSet(@(model.customePay), @"customePay");
+    DicValueSet(model.contactNum, @"customeConTel");
+    
+    if (model.meetingType == MeetingType_Validate) {
+        NSString *beginTime = [NSString stringWithFormat:@"%@ %@",model.meetingDay,model.meetingTime];
+        DicValueSet(beginTime, @"stTime");
+    } else {
+        DicValueSet([model.beginTime dateWithFormat:@"yyyy-MM-dd HH:mm"], @"stTime");
+        DicValueSet([model.endTime dateWithFormat:@"yyyy-MM-dd HH:mm"], @"endTime");
+    }
+
     return [self dataTaskMethod:HTTPMethodPOST path:@"api/meeting/saveorupdate" params:ParamsDic networkHUD:hud target:target success:success];
 }
 

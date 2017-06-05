@@ -425,6 +425,7 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    [self.navigationController setNavigationBarHidden:NO animated:YES];
     [self.navigationController.navigationBar setBackgroundImage:[UIImage imageWithColor:UIColorHex(0xffffff)] forBarMetrics:UIBarMetricsDefault];
     [self.navigationController.navigationBar setTitleTextAttributes:@{NSForegroundColorAttributeName:UIColorHex(0x000000), NSFontAttributeName:kNavTitleFont}];
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault];

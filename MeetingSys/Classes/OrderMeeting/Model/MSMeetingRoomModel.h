@@ -19,8 +19,8 @@
 @property (nonatomic, assign) NSInteger maxMinutes;
 
 + (NSURLSessionDataTask *)getRoomsWithMeetingType:(NSInteger)type
-                                        beginTime:(NSDate*)begin
-                                          endTime:(NSDate*)end
+                                        beginTime:(NSString*)begin
+                                          endTime:(NSString*)end
                                        networkHUD:(NetworkHUD)hud
                                            target:(id)target
                                           success:(NetResponseBlock)success;

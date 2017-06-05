@@ -155,6 +155,7 @@
 		A7416AEB1EC0867300E42EB0 /* MSNoticeCellView.m in Sources */ = {isa = PBXBuildFile; fileRef = A7416AEA1EC0867300E42EB0 /* MSNoticeCellView.m */; };
 		A7416AEE1EC086B200E42EB0 /* MSMeetingListCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A7416AED1EC086B200E42EB0 /* MSMeetingListCell.m */; };
 		A7416AF11EC086E700E42EB0 /* MSMeetingDetailCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A7416AF01EC086E700E42EB0 /* MSMeetingDetailCell.m */; };
+		A753A7021EE5099400F6CCCF /* MSNavBarView.m in Sources */ = {isa = PBXBuildFile; fileRef = A753A7011EE5099400F6CCCF /* MSNavBarView.m */; };
 		A759CBCA1ECEE44E008C4228 /* CSDatePickView.m in Sources */ = {isa = PBXBuildFile; fileRef = A759CBC91ECEE44E008C4228 /* CSDatePickView.m */; };
 		A759CBCD1ECEF812008C4228 /* MSMeetingRoomModel.m in Sources */ = {isa = PBXBuildFile; fileRef = A759CBCC1ECEF812008C4228 /* MSMeetingRoomModel.m */; };
 		A76002641ECBFB64006BCEEF /* MSUpdatePwdViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A76002631ECBFB64006BCEEF /* MSUpdatePwdViewController.m */; };
@@ -495,6 +496,8 @@
 		A7416AED1EC086B200E42EB0 /* MSMeetingListCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSMeetingListCell.m; sourceTree = "<group>"; };
 		A7416AEF1EC086E700E42EB0 /* MSMeetingDetailCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSMeetingDetailCell.h; sourceTree = "<group>"; };
 		A7416AF01EC086E700E42EB0 /* MSMeetingDetailCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSMeetingDetailCell.m; sourceTree = "<group>"; };
+		A753A7001EE5099400F6CCCF /* MSNavBarView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSNavBarView.h; sourceTree = "<group>"; };
+		A753A7011EE5099400F6CCCF /* MSNavBarView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSNavBarView.m; sourceTree = "<group>"; };
 		A759CBC81ECEE44E008C4228 /* CSDatePickView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSDatePickView.h; sourceTree = "<group>"; };
 		A759CBC91ECEE44E008C4228 /* CSDatePickView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSDatePickView.m; sourceTree = "<group>"; };
 		A759CBCB1ECEF812008C4228 /* MSMeetingRoomModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSMeetingRoomModel.h; sourceTree = "<group>"; };
@@ -1321,6 +1324,8 @@
 				A7949C331ED6B718005B8BE8 /* MSSearchHeadMemberView.m */,
 				A7949C381ED6CFBF005B8BE8 /* MSSearchBottomView.h */,
 				A7949C391ED6CFBF005B8BE8 /* MSSearchBottomView.m */,
+				A753A7001EE5099400F6CCCF /* MSNavBarView.h */,
+				A753A7011EE5099400F6CCCF /* MSNavBarView.m */,
 			);
 			name = NewMeeting;
 			sourceTree = "<group>";
@@ -1721,6 +1726,7 @@
 				A7186FC71EBC219F00DE4B67 /* DataManager.m in Sources */,
 				A7186F4B1EBC219F00DE4B67 /* BaseModel.m in Sources */,
 				A7186F701EBC219F00DE4B67 /* NSNumber+CGFloat.m in Sources */,
+				A753A7021EE5099400F6CCCF /* MSNavBarView.m in Sources */,
 				A773273A1EC498B1005A89AE /* MSMemberView.m in Sources */,
 				A7186F631EBC219F00DE4B67 /* NSDate+Formatter.m in Sources */,
 				A7416AF11EC086E700E42EB0 /* MSMeetingDetailCell.m in Sources */,

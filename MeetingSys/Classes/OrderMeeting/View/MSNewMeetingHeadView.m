@@ -47,7 +47,7 @@
         [borderBgView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.size.mas_equalTo(CGSizeMake(260, 200));
             make.centerX.equalTo(self);
-            make.top.equalTo(@10);
+            make.top.equalTo(@64);
         }];
         
         themeClassics = [UIImageView new];

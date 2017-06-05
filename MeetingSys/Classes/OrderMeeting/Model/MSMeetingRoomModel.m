@@ -16,16 +16,16 @@
 }
 
 + (NSURLSessionDataTask *)getRoomsWithMeetingType:(NSInteger)type
-                                        beginTime:(NSDate*)begin
-                                          endTime:(NSDate*)end
+                                        beginTime:(NSString*)begin
+                                          endTime:(NSString*)end
                                        networkHUD:(NetworkHUD)hud
                                            target:(id)target
                                           success:(NetResponseBlock)success
 {
     CreateParamsDic;
     DicValueSet(@(type), @"meetingType");
-    DicValueSet([begin dateWithFormat:@"yyyy-MM-dd HH:mm"], @"stTime");
-    DicValueSet([end dateWithFormat:@"yyyy-MM-dd HH:mm"], @"endTime");
+    DicValueSet(begin, @"stTime");
+    DicValueSet(end, @"endTime");
     return [self dataTaskMethod:HTTPMethodPOST path:@"api/meeting/getroombytimeandtype" params:ParamsDic networkHUD:hud target:target success:success];
 }
 @end
