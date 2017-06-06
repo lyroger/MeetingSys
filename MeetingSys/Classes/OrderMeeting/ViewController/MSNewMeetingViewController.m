@@ -254,16 +254,47 @@
     //判断是否是週六，週六時間段 9:00-14:30
     NSDate *date = [NSDate dateWithString:self.meetingInfoObj.meetingDay format:@"yyyy-MM-dd"];
     NSCalendar*calendar = [NSCalendar currentCalendar];
-    NSDateComponents *comps = [calendar components:(NSWeekCalendarUnit | NSWeekdayCalendarUnit |NSWeekdayOrdinalCalendarUnit) fromDate:date];
+    NSDateComponents *comps = [calendar components:(NSCalendarUnitDay | NSWeekCalendarUnit | NSWeekdayCalendarUnit |NSWeekdayOrdinalCalendarUnit) fromDate:date];
+    
+    
+    NSDate *nowDate = [NSDate date];
+    NSDateComponents *nowComps = [calendar components:(NSCalendarUnitDay | NSCalendarUnitHour | NSCalendarUnitMinute) fromDate:nowDate];
+    
     if (comps.weekday == 7) {
         //周六
+        if (comps.hour < 9 || comps.hour > 15) {
+            return nil;
+        }
         NSArray *times = @[@"9:00",@"9:30",@"10:00",@"10:30",@"11:00",@"11:30",@"12:00",@"12:30",@"13:00",@"13:30",@"14:00"];
         NSMutableArray *mutTimes = [[NSMutableArray alloc] initWithArray:times];
+        
+        if (nowComps.day == comps.day) {
+            if (nowComps.hour>=9 && nowComps.hour <= 14) {
+                NSInteger stepIndex = (nowComps.hour - 9)*2;
+                if (nowComps.minute >= 30) {
+                    stepIndex++;
+                }
+                [mutTimes removeObjectsInRange:NSMakeRange(0, stepIndex+1)];
+            }
+        }
+        
         return mutTimes;
     } else {
         //周一到周五 9:00-17:30
+        if (comps.hour < 9 || comps.hour > 18) {
+            return nil;
+        }
         NSArray *times = @[@"9:00",@"9:30",@"10:00",@"10:30",@"11:00",@"11:30",@"12:00",@"12:30",@"13:00",@"13:30",@"14:00",@"14:30",@"15:00",@"15:30",@"16:00",@"16:30",@"17:00"];
         NSMutableArray *mutTimes = [[NSMutableArray alloc] initWithArray:times];
+        if (nowComps.day == comps.day) {
+            if (nowComps.hour>=9 && nowComps.hour <= 17) {
+                NSInteger stepIndex = (nowComps.hour - 9)*2;
+                if (nowComps.minute >= 30) {
+                    stepIndex++;
+                }
+                [mutTimes removeObjectsInRange:NSMakeRange(0, stepIndex+1)];
+            }
+        }
         return mutTimes;
     }
     return nil;
