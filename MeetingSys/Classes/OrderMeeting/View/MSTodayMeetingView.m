@@ -49,6 +49,24 @@
     }
 }
 
+- (void)showCurrentLastMeetingView
+{
+    NSInteger index = 0;
+    for (int i = 0; i < self.dataSource.count; i++) {
+        MSMeetingDetailModel *model = [self.dataSource objectAtIndex:i];
+        if ([model.beginTime compare:[NSDate date]] == NSOrderedDescending) {
+            NSLog(@"index = %zd",i);
+            index = i;
+            break;
+        }
+    }
+    
+    if (self.dataSource.count) {
+        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:index inSection:0];
+        [self.collectView scrollToItemAtIndexPath:indexPath atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally animated:YES];
+    }
+}
+
 - (void)reloadWithDatas:(NSArray*)datas
 {
     [self.dataSource removeAllObjects];

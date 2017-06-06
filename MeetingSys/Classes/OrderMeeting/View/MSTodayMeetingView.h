@@ -16,6 +16,8 @@
 @property (nonatomic, weak) id<MSToDayMeetingViewDelegate> delegate;
 
 - (void)reloadWithDatas:(NSArray*)datas;
+
+- (void)showCurrentLastMeetingView;
 @end
 
 @protocol MSToDayMeetingViewDelegate <NSObject>

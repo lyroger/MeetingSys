@@ -205,6 +205,14 @@
                                              }
                                              [tableAllMeetingView reloadData];
                                              
+                                             
+                                             if (allMeetings.firstPage) {
+                                                 dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                                                     [self.todayMeetingView showCurrentLastMeetingView];
+                                                     [self hideToDayDetailView];
+                                                 });
+                                             }
+                                             
                                          } else {
                                              [HUDManager alertWithTitle:data.msg];
                                          }
@@ -406,12 +414,17 @@
 {
     if (isViewToDayDetail) {
         if (index != lastViewToDayDetailIndex) {
-            isViewToDayDetail = NO;
-            self.todayMeetingDetail = nil;
-            lastViewToDayDetailIndex = -1;
-            [tableAllMeetingView reloadData];
+            [self hideToDayDetailView];
         }
     }
+}
+
+- (void)hideToDayDetailView
+{
+    isViewToDayDetail = NO;
+    self.todayMeetingDetail = nil;
+    lastViewToDayDetailIndex = -1;
+    [tableAllMeetingView reloadData];
 }
 
 #pragma mark UITableViewDelegate & UITableViewDataSource
@@ -788,6 +801,9 @@
         [mainScrollView scrollToHorizontalPageIndex:1 animated:YES];
         if (!isLoadedAllMeetingData) {
             [tableAllMeetingView.mj_header beginRefreshing];
+        } else {
+            [self.todayMeetingView showCurrentLastMeetingView];
+            [self hideToDayDetailView];
         }
     }
 }
