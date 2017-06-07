@@ -99,7 +99,13 @@
 - (void)data:(MSMeetingDetailModel*)model
 {
     [imageIcon sd_setImageWithURL:kImageURLWithLastString(model.organizerHeadURL) placeholderImage:[UIImage imageNamed:@"portrait_xiao"]];
-    titleLabel.text = model.title;
+    NSString *detailInfo = model.title;
+    if (model.meetingType == MeetingType_Money) {
+        detailInfo = [NSString stringWithFormat:@"理財中心-%@",model.address];
+    } else if (model.meetingType == MeetingType_Validate) {
+        detailInfo = [NSString stringWithFormat:@"驗證中心-%@",model.address];
+    }
+    titleLabel.text = detailInfo;
     timeLabel.text = [NSString stringWithFormat:@"%@-%@",[model.beginTime dateWithFormat:@"HH:mm"],[model.endTime dateWithFormat:@"HH:mm"]];
 //    organizerLabel.text = model.organizeName;
 }

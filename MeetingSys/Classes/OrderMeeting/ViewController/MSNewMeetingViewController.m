@@ -262,7 +262,7 @@
     
     if (comps.weekday == 7) {
         //周六
-        if (comps.hour < 9 || comps.hour > 15) {
+        if (nowComps.hour < 9 || nowComps.hour > 15) {
             return nil;
         }
         NSArray *times = @[@"9:00",@"9:30",@"10:00",@"10:30",@"11:00",@"11:30",@"12:00",@"12:30",@"13:00",@"13:30",@"14:00"];
@@ -281,7 +281,7 @@
         return mutTimes;
     } else {
         //周一到周五 9:00-17:30
-        if (comps.hour < 9 || comps.hour > 18) {
+        if (nowComps.hour < 9 || nowComps.hour > 18) {
             return nil;
         }
         NSArray *times = @[@"9:00",@"9:30",@"10:00",@"10:30",@"11:00",@"11:30",@"12:00",@"12:30",@"13:00",@"13:30",@"14:00",@"14:30",@"15:00",@"15:30",@"16:00",@"16:30",@"17:00"];
@@ -460,7 +460,7 @@
         [newMeetingTableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
     } else if (view == selectIsPayView) {
         NSInteger indexItem = [[indexs objectAtIndex:0] integerValue];
-        self.meetingInfoObj.customePay = indexItem==0?1:0;
+        self.meetingInfoObj.customePay = indexItem==0?0:1;
         NSIndexPath *indexPath = [NSIndexPath indexPathForRow:8 inSection:0];
         [newMeetingTableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
     }
@@ -830,7 +830,7 @@
                 } else if (indexPath.row == 7 && self.meetingInfoObj.insuranceNum) {
                     [cell contentText:[NSString stringWithFormat:@"%zd個",self.meetingInfoObj.insuranceNum]];
                 } else if (indexPath.row == 8 && self.meetingInfoObj.customePay!=-1) {
-                    [cell contentText:self.meetingInfoObj.customePay==1?@"是":@"否"];
+                    [cell contentText:self.meetingInfoObj.customePay==0?@"是":@"否"];
                 }
                 return cell;
             } else {

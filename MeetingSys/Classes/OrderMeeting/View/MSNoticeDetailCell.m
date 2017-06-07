@@ -14,7 +14,7 @@
 {
     if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
         sureButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        [sureButton setBackgroundImage:[UIImage imageWithColor:UIColorHex(0xFFB072)] forState:UIControlStateNormal];
+        [sureButton setBackgroundImage:[UIImage imageWithColor:kMainColor] forState:UIControlStateNormal];
         
         sureButton.layer.cornerRadius = 4;
         sureButton.layer.borderColor = [UIColor clearColor].CGColor;
@@ -45,20 +45,85 @@
     return self;
 }
 
++ (NSString *)getDemandInfo:(MSMeetingDetailModel*)model
+{
+    NSString *detailInfo = model.demand;
+    if (model.meetingType == MeetingType_Validate) {
+        detailInfo = [NSString stringWithFormat:@"客人姓名：%@\n客人數目：%zd個\n保單數目：%zd個\n投保類別：%@\n是否及時繳費：%@\n聯絡電話：%@",model.customerName,model.customerNum,model.insuranceNum,model.productType,model.customePay==0?@"是":@"否",model.contactNum];
+    }
+    return detailInfo;
+}
+
 - (void)data:(MSMeetingDetailModel*)model
 {
     [super data:model];
     contentDetailView.titleLabel.text = @"提醒內容";
     contentDetailView.detailLabel.text = model.remindConent;
+    
+    if (model.meetingType == MeetingType_Money) {
+        memberView.hidden = YES;
+        meetingAgendaView.hidden = YES;
+        meetingDemandView.hidden = YES;
+        [sureButton mas_remakeConstraints:^(MASConstraintMaker *make) {
+            make.top.mas_equalTo(meetindAddressView.mas_bottom).mas_offset(35);
+            make.left.mas_equalTo(30);
+            make.right.mas_equalTo(-30);
+            make.height.mas_equalTo(44);
+        }];
+    } else if (model.meetingType == MeetingType_Validate) {
+        memberView.hidden = YES;
+        meetingAgendaView.hidden = YES;
+        meetingDemandView.hidden = NO;
+        meetingDemandView.titleLabel.text = @"驗證信息";
+        meetingDemandView.detailLabel.text = [MSNoticeDetailCell getDemandInfo:model];
+        
+        [meetingDemandView mas_remakeConstraints:^(MASConstraintMaker *make) {
+            make.left.right.equalTo(@0);
+            make.top.equalTo(meetindAddressView.mas_bottom);
+            make.bottom.equalTo(sureButton.mas_top).offset(-35);
+        }];
+        
+        [sureButton mas_remakeConstraints:^(MASConstraintMaker *make) {
+            make.top.mas_equalTo(meetingDemandView.mas_bottom).mas_offset(35);
+            make.left.mas_equalTo(30);
+            make.right.mas_equalTo(-30);
+            make.height.mas_equalTo(44);
+        }];
+    } else {
+        memberView.hidden = NO;
+        meetingAgendaView.hidden = NO;
+        meetingDemandView.hidden = NO;
+        
+        [meetingDemandView mas_remakeConstraints:^(MASConstraintMaker *make) {
+            make.left.right.equalTo(@0);
+            make.top.equalTo(meetingAgendaView.mas_bottom);
+            make.bottom.equalTo(sureButton.mas_top).offset(-35);
+        }];
+        
+        [sureButton mas_remakeConstraints:^(MASConstraintMaker *make) {
+            make.top.mas_equalTo(meetingDemandView.mas_bottom).mas_offset(35);
+            make.left.mas_equalTo(30);
+            make.right.mas_equalTo(-30);
+            make.height.mas_equalTo(44);
+        }];
+    }
 }
 
 + (CGFloat)meetingDetailHeight:(MSMeetingDetailModel*)model
 {
     CGFloat agendaHeight = [MSTitleAndDetailView titleAndDetailViewHeight:model.agenda width:kScreenWidth-10*2];
-    CGFloat demandHeight = [MSTitleAndDetailView titleAndDetailViewHeight:model.demand width:kScreenWidth-10*2];
+    CGFloat demandHeight = [MSTitleAndDetailView titleAndDetailViewHeight:[MSNoticeDetailCell getDemandInfo:model] width:kScreenWidth-10*2];
     CGFloat remindContentHeight = [MSTitleAndDetailView titleAndDetailViewHeight:model.remindConent width:kScreenWidth-10*2];
        
-    CGFloat tottalHeight = 70+70+127+agendaHeight+demandHeight + 114 + remindContentHeight;
+    CGFloat tottalHeight = remindContentHeight+70+70+127+agendaHeight+demandHeight+114;
+    
+    if (model.meetingType == MeetingType_Money) {
+        tottalHeight = remindContentHeight+70+70+114;
+        
+    } else if (model.meetingType == MeetingType_Validate) {
+        tottalHeight = remindContentHeight+70+70+demandHeight+114;
+    }
+    
     return tottalHeight;
 }
 

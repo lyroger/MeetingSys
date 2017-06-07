@@ -27,7 +27,7 @@
 {
     if (self = [super initWithFrame:frame]) {
         bgView = [[UIView alloc] initWithFrame:CGRectMake(0, -1000, frame.size.width, frame.size.height+1000)];
-        bgView.backgroundColor = UIColorHex(0xFF845F);
+        bgView.backgroundColor = UIColorHex(0xFFFFFF);
         [self addSubview:bgView];
         
         UIImageView *bgImageView = [UIImageView new];
@@ -35,8 +35,8 @@
         [self addSubview:bgImageView];
         
         [bgImageView mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.left.bottom.equalTo(@0);
-            make.size.mas_equalTo(CGSizeMake(165, 150));
+            make.left.bottom.right.top.equalTo(@0);
+//            make.size.mas_equalTo(CGSizeMake(165, 150));
         }];
         
         UIImageView *borderBgView = [UIImageView new];

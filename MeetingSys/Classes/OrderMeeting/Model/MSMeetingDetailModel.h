@@ -46,7 +46,7 @@ typedef NS_ENUM(NSInteger, MeetingOrder_Type)
 @property (nonatomic, copy) NSString *agenda;
 @property (nonatomic, copy) NSString *demand;
 @property (nonatomic, strong) NSMutableArray *members;
-@property (nonatomic, assign) MeetingOrder_Type meetingType;//會議類型；
+@property (nonatomic, assign) NSInteger meetingType;//會議類型；
 @property (nonatomic, copy) NSString *roomId;//會議室ID
 @property (nonatomic, copy) NSString *roomTheme;//主题
 @property (nonatomic, copy) NSString *roomTimeTips;//最大时长提示
@@ -65,7 +65,7 @@ typedef NS_ENUM(NSInteger, MeetingOrder_Type)
 @property (nonatomic, assign) NSInteger customerNum;    //客人數
 @property (nonatomic, assign) NSInteger insuranceNum;   //保单数
 @property (nonatomic, copy) NSString *productType;      //产品类别
-@property (nonatomic, assign) NSInteger customePay;     //是否及时缴费 1是，0否
+@property (nonatomic, assign) NSInteger customePay;     //是否及时缴费 0是，1否
 @property (nonatomic, copy) NSString *contactNum;       //联系电话；
 
 @property (nonatomic, copy) NSString *organizerHeadURL;

@@ -57,7 +57,12 @@
              @"address":@"mName",
              @"organizerHeadURL":@"orgAvater",
              @"sendDate":@"createDate",
-             @"remindId":@"id"};
+             @"remindId":@"id",
+             @"customerName":@"customeName",
+             @"customerNum":@"customeNum",
+             @"insuranceNum":@"customePolicyNum",
+             @"productType":@"customePolicy",
+             @"contactNum":@"customeConTel"};
 }
 
 - (NSMutableArray*)members
@@ -84,6 +89,13 @@
     detail.organizeId = self.organizeId;
     detail.isDetail = self.isDetail;
     detail.remindId = self.remindId;
+    detail.meetingType = self.meetingType;
+    detail.customePay = self.customePay;
+    detail.customerName = self.customerName;
+    detail.customerNum = self.customerNum;
+    detail.insuranceNum = self.insuranceNum;
+    detail.contactNum = self.contactNum;
+    detail.productType = self.productType;
     
     return detail;
 }

@@ -14,7 +14,7 @@
 {
     if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
         sureButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        [sureButton setBackgroundImage:[UIImage imageWithColor:UIColorHex(0xFFB072)] forState:UIControlStateNormal];
+        [sureButton setBackgroundImage:[UIImage imageWithColor:kMainColor] forState:UIControlStateNormal];
         sureButton.layer.cornerRadius = 4;
         sureButton.layer.borderColor = [UIColor clearColor].CGColor;
         sureButton.layer.borderWidth = 1;
@@ -26,7 +26,7 @@
         [bgContentView addSubview:sureButton];
         
         cancelButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        [cancelButton setBackgroundImage:[UIImage imageWithColor:UIColorHex(0xFFB072)] forState:UIControlStateNormal];
+        [cancelButton setBackgroundImage:[UIImage imageWithColor:kMainColor] forState:UIControlStateNormal];
         cancelButton.layer.cornerRadius = 4;
         cancelButton.layer.borderColor = [UIColor clearColor].CGColor;
         cancelButton.layer.borderWidth = 1;
@@ -72,7 +72,7 @@
 - (void)data:(MSMeetingDetailModel*)model
 {
     contentDetailView.titleLabel.text = @"會議主題";
-    contentDetailView.detailLabel.text = model.title;
+    contentDetailView.detailLabel.text = [MSAllMeetingDetailCell getTitleDetailInfo:model];
     
     beginTimeView.titleLabel.text = @"會議開始時間";
     beginTimeView.detailLabel.text = [model.beginTime dateWithFormat:@"HH:mm"];
@@ -91,6 +91,55 @@
     meetingDemandView.titleLabel.text = @"會議要求";
     meetingDemandView.detailLabel.text = model.demand;
     
+    
+    if (model.meetingType == MeetingType_Money) {
+        memberView.hidden = YES;
+        meetingAgendaView.hidden = YES;
+        meetingDemandView.hidden = YES;
+        [sureButton mas_remakeConstraints:^(MASConstraintMaker *make) {
+            make.top.mas_equalTo(meetindAddressView.mas_bottom).mas_offset(35);
+            make.left.mas_equalTo(30);
+            make.right.mas_equalTo(-30);
+            make.height.mas_equalTo(44);
+        }];
+    } else if (model.meetingType == MeetingType_Validate) {
+        memberView.hidden = YES;
+        meetingAgendaView.hidden = YES;
+        meetingDemandView.hidden = NO;
+        meetingDemandView.titleLabel.text = @"驗證信息";
+        meetingDemandView.detailLabel.text = [MSAllMeetingDetailCell getDemandInfo:model];
+        
+        [meetingDemandView mas_remakeConstraints:^(MASConstraintMaker *make) {
+            make.left.right.equalTo(@0);
+            make.top.equalTo(meetindAddressView.mas_bottom);
+            make.bottom.equalTo(sureButton.mas_top).offset(-35);
+        }];
+        
+        [sureButton mas_remakeConstraints:^(MASConstraintMaker *make) {
+            make.top.mas_equalTo(meetingDemandView.mas_bottom).mas_offset(35);
+            make.left.mas_equalTo(30);
+            make.right.mas_equalTo(-30);
+            make.height.mas_equalTo(44);
+        }];
+    } else {
+        memberView.hidden = NO;
+        meetingAgendaView.hidden = NO;
+        meetingDemandView.hidden = NO;
+        
+        [meetingDemandView mas_remakeConstraints:^(MASConstraintMaker *make) {
+            make.left.right.equalTo(@0);
+            make.top.equalTo(meetingAgendaView.mas_bottom);
+            make.bottom.equalTo(sureButton.mas_top).offset(-35);
+        }];
+        
+        [sureButton mas_remakeConstraints:^(MASConstraintMaker *make) {
+            make.top.mas_equalTo(meetingDemandView.mas_bottom).mas_offset(35);
+            make.left.mas_equalTo(30);
+            make.right.mas_equalTo(-30);
+            make.height.mas_equalTo(44);
+        }];
+    }
+    
     //如果是组织者，可以取消
     cancelButton.hidden = YES;
     if ([model.organizeId isEqualToString:[MSUserInfo shareUserInfo].userId]) {
@@ -101,21 +150,49 @@
     }
 }
 
++ (NSString *)getTitleDetailInfo:(MSMeetingDetailModel*)model
+{
+    NSString *detailInfo = model.title;
+    if (model.meetingType == MeetingType_Money) {
+        detailInfo = [NSString stringWithFormat:@"理財中心"];
+    } else if (model.meetingType == MeetingType_Validate) {
+        detailInfo = [NSString stringWithFormat:@"驗證中心"];
+    }
+    return detailInfo;
+}
+
++ (NSString *)getDemandInfo:(MSMeetingDetailModel*)model
+{
+    NSString *detailInfo = model.demand;
+    if (model.meetingType == MeetingType_Validate) {
+        detailInfo = [NSString stringWithFormat:@"客人姓名：%@\n客人數目：%zd個\n保單數目：%zd個\n投保類別：%@\n是否及時繳費：%@\n聯絡電話：%@",model.customerName,model.customerNum,model.insuranceNum,model.productType,model.customePay==0?@"是":@"否",model.contactNum];
+    }
+    return detailInfo;
+}
+
 + (CGFloat)meetingDetailHeight:(MSMeetingDetailModel*)model
 {
     CGFloat agendaHeight = [MSTitleAndDetailView titleAndDetailViewHeight:model.agenda width:kScreenWidth-10*2];
-    CGFloat demandHeight = [MSTitleAndDetailView titleAndDetailViewHeight:model.demand width:kScreenWidth-10*2];
-    CGFloat contentHeight = [MSTitleAndDetailView titleAndDetailViewHeight:model.title width:kScreenWidth-10*2];
+    CGFloat demandHeight = [MSTitleAndDetailView titleAndDetailViewHeight:[MSAllMeetingDetailCell getDemandInfo:model] width:kScreenWidth-10*2];
+    CGFloat contentHeight = [MSTitleAndDetailView titleAndDetailViewHeight:[MSAllMeetingDetailCell getTitleDetailInfo:model] width:kScreenWidth-10*2];
     
-//    agendaHeight = agendaHeight<70?70:agendaHeight;
-//    demandHeight = demandHeight<70?70:demandHeight;
-//    contentHeight = contentHeight<70?70:contentHeight;
+    
     CGFloat tottalHeight = contentHeight+70+70+120+agendaHeight+demandHeight + 114;
+    
+    if (model.meetingType == MeetingType_Money) {
+        tottalHeight = contentHeight+70+70 + 114;
+        
+    } else if (model.meetingType == MeetingType_Validate) {
+        tottalHeight = contentHeight+70+70+demandHeight + 114;
+    }
+    
+    
     //如果是组织者，可以取消
     if ([model.organizeId isEqualToString:[MSUserInfo shareUserInfo].userId]) {
         NSInteger status = [model.mtStatus integerValue];
         if (status == 0 || status == 3 || status ==5) {
-            tottalHeight = contentHeight+70+70+120+agendaHeight+demandHeight + 105*2;
+//            tottalHeight = contentHeight+70+70+120+agendaHeight+demandHeight + 105*2;
+            tottalHeight += 96;
         }
     }
     return tottalHeight;

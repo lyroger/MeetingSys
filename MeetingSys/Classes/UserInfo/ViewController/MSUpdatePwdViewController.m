@@ -29,7 +29,7 @@
 - (void)loadSubView
 {
     self.title = @"修改密碼";
-    [self rightBarButtonWithName:@"保存" normalColor:UIColorHex(0xFF7B54) disableColor:UIColorHex_Alpha(0xFF7B54, 0.6) target:self action:@selector(updatePwd)];
+    [self rightBarButtonWithName:@"保存" normalColor:kMainColor disableColor:UIColorHex_Alpha(0xDF1B20, 0.6) target:self action:@selector(updatePwd)];
     
     CGFloat height = 90;
     
