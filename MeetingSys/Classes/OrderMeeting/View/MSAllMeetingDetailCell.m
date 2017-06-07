@@ -86,10 +86,10 @@
     [memberView membersData:model.members];
     
     meetingAgendaView.titleLabel.text = @"會議議程";
-    meetingAgendaView.detailLabel.text = model.agenda;
+    meetingAgendaView.detailLabel.attributedText = [self getTextAttributeString:model.agenda];
     
     meetingDemandView.titleLabel.text = @"會議要求";
-    meetingDemandView.detailLabel.text = model.demand;
+    meetingDemandView.detailLabel.attributedText = [self getTextAttributeString:[MSAllMeetingDetailCell getDemandInfo:model]];
     
     
     if (model.meetingType == MeetingType_Money) {
@@ -107,7 +107,7 @@
         meetingAgendaView.hidden = YES;
         meetingDemandView.hidden = NO;
         meetingDemandView.titleLabel.text = @"驗證信息";
-        meetingDemandView.detailLabel.text = [MSAllMeetingDetailCell getDemandInfo:model];
+        meetingDemandView.detailLabel.attributedText = [self getTextAttributeString:[MSAllMeetingDetailCell getDemandInfo:model]];
         
         [meetingDemandView mas_remakeConstraints:^(MASConstraintMaker *make) {
             make.left.right.equalTo(@0);
@@ -147,6 +147,23 @@
         if (status == 0 || status == 3 || status == 5) {
             cancelButton.hidden = NO;
         }
+    }
+}
+
+- (NSMutableAttributedString*)getTextAttributeString:(NSString*)str
+{
+    if (str.length) {
+        NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:str];
+        [attributedString addAttribute:NSFontAttributeName value:kFontPingFangRegularSize(14) range:NSMakeRange(0, attributedString.length)];
+        //设置行间距
+        NSMutableParagraphStyle * paragraphStyle1 = [[NSMutableParagraphStyle alloc] init];
+        [paragraphStyle1 setLineSpacing:8];
+        paragraphStyle1.alignment = NSTextAlignmentCenter;//设置对齐方式
+        [attributedString addAttribute:NSParagraphStyleAttributeName value:paragraphStyle1 range:NSMakeRange(0, attributedString.length)];
+        
+        return attributedString;
+    } else {
+        return nil;
     }
 }
 

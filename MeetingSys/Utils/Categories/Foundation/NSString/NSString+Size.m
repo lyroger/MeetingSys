@@ -39,6 +39,8 @@
     }
 #else
     NSMutableParagraphStyle *paragraph = [[NSMutableParagraphStyle alloc] init];
+    paragraph.lineSpacing = 8;
+    paragraph.alignment = NSTextAlignmentCenter;//设置对齐方式
     paragraph.lineBreakMode = NSLineBreakByWordWrapping;
     NSDictionary *attributes = @{NSFontAttributeName: textFont,
                                  NSParagraphStyleAttributeName: paragraph};
