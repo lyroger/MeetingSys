@@ -65,7 +65,7 @@ typedef NS_ENUM(NSInteger, MeetingOrder_Type)
 @property (nonatomic, assign) NSInteger customerNum;    //客人數
 @property (nonatomic, assign) NSInteger insuranceNum;   //保单数
 @property (nonatomic, copy) NSString *productType;      //产品类别
-@property (nonatomic, assign) NSInteger customePay;     //是否及时缴费 0是，1否
+@property (nonatomic, assign) NSInteger customePay;     //是否即时缴费 0是，1否
 @property (nonatomic, copy) NSString *contactNum;       //联系电话；
 
 @property (nonatomic, copy) NSString *organizerHeadURL;

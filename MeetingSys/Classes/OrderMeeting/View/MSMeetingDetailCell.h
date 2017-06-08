@@ -31,5 +31,6 @@
 - (void)data:(MSMeetingDetailModel*)model;
 - (void)showTopShadow:(BOOL)show;
 + (CGFloat)meetingDetailHeight:(MSMeetingDetailModel*)model;
+- (NSMutableAttributedString*)getTextAttributeString:(NSString*)str;
 
 @end

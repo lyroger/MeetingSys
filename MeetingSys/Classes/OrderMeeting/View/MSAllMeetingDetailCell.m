@@ -72,7 +72,7 @@
 - (void)data:(MSMeetingDetailModel*)model
 {
     contentDetailView.titleLabel.text = @"會議主題";
-    contentDetailView.detailLabel.text = [MSAllMeetingDetailCell getTitleDetailInfo:model];
+    contentDetailView.detailLabel.attributedText = [self getTextAttributeString:[MSAllMeetingDetailCell getTitleDetailInfo:model]];
     
     beginTimeView.titleLabel.text = @"會議開始時間";
     beginTimeView.detailLabel.text = [model.beginTime dateWithFormat:@"HH:mm"];
@@ -150,23 +150,6 @@
     }
 }
 
-- (NSMutableAttributedString*)getTextAttributeString:(NSString*)str
-{
-    if (str.length) {
-        NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:str];
-        [attributedString addAttribute:NSFontAttributeName value:kFontPingFangRegularSize(14) range:NSMakeRange(0, attributedString.length)];
-        //设置行间距
-        NSMutableParagraphStyle * paragraphStyle1 = [[NSMutableParagraphStyle alloc] init];
-        [paragraphStyle1 setLineSpacing:8];
-        paragraphStyle1.alignment = NSTextAlignmentCenter;//设置对齐方式
-        [attributedString addAttribute:NSParagraphStyleAttributeName value:paragraphStyle1 range:NSMakeRange(0, attributedString.length)];
-        
-        return attributedString;
-    } else {
-        return nil;
-    }
-}
-
 + (NSString *)getTitleDetailInfo:(MSMeetingDetailModel*)model
 {
     NSString *detailInfo = model.title;
@@ -182,7 +165,7 @@
 {
     NSString *detailInfo = model.demand;
     if (model.meetingType == MeetingType_Validate) {
-        detailInfo = [NSString stringWithFormat:@"客人姓名：%@\n客人數目：%zd個\n保單數目：%zd個\n投保類別：%@\n是否及時繳費：%@\n聯絡電話：%@",model.customerName,model.customerNum,model.insuranceNum,model.productType,model.customePay==0?@"是":@"否",model.contactNum];
+        detailInfo = [NSString stringWithFormat:@"客人姓名：%@\n客人數目：%zd個\n保單數目：%zd個\n投保類別：%@\n是否即时缴费：%@\n聯絡電話：%@",model.customerName,model.customerNum,model.insuranceNum,model.productType,model.customePay==0?@"是":@"否",model.contactNum];
     }
     return detailInfo;
 }

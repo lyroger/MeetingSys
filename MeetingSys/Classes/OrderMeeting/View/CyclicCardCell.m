@@ -20,9 +20,13 @@
 - (id)initWithFrame:(CGRect)frame
 {
     if (self = [super initWithFrame:frame]) {
-        self.backgroundColor = kMainColor;
-        self.layer.masksToBounds = true;
-        self.layer.cornerRadius = 2.0;
+//        self.backgroundColor = kMainColor;
+//        self.layer.masksToBounds = true;
+//        self.layer.cornerRadius = 2.0;
+        
+        UIImageView *bgImage = [UIImageView new];
+        bgImage.image = [UIImage imageNamed:@"card_bg"];
+        [self.contentView addSubview:bgImage];
         
         self.imageView = [UIImageView new];
         self.imageView.layer.cornerRadius = 18;
@@ -47,10 +51,19 @@
         
         self.statusLabel = [UILabel new];
         self.statusLabel.font = kFontPingFangRegularSize(12);
-        self.statusLabel.textColor = UIColorHex(0xffffff);
+        self.statusLabel.textColor = kMainColor;
         self.statusLabel.textAlignment = NSTextAlignmentCenter;
-        self.statusLabel.backgroundColor = UIColorHex(0xDF1B20);
+        self.statusLabel.backgroundColor = UIColorHex(0xffffff);
+        self.statusLabel.layer.cornerRadius = 3;
+        self.statusLabel.layer.masksToBounds = YES;
         [self.contentView addSubview:self.statusLabel];
+        
+        [bgImage mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.top.equalTo(@(-3));
+            make.right.equalTo(@(10));
+            make.left.equalTo(@(-10));
+            make.bottom.equalTo(@(15));
+        }];
         
         [self.imageView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.size.mas_equalTo(CGSizeMake(36, 36));

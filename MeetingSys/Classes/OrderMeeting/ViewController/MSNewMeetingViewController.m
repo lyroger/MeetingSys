@@ -88,9 +88,9 @@
 {
     if (!_meetingTypeData) {
         _meetingTypeData = [[NSMutableArray alloc] init];
-        [_meetingTypeData addObject:@"理财培训学院"];
-        [_meetingTypeData addObject:@"理财中心"];
-        [_meetingTypeData addObject:@"验证中心"];
+        [_meetingTypeData addObject:@"理財培訓學院"];
+        [_meetingTypeData addObject:@"理財中心"];
+        [_meetingTypeData addObject:@"驗證中心"];
     }
     return _meetingTypeData;
 }
@@ -156,7 +156,7 @@
         navBarView.titleLabel.textColor = kColorBlack;
         [navBarView.navRightButton setTitleColor:UIColorHex_Alpha(0x333333, 0.6) forState:UIControlStateDisabled];
         [navBarView.navRightButton setTitleColor:UIColorHex_Alpha(0x333333, 1) forState:UIControlStateNormal];
-        [navBarView.closeButton setImage:[UIImage imageNamed:@"guanbi"] forState:UIControlStateNormal];
+        [navBarView.closeButton setImage:[UIImage imageNamed:@"guanbi_hui"] forState:UIControlStateNormal];
         [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault];
     } else {
         navBarView.titleLabel.textColor = UIColorHex(0xffffff);
@@ -243,7 +243,7 @@
         selectIsPayView = [[SHMSelectActionView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, kScreenHeight)];
         selectIsPayView.delegate = self;
     }
-    selectIsPayView.title = @"是否及時繳費";
+    selectIsPayView.title = @"是否即时缴费";
     selectIsPayView.isMutibleSelect = NO;
     selectIsPayView.dataArray = @[@"是",@"否"];
     [selectIsPayView showSelectActionView];
@@ -262,9 +262,6 @@
     
     if (comps.weekday == 7) {
         //周六
-        if (nowComps.hour < 9 || nowComps.hour > 15) {
-            return nil;
-        }
         NSArray *times = @[@"9:00",@"9:30",@"10:00",@"10:30",@"11:00",@"11:30",@"12:00",@"12:30",@"13:00",@"13:30",@"14:00"];
         NSMutableArray *mutTimes = [[NSMutableArray alloc] initWithArray:times];
         
@@ -275,15 +272,15 @@
                     stepIndex++;
                 }
                 [mutTimes removeObjectsInRange:NSMakeRange(0, stepIndex+1)];
+            } else if (nowComps.hour > 14) {
+                //当天已经没有可用时间了
+                return nil;
             }
         }
         
         return mutTimes;
     } else {
         //周一到周五 9:00-17:30
-        if (nowComps.hour < 9 || nowComps.hour > 18) {
-            return nil;
-        }
         NSArray *times = @[@"9:00",@"9:30",@"10:00",@"10:30",@"11:00",@"11:30",@"12:00",@"12:30",@"13:00",@"13:30",@"14:00",@"14:30",@"15:00",@"15:30",@"16:00",@"16:30",@"17:00"];
         NSMutableArray *mutTimes = [[NSMutableArray alloc] initWithArray:times];
         if (nowComps.day == comps.day) {
@@ -293,6 +290,9 @@
                     stepIndex++;
                 }
                 [mutTimes removeObjectsInRange:NSMakeRange(0, stepIndex+1)];
+            } else if (nowComps.hour > 17) {
+                //当天已经没有可用时间了
+                return nil;
             }
         }
         return mutTimes;
@@ -747,11 +747,11 @@
             if (self.meetingInfoObj.meetingType == MeetingType_Validate) {
                 NSString *begin = self.meetingInfoObj.meetingDay?self.meetingInfoObj.meetingDay:@"請選擇日期";
                 NSString *end = self.meetingInfoObj.meetingTime?self.meetingInfoObj.meetingTime:@"請選擇時間段";
-                [cell title:@"會議時間" mustItem:YES begin:begin end:end];
+                [cell title:@"驗證時間" mustItem:YES begin:begin end:end];
             } else {
                 NSString *begin = self.meetingInfoObj.beginTime?[self.meetingInfoObj.beginTime dateWithFormat:@"yyyy-MM-dd HH:mm"]:@"請選擇開始時間";
                 NSString *end = self.meetingInfoObj.endTime?[self.meetingInfoObj.endTime dateWithFormat:@"yyyy-MM-dd HH:mm"]:@"請選擇結束時間";
-                [cell title:@"會議時間" mustItem:YES begin:begin end:end];
+                [cell title:self.meetingInfoObj.meetingType==MeetingType_Money?@"見客時間":@"會議時間" mustItem:YES begin:begin end:end];
             }
             
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
@@ -766,6 +766,11 @@
                 return cell;
             } else {
                 NSArray *titles = @[@"會議地點",@"會議組織者"];
+                if (self.meetingInfoObj.meetingType == MeetingType_Validate) {
+                    titles = @[@"驗證室",@"使用者"];
+                } else if (self.meetingInfoObj.meetingType == MeetingType_Money) {
+                    titles = @[@"見客地點",@"使用者"];
+                }
                 MSNewMeetingSelectCell *cell = [tableView dequeueReusableCellWithIdentifier:@"MSNewMeetingSelectCell"];
                 [cell title:titles[indexPath.row-3] placeholder:@"請選擇" mustItem:YES rightView:NO];
                 if (indexPath.row == 3 && self.meetingInfoObj.address.length) {
@@ -822,7 +827,7 @@
         } else {
             //验证类型
             if (indexPath.row >=6 && indexPath.row <=8) {
-                NSArray *titles = @[@"客人數量",@"保單數量",@"是否及時繳費"];
+                NSArray *titles = @[@"客人數量",@"保單數量",@"是否即时缴费"];
                 MSNewMeetingSelectCell *cell = [tableView dequeueReusableCellWithIdentifier:@"MSNewMeetingSelectCell"];
                 [cell title:titles[indexPath.row-6] placeholder:@"請選擇" mustItem:YES rightView:NO];
                 if (indexPath.row == 6 && self.meetingInfoObj.customerNum) {
