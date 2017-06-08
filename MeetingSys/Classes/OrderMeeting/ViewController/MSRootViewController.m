@@ -47,7 +47,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.title = @"會議室管理";
+    self.title = @"勵駿雲";
     AddNotification(self, @selector(userLoginOut), kLoginOutNotification, nil);
     AddNotification(self, @selector(userTokenExpire), kUserTokenExpireNotification, nil);
     [self leftBarButtonWithName:nil image:[UIImage imageNamed:@"user_center_icon"] target:self action:@selector(userInfoClick:)];

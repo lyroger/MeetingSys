@@ -243,7 +243,7 @@
         selectIsPayView = [[SHMSelectActionView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, kScreenHeight)];
         selectIsPayView.delegate = self;
     }
-    selectIsPayView.title = @"是否即时缴费";
+    selectIsPayView.title = @"是否即時繳費";
     selectIsPayView.isMutibleSelect = NO;
     selectIsPayView.dataArray = @[@"是",@"否"];
     [selectIsPayView showSelectActionView];
@@ -827,7 +827,7 @@
         } else {
             //验证类型
             if (indexPath.row >=6 && indexPath.row <=8) {
-                NSArray *titles = @[@"客人數量",@"保單數量",@"是否即时缴费"];
+                NSArray *titles = @[@"客人數量",@"保單數量",@"是否即時繳費"];
                 MSNewMeetingSelectCell *cell = [tableView dequeueReusableCellWithIdentifier:@"MSNewMeetingSelectCell"];
                 [cell title:titles[indexPath.row-6] placeholder:@"請選擇" mustItem:YES rightView:NO];
                 if (indexPath.row == 6 && self.meetingInfoObj.customerNum) {
