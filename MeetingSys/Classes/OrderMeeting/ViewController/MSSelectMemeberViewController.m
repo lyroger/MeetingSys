@@ -287,8 +287,10 @@
             
             if (self.bottomView.isSelectedAll) {
                 [members enumerateObjectsUsingBlock:^(MSMemberModel *model, NSUInteger idx, BOOL * _Nonnull stop) {
-                    model.isSelected = YES;
-                    [self.selectedMemebers addObject:model];
+                    if (![self isContainMember:model]) {
+                        model.isSelected = YES;
+                        [self.selectedMemebers addObject:model];
+                    }
                 }];
                 [self memberChangedEvent];
             }
@@ -313,6 +315,17 @@
             [HUDManager alertWithTitle:data.msg];
         }
     }];
+}
+
+- (BOOL)isContainMember:(MSMemberModel*)model
+{
+    for (int i = 0; i < self.selectedMemebers.count; i++) {
+        MSMemberModel *m = [self.selectedMemebers objectAtIndex:i];
+        if ([m.memberId isEqualToString:model.memberId]) {
+            return YES;
+        }
+    }
+    return NO;
 }
 
 - (NSInteger)fetchMemberOfSelectedIndex:(MSMemberModel*)model

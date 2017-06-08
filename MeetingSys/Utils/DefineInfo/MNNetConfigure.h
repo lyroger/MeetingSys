@@ -9,7 +9,7 @@
 #ifndef MNNetConfigure_h
 #define MNNetConfigure_h
 
-#define isTrueEnvironment 0 //正式发布
+#define isTrueEnvironment 1 //正式发布
 #define isTestEnvironment 1 //测试环境
 
 

@@ -432,7 +432,13 @@
         self.meetingInfoObj.roomTimeTips = [NSString stringWithFormat:@"最長可預訂%zd分鐘",room.maxMinutes];
         NSIndexPath *indexPath = [NSIndexPath indexPathForRow:3 inSection:0];
         MSNewMeetingSelectCell *cell = [newMeetingTableView cellForRowAtIndexPath:indexPath];
-        [cell contentText:[NSString stringWithFormat:@"%@(%@)",self.meetingInfoObj.address,self.meetingInfoObj.roomTimeTips]];
+        
+        if (self.meetingInfoObj.meetingType == MeetingType_Validate) {
+            [cell contentText:[NSString stringWithFormat:@"%@",self.meetingInfoObj.address]];
+        } else {
+            [cell contentText:[NSString stringWithFormat:@"%@(%@)",self.meetingInfoObj.address,self.meetingInfoObj.roomTimeTips]];
+        }
+        
         
         MSNewMeetingONOffCell *switchCell = [newMeetingTableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
         if ([self.meetingInfoObj.roomTheme isEqualToString:@"Legend"]) {
