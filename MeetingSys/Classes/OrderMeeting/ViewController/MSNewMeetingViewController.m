@@ -59,9 +59,40 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.view.backgroundColor = kPageBackgroundColor;
     self.title = @"新增預約";
-    [self loadSubView];
+    navBarView = [[MSNavBarView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, 64)];
+    navBarView.navRightButton.enabled = NO;
+    navBarView.titleLabel.text = @"新增預約";
+    [self updateNavWithOffsetY:70];
+    @weakify(self)
+    navBarView.actionBlock = ^(NSInteger actionType) {
+        @strongify(self)
+        if (actionType == 0) {
+            [self closeView:nil];
+        } else if (actionType == 1) {
+            [self submitMeetingAction:nil];
+        }
+    };
+    [self.view addSubview:navBarView];
+    [self loadUserIsRMUP];
     // Do any additional setup after loading the view.
+}
+
+- (void)loadUserIsRMUP
+{
+    [MSUserInfo checkUserIsRMUpNetworkHUD:NetworkHUDLockScreenButNavWithError target:self success:^(StatusModel *data) {
+        if (data.code == 0) {
+            NSLog(@"data.originalData = %@",data.originalData);
+            self.meetingInfoObj.isRM = [data.originalData boolValue];
+            if (!self.meetingInfoObj.isRM) {
+                [self.meetingTypeData removeObjectAtIndex:0];
+                self.meetingInfoObj.meetingType = MeetingType_Money;
+            }
+            [self loadSubView];
+            [self updateNavWithOffsetY:0];
+        }
+    }];
 }
 
 - (MSMeetingDetailModel*)meetingInfoObj
@@ -126,33 +157,25 @@
     [newMeetingTableView registerClass:[MSNewMeetingSelectCell class] forCellReuseIdentifier:@"MSNewMeetingSelectCell"];
     [newMeetingTableView registerClass:[MSNewMeetingONOffCell class] forCellReuseIdentifier:@"MSNewMeetingONOffCell"];
     [self.view addSubview:newMeetingTableView];
-    
-    navBarView = [[MSNavBarView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, 64)];
-    navBarView.navRightButton.enabled = NO;
-    navBarView.titleLabel.text = @"新增預約";
-    @weakify(self)
-    navBarView.actionBlock = ^(NSInteger actionType) {
-        @strongify(self)
-        if (actionType == 0) {
-            [self closeView:nil];
-        } else if (actionType == 1) {
-            [self submitMeetingAction:nil];
-        }
-    };
-    [self.view addSubview:navBarView];
+    [self.view sendSubviewToBack:newMeetingTableView];
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
     offsetY = scrollView.contentOffset.y;
     NSLog(@"offsetY = %.1f",offsetY);
-    if (offsetY<=0) {
+    [self updateNavWithOffsetY:offsetY];
+    
+}
+
+- (void)updateNavWithOffsetY:(CGFloat)offset
+{
+    if (offset<=0) {
         navBarView.backgroundColor = [[UIColor whiteColor] colorWithAlphaComponent:0.0];
-    } else if (offsetY <= 64 ) {
+    } else if (offset <= 64 ) {
         navBarView.backgroundColor = [[UIColor whiteColor] colorWithAlphaComponent:offsetY/64];
     }
-    
-    if (offsetY > 30) {
+    if (offset > 30) {
         navBarView.titleLabel.textColor = kColorBlack;
         [navBarView.navRightButton setTitleColor:UIColorHex_Alpha(0x333333, 0.6) forState:UIControlStateDisabled];
         [navBarView.navRightButton setTitleColor:UIColorHex_Alpha(0x333333, 1) forState:UIControlStateNormal];
@@ -357,7 +380,8 @@
             && self.meetingInfoObj.endTime
             && self.meetingInfoObj.meetingType
             && self.meetingInfoObj.roomId.length
-            && self.meetingInfoObj.organizeId.length) {
+            && self.meetingInfoObj.organizeId.length
+            && self.meetingInfoObj.others.length) {
             navBarView.navRightButton.enabled = YES;
         } else {
             navBarView.navRightButton.enabled = NO;
@@ -408,11 +432,13 @@
         NSString *meetingTypeString = [self.meetingTypeData objectAtIndex:indexItem];
         NSIndexPath *indexPath = [NSIndexPath indexPathForRow:1 inSection:0];
         MSNewMeetingSelectCell *cell = [newMeetingTableView cellForRowAtIndexPath:indexPath];
-        
         NSInteger meetingType = indexItem+1;
+        if (!self.meetingInfoObj.isRM) {
+            meetingType++;
+        }
         if (meetingType != self.meetingInfoObj.meetingType) {
             //值改变了
-            self.meetingInfoObj.meetingType = indexItem+1;
+            self.meetingInfoObj.meetingType = meetingType;
             //清空选择会议地址信息
             self.meetingInfoObj.roomId = nil;
             self.meetingInfoObj.address = nil;
@@ -674,6 +700,7 @@
                     [self.meetingOthers removeAllObjects];
                     [self.meetingOthers addObjectsFromArray:members];
                     [cell contentText:names];
+                    [self checkInfoComplete];
                 };
                 [self.navigationController pushViewController:memberVC animated:YES];
             }
@@ -767,7 +794,11 @@
                 MSNewMeetingSelectCell *cell = [tableView dequeueReusableCellWithIdentifier:@"MSNewMeetingSelectCell"];
                 [cell title:@"預約類型" placeholder:@"請選擇" mustItem:YES rightView:NO];
                 if (self.meetingInfoObj.meetingType) {
-                    [cell contentText:[self.meetingTypeData objectAtIndex:self.meetingInfoObj.meetingType-1]];
+                    NSInteger index = self.meetingInfoObj.meetingType-1;
+                    if (!self.meetingInfoObj.isRM) {
+                        index--;
+                    }
+                    [cell contentText:[self.meetingTypeData objectAtIndex:index]];
                 }
                 return cell;
             } else {
@@ -794,7 +825,7 @@
             if (indexPath.row == 5) {
                 //参与人员
                 MSNewMeetingSelectCell *cell = [tableView dequeueReusableCellWithIdentifier:@"MSNewMeetingSelectCell"];
-                [cell title:@"參與人員" placeholder:@"請選擇" mustItem:NO rightView:NO];
+                [cell title:@"參與人員" placeholder:@"請選擇" mustItem:YES rightView:NO];
                 if (self.meetingInfoObj.othersName.length) {
                     [cell contentText:self.meetingInfoObj.othersName];
                 }

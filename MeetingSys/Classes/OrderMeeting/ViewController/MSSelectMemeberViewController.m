@@ -74,7 +74,7 @@
         [searchBarContentView addSubview:_searchBar];
         [_searchBar becomeFirstResponder];
         
-        _searchBar2 = [self creatSearchBarPlaceHolder:@"名稱/職位"];
+        _searchBar2 = [self creatSearchBarPlaceHolder:@"英文全名/職位"];
         _searchBar2.frame = CGRectMake(kScreenWidth/2, 0, kScreenWidth/2, 46);
         [searchBarContentView addSubview:_searchBar2];
         

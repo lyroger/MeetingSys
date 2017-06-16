@@ -59,6 +59,7 @@ typedef NS_ENUM(NSInteger, MeetingOrder_Type)
 @property (nonatomic,strong) NSDate  *sendDate;//發送時間
 @property (nonatomic, copy) NSString *remindId;//提醒ID；
 
+@property (nonatomic, assign) BOOL isRM; //是否是RM以上權限
 @property (nonatomic, copy) NSString *meetingDay;       //验证类型预约日期
 @property (nonatomic, copy) NSString *meetingTime;      //验证类型预约时间段
 @property (nonatomic, copy) NSString *customerName;     //客戶姓名

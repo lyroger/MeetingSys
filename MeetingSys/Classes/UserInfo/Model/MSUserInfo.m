@@ -183,4 +183,11 @@
     DicObjectSet(deviceToken, @"deviceToken");
     return [self dataTaskMethod:HTTPMethodPOST path:@"api/push/unregister" params:ParamsDic networkHUD:NetworkHUDBackground target:target success:success];
 }
+
++ (NSURLSessionDataTask *)checkUserIsRMUpNetworkHUD:(NetworkHUD)hud
+                                             target:(id)target
+                                            success:(NetResponseBlock)success
+{
+    return [self dataTaskMethod:HTTPMethodPOST path:@"api/user/userisrmup" params:nil networkHUD:hud target:target success:success];
+}
 @end

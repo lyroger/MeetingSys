@@ -76,4 +76,8 @@
                              deviceToken:(NSString *)deviceToken
                                   target:(id)target
                                  success:(NetResponseBlock)success;
+
++ (NSURLSessionDataTask *)checkUserIsRMUpNetworkHUD:(NetworkHUD)hud
+                                             target:(id)target
+                                            success:(NetResponseBlock)success;
 @end
